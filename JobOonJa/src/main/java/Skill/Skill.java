@@ -1,4 +1,4 @@
-package skill;
+package Skill;
 
 public class Skill {
     private String name;

@@ -1,4 +1,4 @@
-package command;
+package Command;
 
 public class AuctionCommand implements Command {
     private String projectTitle‬‬;

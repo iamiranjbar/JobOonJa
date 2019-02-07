@@ -1,9 +1,10 @@
-package user;
+package User;
 
-import skill.Skill;
+import Skill.Skill;
 import java.util.*;
 
 public class User {
+
     private String name;
     private ArrayList<Skill> skills;
 

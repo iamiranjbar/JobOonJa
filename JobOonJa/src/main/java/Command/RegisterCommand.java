@@ -1,6 +1,6 @@
-package command;
+package Command;
 
-import user.User;
+import User.User;
 
 public class RegisterCommand implements Command {
     private User user;
