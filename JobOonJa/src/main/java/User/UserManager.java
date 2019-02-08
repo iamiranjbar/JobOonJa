@@ -20,6 +20,7 @@ public class UserManager {
         if (!repository.containsKey(username)) {
             repository.put(username, user);
         }
+        // TODO: handel username that use before.
     }
 
     public User find(String username) {
