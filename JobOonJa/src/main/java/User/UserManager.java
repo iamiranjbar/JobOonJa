@@ -3,23 +3,30 @@ package User;
 import  java.util.*;
 
 public class UserManager {
-    private static final UserManager ourInstance = new UserManager();
-    private HashMap<String, User> hashMap;
+    private static UserManager instance = null;
+    private HashMap<String, User> repository;
 
     private UserManager() {
+        repository = new HashMap<String, User>();
     }
 
     public static UserManager getInstance() {
-        return ourInstance;
+        if (instance == null)
+            instance = new UserManager();
+        return instance;
     }
 
-    public boolean find(String key) {
-        return hashMap.containsKey(key);
-    }
-
-    public void add(String key, User user) {
-        if (!find(key)) {
-            hashMap.put(key, user);
+    public void add(String username, User user) {
+        if (!repository.containsKey(username)) {
+            repository.put(username, user);
         }
     }
+
+    public User find(String username) {
+        if(repository.containsKey(username))
+            return repository.get(username);
+        else
+            return null;
+    }
+
 }
