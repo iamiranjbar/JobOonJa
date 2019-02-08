@@ -1,5 +1,7 @@
 package Command;
 
+import JobOonJa.JobOonJa;
+
 public class AuctionCommand implements Command {
     private String projectTitle‬‬;
 
@@ -8,6 +10,6 @@ public class AuctionCommand implements Command {
     }
 
     public void execute() {
-
+        JobOonJa.getInstance().auction(projectTitle‬‬);
     }
 }
