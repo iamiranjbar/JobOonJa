@@ -8,6 +8,7 @@ import Skill.Skill;
 import User.User;
 import User.UserManager;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -71,5 +72,9 @@ public class JobOonJa {
         if (!bidManager.submit(bid)) {
             // TODO: handle bad bid for submitting.
         }
+    }
+
+    public void receiveFrom(InputStream input) {
+
     }
 }
