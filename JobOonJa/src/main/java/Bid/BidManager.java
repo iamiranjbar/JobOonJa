@@ -5,6 +5,7 @@ import Project.ProjectManager;
 import Skill.Skill;
 import User.User;
 import User.UserManager;
+import Exception.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +24,7 @@ public class BidManager {
         return  instance;
     }
 
-    public Bid makeBidFromDTO(BidDTO bidDTO){ // TODO: check null  OR throw exception
+    public Bid makeBidFromDTO(BidDTO bidDTO) throws ProjectNotFound, UserNotFound {
         ProjectManager projectManager = ProjectManager.getInstance();
         Project foundProject = projectManager.find(bidDTO.getProjectTitle());
         UserManager userManager = UserManager.getInstance();

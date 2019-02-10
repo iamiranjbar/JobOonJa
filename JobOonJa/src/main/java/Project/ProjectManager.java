@@ -1,6 +1,6 @@
 package Project;
 
-import Skill.Skill;
+import Exception.*;
 
 import java.util.ArrayList;
         import java.util.HashMap;
@@ -20,16 +20,17 @@ public class ProjectManager {
         return instance;
     }
 
-    public void add(String title, Project project){
+    public void add(String title, Project project) throws RedundantProject {
         if(!repository.containsKey(title))
             repository.put(title,project);
-        // TODO: handel title that use before.
+        else
+            throw new RedundantProject("Project has already exist!");
     }
 
-    public Project find(String title){
+    public Project find(String title) throws ProjectNotFound {
         if(repository.containsKey(title))
             return repository.get(title);
         else
-            return null;
+            throw new ProjectNotFound("Project not found!");
     }
 }

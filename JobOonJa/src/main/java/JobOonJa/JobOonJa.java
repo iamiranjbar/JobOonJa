@@ -1,14 +1,12 @@
 package JobOonJa;
 
-import Bid.Bid;
-import Bid.BidManager;
+import Bid.*;
 import Command.CommandInterpreter;
 import CommandLineInterface.CLI;
-import Project.Project;
-import Project.ProjectManager;
+import Project.*;
 import Skill.Skill;
-import User.User;
-import User.UserManager;
+import User.*;
+import Exception.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,7 +42,7 @@ public class JobOonJa {
         return result;
     }
 
-    public void register(User user) {
+    public void register(User user) throws RedundantUser {
         userManager.add(user.getName(), user);
     }
 
@@ -67,7 +65,7 @@ public class JobOonJa {
         }
     }
 
-    public void addProject(Project project) {
+    public void addProject(Project project) throws RedundantProject {
         projectManager.add(project.getTitle(), project);
     }
 
@@ -77,14 +75,18 @@ public class JobOonJa {
         }
     }
 
-    public void run() throws IOException {
+    public void run() {
         CLI cli = CLI.getInstance();
         CommandInterpreter ci = new CommandInterpreter();
         while (true) { //TODO: Better condition
-            String command = cli.getCommand();
-            String[] splittedCommands = cli.parseCommand(command);
-            ci.addCommand(cli.createCommand(splittedCommands));
-            ci.run();
+            try{
+                String command = cli.getCommand();
+                String[] splittedCommands = cli.parseCommand(command);
+                ci.addCommand(cli.createCommand(splittedCommands));
+                ci.run();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 }

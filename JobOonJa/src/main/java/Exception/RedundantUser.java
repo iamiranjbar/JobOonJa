@@ -1,4 +1,7 @@
 package Exception;
 
-public class RedundantUser {
+public class RedundantUser extends Exception {
+    public RedundantUser(String message) {
+        super(message);
+    }
 }

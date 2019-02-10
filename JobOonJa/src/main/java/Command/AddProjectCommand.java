@@ -2,6 +2,7 @@ package Command;
 
 import Project.Project;
 import JobOonJa.JobOonJa;
+import Exception.*;
 
 public class AddProjectCommand implements Command{
 
@@ -11,7 +12,7 @@ public class AddProjectCommand implements Command{
         this.project = project;
     }
 
-    public void execute() {
-        JobOonJa.getInstance().addProject(project);
+    public void execute() throws RedundantProject {
+       JobOonJa.getInstance().addProject(project);
     }
 }

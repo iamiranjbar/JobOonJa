@@ -6,6 +6,7 @@ import Command.*;
 import Project.*;
 import User.*;
 import com.jsoniter.JsonIterator;
+import Exception.*;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -21,18 +22,15 @@ public class CLI {
     private CLI() { }
 
     public String getCommand() {
-//        Scanner reader = new Scanner(System.in);
         System.out.println("Enter your command: ");
-        String command = reader.nextLine();
-//        reader.close();
-        return command;
+        return reader.nextLine();
     }
 
     public String[] parseCommand(String command) {
         return command.split("\\s+");
     }
 
-    public Command createCommand(String[] splittedCommand) throws IOException {
+    public Command createCommand(String[] splittedCommand) throws ProjectNotFound, UserNotFound {
         switch (splittedCommand[0]){
             case "register":
                 UserDTO userDTO = JsonIterator.deserialize(splittedCommand[1], UserDTO.class);

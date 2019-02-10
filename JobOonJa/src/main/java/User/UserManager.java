@@ -1,6 +1,7 @@
 package User;
 
 import Skill.Skill;
+import Exception.*;
 
 import  java.util.*;
 
@@ -18,18 +19,18 @@ public class UserManager {
         return instance;
     }
 
-    public void add(String username, User user) {
-        if (!repository.containsKey(username)) {
+    public void add(String username, User user) throws RedundantUser {
+        if (!repository.containsKey(username))
             repository.put(username, user);
-        }
-        // TODO: handel username that use before.
+        else
+            throw new RedundantUser("User has already exist!");
     }
 
-    public User find(String username) {
+    public User find(String username) throws UserNotFound {
         if(repository.containsKey(username))
             return repository.get(username);
         else
-            return null;
+            throw new UserNotFound("User not found!");
     }
 
     public User makeUserFromDTO(UserDTO userDTO) {

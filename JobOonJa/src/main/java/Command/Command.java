@@ -1,5 +1,7 @@
 package Command;
 
+import Exception.*;
+
 public interface Command {
-    public void execute();
+    void execute() throws RedundantUser, RedundantProject;
 }

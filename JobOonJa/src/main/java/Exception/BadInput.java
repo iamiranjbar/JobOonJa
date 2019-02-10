@@ -1,4 +1,3 @@
 package Exception;
 
-public class BadInput {
-}
+public class BadInput extends Exception { }
