@@ -2,12 +2,15 @@ package JobOonJa;
 
 import Bid.Bid;
 import Bid.BidManager;
+import Command.CommandInterpreter;
+import CommandLineInterface.CLI;
 import Project.Project;
 import Project.ProjectManager;
 import Skill.Skill;
 import User.User;
 import User.UserManager;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,7 +77,14 @@ public class JobOonJa {
         }
     }
 
-    public void receiveFrom(InputStream input) {
-
+    public void run() throws IOException {
+        CLI cli = CLI.getInstance();
+        CommandInterpreter ci = new CommandInterpreter();
+        while (true) { //TODO: Better condition
+            String command = cli.getCommand();
+            String[] splittedCommands = cli.parseCommand(command);
+            ci.addCommand(cli.createCommand(splittedCommands));
+            ci.run();
+        }
     }
 }
