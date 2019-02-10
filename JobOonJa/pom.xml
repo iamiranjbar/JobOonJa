@@ -25,7 +25,13 @@
             <artifactId>dsl-json</artifactId>
             <version>1.8.5</version>
         </dependency>
+        <dependency>
+            <groupId>com.jsoniter</groupId>
+            <artifactId>jsoniter</artifactId>
+            <version>0.9.23</version>
+        </dependency>
     </dependencies>
+
 
 
 </project>

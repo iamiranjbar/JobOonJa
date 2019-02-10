@@ -10,6 +10,8 @@ public class Project {
     private ArrayList<Skill> skills;
     private int budget;
 
+    public Project() {}
+
     public Project(String title, ArrayList<Skill> skills, int budget){
         this.title = title;
         this.skills = new ArrayList<Skill>(skills);

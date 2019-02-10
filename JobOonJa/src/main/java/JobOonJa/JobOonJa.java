@@ -61,7 +61,7 @@ public class JobOonJa {
         }
 
         if (selected != null) {
-            System.out.printf("winner: %s", selected.getName());
+            System.out.printf("winner: %s\n", selected.getName());
         } else {
             System.out.println("we do not have any bid for this project.");
         }

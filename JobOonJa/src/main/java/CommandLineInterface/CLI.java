@@ -5,14 +5,14 @@ import Bid.*;
 import Command.*;
 import Project.*;
 import User.*;
-import com.dslplatform.json.DslJson;
+import com.jsoniter.JsonIterator;
 
 import java.io.IOException;
 import java.util.Scanner;
 
 public class CLI {
     private static final CLI instance = new CLI();
-    private final DslJson<Object> dslJson = new DslJson<>();
+    private static final Scanner reader = new Scanner(System.in);
 
     public static CLI getInstance() {
         return instance;
@@ -21,10 +21,10 @@ public class CLI {
     private CLI() { }
 
     public String getCommand() {
-        Scanner reader = new Scanner(System.in);
+//        Scanner reader = new Scanner(System.in);
         System.out.println("Enter your command: ");
         String command = reader.nextLine();
-        reader.close();
+//        reader.close();
         return command;
     }
 
@@ -33,23 +33,22 @@ public class CLI {
     }
 
     public Command createCommand(String[] splittedCommand) throws IOException {
-        byte[] byteStream = splittedCommand[1].getBytes();
         switch (splittedCommand[0]){
             case "register":
-                UserDTO userDTO = dslJson.deserialize(UserDTO.class, byteStream, byteStream.length);
+                UserDTO userDTO = JsonIterator.deserialize(splittedCommand[1], UserDTO.class);
                 UserManager userManager = UserManager.getInstance();
                 User user = userManager.makeUserFromDTO(userDTO);
                 return new RegisterCommand(user);
             case "addProject":
-                Project project = dslJson.deserialize(Project.class,byteStream, byteStream.length);
+                Project project = JsonIterator.deserialize(splittedCommand[1], Project.class);
                 return new AddProjectCommand(project);
             case "bid":
-                BidDTO bidDTO = dslJson.deserialize(BidDTO.class, byteStream, byteStream.length);
+                BidDTO bidDTO = JsonIterator.deserialize(splittedCommand[1], BidDTO.class);
                 BidManager bidManager = BidManager.getInstance();
                 Bid bid = bidManager.makeBidFromDTO(bidDTO);
                 return new BidCommand(bid);
             case "auction": //TODO: Check bad coding style
-                AuctionDTO auctionDTO = dslJson.deserialize(AuctionDTO.class, byteStream, byteStream.length);
+                AuctionDTO auctionDTO = JsonIterator.deserialize(splittedCommand[1], AuctionDTO.class);
                 return new AuctionCommand(auctionDTO.getProjectTitle());
         }
         return null;
