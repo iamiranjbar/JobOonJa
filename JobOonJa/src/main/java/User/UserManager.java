@@ -1,5 +1,7 @@
 package User;
 
+import Skill.Skill;
+
 import  java.util.*;
 
 public class UserManager {
@@ -30,4 +32,12 @@ public class UserManager {
             return null;
     }
 
+    public User makeUserFromDTO(UserDTO userDTO) {
+        String username = userDTO.getUsername();
+        ArrayList<Skill> temp = userDTO.getSkills();
+        HashMap<String,Skill> skills = new HashMap<>();
+        for (Skill skill:temp)
+            skills.put(skill.getName(), skill);
+        return new User(username,skills);
+    }
 }

@@ -4,16 +4,20 @@ import Skill.Skill;
 import java.util.*;
 
 public class User {
-
-    private String name;
+    private String username;
     private HashMap<String,Skill> skills;
 
-    public String getName() {
-        return name;
+    public User(String username, HashMap<String, Skill> skills) {
+        this.username = username;
+        this.skills = skills;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getName() {
+        return username;
+    }
+
+    public void setName(String username) {
+        this.username = username;
     }
 
     public HashMap<String,Skill> getSkills() {
