@@ -23,12 +23,12 @@ public class BidManager {
         return  instance;
     }
 
-    public Bid make(String projectTitle, String username, int amount){ // TODO: check null  OR throw exception
+    public Bid makeBidFromDTO(BidDTO bidDTO){ // TODO: check null  OR throw exception
         ProjectManager projectManager = ProjectManager.getInstance();
-        Project foundProject = projectManager.find(projectTitle);
+        Project foundProject = projectManager.find(bidDTO.getProjectTitle());
         UserManager userManager = UserManager.getInstance();
-        User foundUser = userManager.find(username);
-        return new Bid(foundUser,foundProject,amount);
+        User foundUser = userManager.find(bidDTO.getBiddingUser());
+        return new Bid(foundUser,foundProject,bidDTO.getBidAmount());
     }
 
     public boolean submit(Bid bid){

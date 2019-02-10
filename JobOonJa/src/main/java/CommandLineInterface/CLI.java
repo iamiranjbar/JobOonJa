@@ -1,8 +1,9 @@
 package CommandLineInterface;
 
 
+import Bid.*;
 import Command.*;
-import Project.Project;
+import Project.*;
 import User.*;
 import com.dslplatform.json.DslJson;
 
@@ -45,7 +46,10 @@ public class CLI {
                 return new AddProjectCommand(project);
                 break;
             case "bid":
-
+                BidDTO bidDTO = dslJson.deserialize(BidDTO.class, byteStream, byteStream.length);
+                BidManager bidManager = BidManager.getInstance();
+                Bid bid = bidManager.makeBidFromDTO(bidDTO);
+                return new BidCommand(bid);
                 break;
             case "auction":
 
