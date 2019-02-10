@@ -40,20 +40,18 @@ public class CLI {
                 UserManager userManager = UserManager.getInstance();
                 User user = userManager.makeUserFromDTO(userDTO);
                 return new RegisterCommand(user);
-                break;
             case "addProject":
                 Project project = dslJson.deserialize(Project.class,byteStream, byteStream.length);
                 return new AddProjectCommand(project);
-                break;
             case "bid":
                 BidDTO bidDTO = dslJson.deserialize(BidDTO.class, byteStream, byteStream.length);
                 BidManager bidManager = BidManager.getInstance();
                 Bid bid = bidManager.makeBidFromDTO(bidDTO);
                 return new BidCommand(bid);
-                break;
-            case "auction":
-
-                break;
+            case "auction": //TODO: Check bad coding style
+                AuctionDTO auctionDTO = dslJson.deserialize(AuctionDTO.class, byteStream, byteStream.length);
+                return new AuctionCommand(auctionDTO.getProjectTitle());
         }
+        return null;
     }
 }
