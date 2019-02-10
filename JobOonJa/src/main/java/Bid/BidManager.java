@@ -23,7 +23,7 @@ public class BidManager {
         return  instance;
     }
 
-    public Bid make(String projectTitle, String username, int amount){ // TODO: check not  OR throw exception
+    public Bid make(String projectTitle, String username, int amount){ // TODO: check null  OR throw exception
         ProjectManager projectManager = ProjectManager.getInstance();
         Project foundProject = projectManager.find(projectTitle);
         UserManager userManager = UserManager.getInstance();
@@ -35,9 +35,9 @@ public class BidManager {
         if (bid.getAmount() <= bid.getProject().getBudget()) {
             ArrayList<Skill> requirements = bid.getProject().getSkills();
             HashMap<String,Skill> capabillity = bid.getUser().getSkills();
-            for (int i = 0; i < requirements.size(); i++) {
-                String key = requirements.get(i).getName();
-                if (!capabillity.containsKey(key) || requirements.get(i).getPoint() > capabillity.get(key).getPoint())
+            for (Skill skill: requirements) {
+                String key = skill.getName();
+                if (!capabillity.containsKey(key) || skill.getPoint() > capabillity.get(key).getPoint())
                     return false;
             }
             repository.add(bid);
