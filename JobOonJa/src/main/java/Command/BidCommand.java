@@ -2,6 +2,7 @@ package Command;
 
 import Bid.Bid;
 import JobOonJa.JobOonJa;
+import Exception.*;
 
 public class BidCommand implements Command {
 
@@ -11,7 +12,7 @@ public class BidCommand implements Command {
         this.bid = bid;
     }
 
-    public void execute() {
+    public void execute() throws BadInput {
         JobOonJa.getInstance().bid(bid);
     }
 }

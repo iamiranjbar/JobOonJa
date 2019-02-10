@@ -8,8 +8,6 @@ import Skill.Skill;
 import User.*;
 import Exception.*;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -57,7 +55,6 @@ public class JobOonJa {
                 selected = bid.getUser();
             }
         }
-
         if (selected != null) {
             System.out.printf("winner: %s\n", selected.getName());
         } else {
@@ -69,9 +66,9 @@ public class JobOonJa {
         projectManager.add(project.getTitle(), project);
     }
 
-    public void bid(Bid bid) {
+    public void bid(Bid bid) throws BadInput {
         if (!bidManager.submit(bid)) {
-            // TODO: handle bad bid for submitting.
+            throw new BadInput("This bid cannot submit because of project constraints!");
         }
     }
 
