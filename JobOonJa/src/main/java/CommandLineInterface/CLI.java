@@ -2,6 +2,7 @@ package CommandLineInterface;
 
 
 import Command.*;
+import Project.Project;
 import User.*;
 import com.dslplatform.json.DslJson;
 
@@ -40,7 +41,8 @@ public class CLI {
                 return new RegisterCommand(user);
                 break;
             case "addProject":
-
+                Project project = dslJson.deserialize(Project.class,byteStream, byteStream.length);
+                return new AddProjectCommand(project);
                 break;
             case "bid":
 
