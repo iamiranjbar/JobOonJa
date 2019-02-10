@@ -17,6 +17,7 @@ public class JobOonJa {
     private UserManager userManager;
     private ProjectManager projectManager;
     private BidManager bidManager;
+    private boolean isFinished = false;
 
     public static JobOonJa getInstance() {
         return ourInstance;
@@ -28,6 +29,7 @@ public class JobOonJa {
         bidManager = BidManager.getInstance();
     }
 
+    private void finish() { this.isFinished = true; }
     private int goalFunction(Bid bid) {
         int result = 0;
         ArrayList<Skill> jobSkills = bid.getProject().getSkills();
@@ -60,6 +62,7 @@ public class JobOonJa {
         } else {
             System.out.println("we do not have any bid for this project.");
         }
+        this.finish();
     }
 
     public void addProject(Project project) throws RedundantProject {
@@ -75,7 +78,7 @@ public class JobOonJa {
     public void run() {
         CLI cli = CLI.getInstance();
         CommandInterpreter ci = new CommandInterpreter();
-        while (true) { //TODO: Better condition
+        while (!isFinished) {
             try{
                 String command = cli.getCommand();
                 String[] splittedCommands = cli.parseCommand(command);

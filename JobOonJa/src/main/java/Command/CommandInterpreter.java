@@ -16,12 +16,12 @@ public class CommandInterpreter {
         commands.add(command);
     }
 
-    public void run() throws RedundantUser, RedundantProject {
+    public void run() throws RedundantUser, RedundantProject, BadInput {
         commands.get(commands.size() - 1).execute();
         commands.remove(commands.size() - 1);
     }
 
-    public void  runAll() throws RedundantUser, RedundantProject {
+    public void  runAll() throws RedundantUser, RedundantProject, BadInput {
         for (Command command : commands) {
             command.execute();
         }
