@@ -2,7 +2,7 @@ package Skill;
 
 public class Skill {
     private String name;
-    private  int point;
+    private  int points;
 
     public String getName() {
         return name;
@@ -13,10 +13,10 @@ public class Skill {
     }
 
     public int getPoint() {
-        return point;
+        return points;
     }
 
     public void setPoint(int point) {
-        this.point = point;
+        this.points = point;
     }
 }
