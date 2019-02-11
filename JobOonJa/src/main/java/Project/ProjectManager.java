@@ -7,7 +7,7 @@ import java.util.ArrayList;
         import java.util.Map;
 
 public class ProjectManager {
-    private static ProjectManager instance = null;
+    private static final ProjectManager instance = new ProjectManager();
     private Map<String,Project> repository;
 
     private ProjectManager() {
@@ -15,8 +15,6 @@ public class ProjectManager {
     }
 
     public static ProjectManager getInstance() {
-        if (instance == null)
-            instance = new ProjectManager();
         return instance;
     }
 

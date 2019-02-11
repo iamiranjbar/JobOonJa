@@ -30,7 +30,7 @@ public class CLI {
         return command.split("\\s+");
     }
 
-    public Command createCommand(String[] splittedCommand) throws ProjectNotFound, UserNotFound {
+    public Command createCommand(String[] splittedCommand) throws ProjectNotFound, UserNotFound, BadInput {
         switch (splittedCommand[0]){
             case "register":
                 UserDTO userDTO = JsonIterator.deserialize(splittedCommand[1], UserDTO.class);
@@ -48,7 +48,8 @@ public class CLI {
             case "auction": //TODO: Check bad coding style
                 AuctionDTO auctionDTO = JsonIterator.deserialize(splittedCommand[1], AuctionDTO.class);
                 return new AuctionCommand(auctionDTO.getProjectTitle());
+            default:
+                throw new BadInput(splittedCommand[0] + " is not a command.");
         }
-        return null;
     }
 }

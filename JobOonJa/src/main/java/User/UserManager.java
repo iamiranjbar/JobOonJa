@@ -6,7 +6,7 @@ import Exception.*;
 import  java.util.*;
 
 public class UserManager {
-    private static UserManager instance = null;
+    private static final UserManager instance = new UserManager();
     private HashMap<String, User> repository;
 
     private UserManager() {
@@ -14,8 +14,6 @@ public class UserManager {
     }
 
     public static UserManager getInstance() {
-        if (instance == null)
-            instance = new UserManager();
         return instance;
     }
 

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BidManager {
-    private static BidManager instance = null;
+    private static final BidManager instance = new BidManager();
     private ArrayList<Bid> repository;
 
     private BidManager(){
@@ -19,8 +19,6 @@ public class BidManager {
     }
 
     public static BidManager getInstance(){
-        if (instance == null)
-            instance = new BidManager();
         return  instance;
     }
 
