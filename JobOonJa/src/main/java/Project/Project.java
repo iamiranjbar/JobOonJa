@@ -1,13 +1,19 @@
 package Project;
 
 import Skill.Skill;
+import com.jsoniter.annotation.JsonObject;
+import com.jsoniter.annotation.JsonProperty;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+@JsonObject(asExtraForUnknownProperties = true)
 public class Project {
+    @JsonProperty(required = true)
     private String title;
+    @JsonProperty(required = true)
     private ArrayList<Skill> skills;
+    @JsonProperty(required = true)
     private int budget;
 
     public Project() {}
