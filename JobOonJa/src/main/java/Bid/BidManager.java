@@ -2,7 +2,7 @@ package Bid;
 
 import Project.Project;
 import Project.ProjectManager;
-import Skill.Skill;
+import Skill.*;
 import User.User;
 import User.UserManager;
 import Exception.*;
@@ -30,20 +30,26 @@ public class BidManager {
         return new Bid(foundUser,foundProject,bidDTO.getBidAmount());
     }
 
-    public boolean submit(Bid bid){
+    private boolean haveSkills(ArrayList<Skill> requirements, HashMap<String,UserSkill> capability){
+        for (Skill skill: requirements) {
+            String key = skill.getName();
+            if (!capability.containsKey(key) || skill.getPoint() > capability.get(key).getPoint())
+                return false;
+        }
+        return true;
+    }
+
+    public void submit(Bid bid){
         if (bid.getAmount() <= bid.getProject().getBudget()) {
             ArrayList<Skill> requirements = bid.getProject().getSkills();
-            HashMap<String,Skill> capabillity = bid.getUser().getSkills();
-            for (Skill skill: requirements) {
-                String key = skill.getName();
-                if (!capabillity.containsKey(key) || skill.getPoint() > capabillity.get(key).getPoint())
-                    return false;
-            }
-            repository.add(bid);
-            return true;
+            HashMap<String,UserSkill> capability = bid.getUser().getSkills();
+            if (haveSkills(requirements,capability))
+                repository.add(bid);
+            else
+                throw new InsufficentSkill("You don't have enough skills!");
         }
         else{
-            return false;
+            throw new InsufficentBudget("Your budget is too low!");
         }
     }
 

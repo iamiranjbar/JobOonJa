@@ -18,23 +18,12 @@ public class Bid {
         return user;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public Project getProject() {
         return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
     }
 
     public int getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
 }
