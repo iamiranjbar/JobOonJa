@@ -39,7 +39,7 @@ public class BidManager {
         return true;
     }
 
-    public void submit(Bid bid){
+    public void submit(Bid bid) throws InsufficentSkill, InsufficentBudget {
         if (bid.getAmount() <= bid.getProject().getBudget()) {
             ArrayList<Skill> requirements = bid.getProject().getSkills();
             HashMap<String,UserSkill> capability = bid.getUser().getSkills();

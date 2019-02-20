@@ -2,7 +2,7 @@ package JobOonJa;
 
 import Bid.*;
 import Project.*;
-import Skill.Skill;
+import Skill.*;
 import User.*;
 import Exception.*;
 
@@ -15,7 +15,6 @@ public class JobOonJa {
     private UserManager userManager;
     private ProjectManager projectManager;
     private BidManager bidManager;
-    private boolean isFinished = false;
 
     public static JobOonJa getInstance() {
         return ourInstance;
@@ -27,11 +26,10 @@ public class JobOonJa {
         bidManager = BidManager.getInstance();
     }
 
-    private void finish() { this.isFinished = true; }
     private int goalFunction(Bid bid) {
         int result = 0;
         ArrayList<Skill> jobSkills = bid.getProject().getSkills();
-        HashMap<String, Skill> userSkills = bid.getUser().getSkills();
+        HashMap<String, UserSkill> userSkills = bid.getUser().getSkills();
         for (Skill skill : jobSkills) {
             String key = skill.getName();
             result += 10000 * Math.pow((userSkills.get(key).getPoint() - skill.getPoint()), 2);
@@ -60,17 +58,14 @@ public class JobOonJa {
         } else {
             System.out.println("we do not have any bid for this project.");
         }
-        this.finish();
     }
 
     public void addProject(Project project) throws RedundantProject {
         projectManager.add(project.getTitle(), project);
     }
 
-    public void bid(Bid bid) throws BadInput {
-        if (!bidManager.submit(bid)) {
-            throw new BadInput("This bid cannot submit because of project constraints!");
-        }
+    public void bid(Bid bid) throws InsufficentBudget, InsufficentSkill {
+        bidManager.submit(bid);
     }
 
     public void run() {
