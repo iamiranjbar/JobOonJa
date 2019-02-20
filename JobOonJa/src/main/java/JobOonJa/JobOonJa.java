@@ -1,8 +1,6 @@
 package JobOonJa;
 
 import Bid.*;
-import Command.CommandInterpreter;
-import CommandLineInterface.CLI;
 import Project.*;
 import Skill.Skill;
 import User.*;
@@ -76,17 +74,6 @@ public class JobOonJa {
     }
 
     public void run() {
-        CLI cli = CLI.getInstance();
-        CommandInterpreter ci = new CommandInterpreter();
-        while (!isFinished) {
-            try{
-                String command = cli.getCommand();
-                String[] splittedCommands = cli.parseCommand(command);
-                ci.addCommand(cli.createCommand(splittedCommands));
-                ci.run();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+
     }
 }
