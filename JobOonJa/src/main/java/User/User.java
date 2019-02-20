@@ -1,34 +1,34 @@
 package User;
 
-import Skill.Skill;
+import Skill.*;
 import java.util.*;
 
 public class User {
-    private String username;
-    private HashMap<String,Skill> skills;
+    private String id;
+    private String firstName;
+    private String lastName;
+    private String jobTitle;
+    private String profilePicURL;
+    private HashMap<String, UserSkill> skills;
+    private String bio;
 
-    public User(String username, HashMap<String, Skill> skills) {
-        this.username = username;
+    public User(String id, String firstName, String lastName, String jobTitle, String profilePicURL,
+                HashMap<String, UserSkill> skills, String bio) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.jobTitle = jobTitle;
+        this.profilePicURL = profilePicURL;
         this.skills = skills;
+        this.bio = bio;
     }
 
     public String getName() {
-        return username;
+        return id;
     }
 
-    public void setName(String username) {
-        this.username = username;
-    }
-
-    public HashMap<String,Skill> getSkills() {
+    public HashMap<String,UserSkill> getSkills() {
         return skills;
     }
 
-    public void setSkills(HashMap<String,Skill> skills) {
-        this.skills = skills;
-    }
-
-    public void  addSkill(Skill skill) {
-        this.skills.put(skill.getName(),skill);
-    }
 }

@@ -1,23 +1,18 @@
 package User;
 
-import Skill.Skill;
+import Skill.*;
 import com.jsoniter.annotation.JsonObject;
 import com.jsoniter.annotation.JsonProperty;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @JsonObject(asExtraForUnknownProperties = true)
 public class UserDTO {
-    @JsonProperty(required = true)
-    private String username;
-    @JsonProperty(required = true)
-    private ArrayList<Skill> skills;
-
-    public String getUsername() {
-        return username;
-    }
-
-    public ArrayList<Skill> getSkills() {
-        return skills;
-    }
+    private String id;
+    private String firstName;
+    private String lastName;
+    private String jobTitle;
+    private String profilePicURL;
+    private String bio;
 }

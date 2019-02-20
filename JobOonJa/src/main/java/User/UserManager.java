@@ -31,12 +31,4 @@ public class UserManager {
             throw new UserNotFound("User not found!");
     }
 
-    public User makeUserFromDTO(UserDTO userDTO) {
-        String username = userDTO.getUsername();
-        ArrayList<Skill> temp = userDTO.getSkills();
-        HashMap<String,Skill> skills = new HashMap<>();
-        for (Skill skill:temp)
-            skills.put(skill.getName(), skill);
-        return new User(username,skills);
-    }
 }
