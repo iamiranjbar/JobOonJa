@@ -23,12 +23,31 @@ public class User {
         this.bio = bio;
     }
 
-    public String getName() {
+    public String getId() {
         return id;
     }
 
-    public HashMap<String,UserSkill> getSkills() {
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public String getProfilePicURL() {
+        return profilePicURL;
+    }
+
+    public HashMap<String, UserSkill> getSkills() {
         return skills;
     }
 
+    public String getBio() {
+        return bio;
+    }
 }
