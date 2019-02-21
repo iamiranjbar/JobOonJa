@@ -15,7 +15,8 @@ public class Server {
     public void start() throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
         server.createContext("/", new reqHandler());
-
+        server.setExecutor(null);
+        server.start();
     }
 
     class reqHandler implements HttpHandler {
