@@ -4,6 +4,7 @@ import Project.ProjectManager;
 import com.sun.net.httpserver.HttpExchange;
 import htmlflow.StaticHtml;
 import Exception.*;
+import Project.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -14,6 +15,7 @@ public class SingleProjectPage implements Page {
 
     @Override
     public void render(HttpExchange httpExchange) throws ProjectNotFound, UserNotFound, IOException {
+        Project project = ProjectManager.getInstance().find(id);
         String htmlFile = StaticHtml
                 .view()
                 .html()
@@ -26,14 +28,14 @@ public class SingleProjectPage implements Page {
                 .ul()
                 .li().text("id: " + id)
                 .__()
-                .li().text("title: " + ProjectManager.getInstance().find(id).getTitle())
+                .li().text("title: " + project.getTitle())
                 .__()
-                .li().text("description: " + ProjectManager.getInstance().find(id).getDescription())
+                .li().text("description: " + project.getDescription())
                 .__()
-                .li().img().attrSrc(ProjectManager.getInstance().find(id).getImageURL()).attrStyle("width: 50px; height: 50px;")
+                .li().img().attrSrc(project.getImageURL()).attrStyle("width: 50px; height: 50px;")
                 .__().text("imageUrl: ")
                 .__()
-                .li().text("budget: " + String.valueOf(ProjectManager.getInstance().find(id).getBudget()))
+                .li().text("budget: " + String.valueOf(project.getBudget()))
                 .__()
                 .__()
                 .__()

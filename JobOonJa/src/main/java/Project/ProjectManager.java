@@ -18,16 +18,16 @@ public class ProjectManager {
         return instance;
     }
 
-    public void add(String title, Project project) throws RedundantProject {
-        if(!repository.containsKey(title))
-            repository.put(title,project);
+    public void add(String id, Project project) throws RedundantProject {
+        if(!repository.containsKey(id))
+            repository.put(id,project);
         else
             throw new RedundantProject("Project has already exist!");
     }
 
-    public Project find(String title) throws ProjectNotFound {
-        if(repository.containsKey(title))
-            return repository.get(title);
+    public Project find(String id) throws ProjectNotFound {
+        if(repository.containsKey(id))
+            return repository.get(id);
         else
             throw new ProjectNotFound("Project not found!");
     }

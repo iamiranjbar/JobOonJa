@@ -1,5 +1,6 @@
 package Page;
 
+import User.User;
 import User.UserManager;
 import htmlflow.StaticHtml;
 import Exception.*;
@@ -15,6 +16,7 @@ public class UserPage implements Page {
 
     @Override
     public void render(HttpExchange httpExchange) throws UserNotFound, IOException {
+        User user = UserManager.getInstance().find(id);
         String htmlFile = StaticHtml
                 .view()
                 .html()
@@ -27,13 +29,13 @@ public class UserPage implements Page {
                 .ul()
                 .li().text("id: " + id)
                 .__()
-                .li().text("first name: " + UserManager.getInstance().find(id).getFirstName())
+                .li().text("first name: " + user.getFirstName())
                 .__()
-                .li().text("last name: " + UserManager.getInstance().find(id).getLastName())
+                .li().text("last name: " + user.getLastName())
                 .__()
-                .li().text("jobTitle: " + UserManager.getInstance().find(id).getJobTitle())
+                .li().text("jobTitle: " + user.getJobTitle())
                 .__()
-                .li().text("bio: " + UserManager.getInstance().find(id).getBio())
+                .li().text("bio: " + user.getBio())
                 .__()
                 .__()
                 .__()
