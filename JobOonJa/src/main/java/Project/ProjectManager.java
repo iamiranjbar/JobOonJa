@@ -31,4 +31,8 @@ public class ProjectManager {
         else
             throw new ProjectNotFound("Project not found!");
     }
+
+    public Map<String, Project> getRepository() {
+        return repository;
+    }
 }

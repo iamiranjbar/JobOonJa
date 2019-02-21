@@ -8,6 +8,7 @@ import Exception.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class JobOonJa {
 
@@ -66,6 +67,18 @@ public class JobOonJa {
 
     public void bid(Bid bid) throws InsufficentBudget, InsufficentSkill {
         bidManager.submit(bid);
+    }
+
+    public User getUser(String id) throws UserNotFound {
+        return userManager.find(id);
+    }
+
+    public Project getProject(String id) throws ProjectNotFound {
+        return projectManager.find(id);
+    }
+
+    public Map<String, Project> getProjects() {
+        return projectManager.getRepository();
     }
 
     public void run() {

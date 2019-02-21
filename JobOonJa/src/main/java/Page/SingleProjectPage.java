@@ -1,5 +1,6 @@
 package Page;
 
+import JobOonJa.JobOonJa;
 import Project.ProjectManager;
 import com.sun.net.httpserver.HttpExchange;
 import htmlflow.StaticHtml;
@@ -15,10 +16,10 @@ public class SingleProjectPage implements Page {
 
     @Override
     public void render(HttpExchange httpExchange) throws ProjectNotFound, UserNotFound, IOException {
-        Project project = ProjectManager.getInstance().find(id);
+        Project project = JobOonJa.getInstance().getProject(id);
         String htmlFile = StaticHtml
                 .view()
-                .html()
+                .html().attrLang("en")
                 .head()
                 .title().text("User").__()
                 .meta().attrCharset("UTF-8").__()
