@@ -4,12 +4,17 @@ import User.UserManager;
 import htmlflow.StaticHtml;
 import Exception.*;
 
+import com.sun.net.httpserver.HttpExchange;
+
+import java.io.IOException;
+import java.io.OutputStream;
+
 public class UserPage implements Page {
 
     private String id;
 
     @Override
-    public void render() throws UserNotFound {
+    public void render(HttpExchange httpExchange) throws UserNotFound, IOException {
         String htmlFile = StaticHtml
                 .view()
                 .html()
@@ -35,6 +40,10 @@ public class UserPage implements Page {
                 .__() //body
                 .__() //html
                 .render();
+        httpExchange.sendResponseHeaders(200, htmlFile.length());
+        OutputStream os = httpExchange.getResponseBody();
+        os.write(htmlFile.getBytes());
+        os.close();
     }
 
     public UserPage(String id) {
