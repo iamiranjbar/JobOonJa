@@ -1,8 +1,15 @@
-import JobOonJa.JobOonJa;
+import Server.Server;
+import Exception.*;
+
+import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
-        JobOonJa jobOonJa = JobOonJa.getInstance();
-        jobOonJa.run();
+        Server server = new Server();
+        try {
+            server.start();
+        } catch (IOException | RedundantUser e) {
+            e.printStackTrace();
+        }
     }
 }

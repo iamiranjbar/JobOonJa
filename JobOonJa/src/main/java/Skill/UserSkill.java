@@ -5,6 +5,12 @@ import java.util.ArrayList;
 public class UserSkill extends Skill {
     private ArrayList<Integer> endorsers;
 
+    public UserSkill(String name, int points) {
+        this.name = name;
+        this.points = points;
+        this.endorsers = new ArrayList<>();
+    }
+
     private boolean isUniqueEndorser(int id){
         for(int index:this.endorsers){
             if (index == id)

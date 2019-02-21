@@ -50,4 +50,9 @@ public class User {
     public String getBio() {
         return bio;
     }
+
+    public void addSkill(ArrayList<UserSkill> skills){
+        for(UserSkill skill:skills)
+            this.skills.put(skill.getName(),skill);
+    }
 }
