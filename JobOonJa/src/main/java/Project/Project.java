@@ -18,24 +18,26 @@ public class Project {
     @JsonProperty(required = true)
     private String description;
     @JsonProperty(required = true)
-    private String imageURL;
+    private String imageUrl;
     @JsonProperty(required = true)
     private ArrayList<Skill> skills;
-    @JsonProperty(required = true)
-    private ArrayList<Bid> bids;
     @JsonProperty(required = true)
     private int budget;
     @JsonProperty(required = true)
     private long deadline;
-    @JsonProperty(required = true)
     private User winner;
+    private ArrayList<Bid> bids;
+
+    public Project() {
+
+    }
 
     public Project(String id, String title, String description, String imageURL, ArrayList<Skill> skills,
                    ArrayList<Bid> bids, int budget, long deadline, User winner) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.imageURL = imageURL;
+        this.imageUrl = imageURL;
         this.skills = skills;
         this.bids = bids;
         this.budget = budget;
@@ -56,7 +58,7 @@ public class Project {
     }
 
     public String getImageURL() {
-        return imageURL;
+        return imageUrl;
     }
 
     public ArrayList<Skill> getSkills() {

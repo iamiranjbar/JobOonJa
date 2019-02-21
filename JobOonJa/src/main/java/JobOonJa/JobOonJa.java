@@ -16,6 +16,7 @@ public class JobOonJa {
     private UserManager userManager;
     private ProjectManager projectManager;
     private BidManager bidManager;
+    private SkillManager skillManager;
 
     public static JobOonJa getInstance() {
         return ourInstance;
@@ -25,6 +26,7 @@ public class JobOonJa {
         userManager = UserManager.getInstance();
         projectManager = ProjectManager.getInstance();
         bidManager = BidManager.getInstance();
+        skillManager = SkillManager.getInstance();
     }
 
     private int goalFunction(Bid bid) {
@@ -83,5 +85,13 @@ public class JobOonJa {
 
     public void run() {
 
+    }
+
+    public void addSkills(ArrayList<Skill> skills) {
+        skillManager.addList(skills);
+    }
+
+    public void addProjects(ArrayList<Project> projects) {
+        projectManager.addList(projects);
     }
 }

@@ -3,18 +3,14 @@ package Skill;
 import com.jsoniter.annotation.JsonObject;
 import com.jsoniter.annotation.JsonProperty;
 
+import java.util.ArrayList;
+
 @JsonObject(asExtraForUnknownProperties = true)
-public class Skill {
+public class SkillListDTO {
     @JsonProperty(required = true)
-    protected String name;
-    protected int point;
+    private ArrayList<Skill> skills;
 
-    public String getName() {
-        return name;
+    public ArrayList<Skill> getSkills() {
+        return skills;
     }
-
-    public int getPoint() {
-        return point;
-    }
-
 }

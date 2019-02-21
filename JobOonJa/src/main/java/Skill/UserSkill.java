@@ -5,9 +5,13 @@ import java.util.ArrayList;
 public class UserSkill extends Skill {
     private ArrayList<Integer> endorsers;
 
+    public UserSkill() {
+
+    }
+
     public UserSkill(String name, int points) {
         this.name = name;
-        this.points = points;
+        this.point = points;
         this.endorsers = new ArrayList<>();
     }
 
@@ -21,7 +25,7 @@ public class UserSkill extends Skill {
 
     public void endorse(int id){
         if (isUniqueEndorser(id)) {
-            this.points++;
+            this.point++;
             this.endorsers.add(id);
         }
     }

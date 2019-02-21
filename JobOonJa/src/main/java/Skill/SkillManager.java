@@ -2,6 +2,7 @@ package Skill;
 
 import Exception.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,13 @@ public class SkillManager {
     public void add(Skill skill) {
         if(!repository.containsKey(skill.getName()))
             repository.put(skill.getName(),skill);
+    }
+
+    public void addList(ArrayList<Skill> skills) {
+        for (Skill skill: skills) {
+            if(!repository.containsKey(skill.getName()))
+                repository.put(skill.getName(),skill);
+        }
     }
 
     public Skill find(String name) throws SkillNotFound {

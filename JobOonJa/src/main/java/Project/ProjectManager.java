@@ -25,6 +25,13 @@ public class ProjectManager {
             throw new RedundantProject("Project has already exist!");
     }
 
+    public void addList(ArrayList<Project> projects) {
+        for (Project project: projects) {
+            if(!repository.containsKey(project.getId()))
+                repository.put(project.getId(),project);
+        }
+    }
+
     public Project find(String id) throws ProjectNotFound {
         if(repository.containsKey(id))
             return repository.get(id);

@@ -8,6 +8,10 @@ public class Bid {
     private Project project;
     private int amount;
 
+    public Bid() {
+
+    }
+
     public Bid(User user, Project project, int amount){
         this.user = user;
         this.project = project;

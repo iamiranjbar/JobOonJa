@@ -12,6 +12,10 @@ public class User {
     private HashMap<String, UserSkill> skills;
     private String bio;
 
+    public User() {
+
+    }
+
     public User(String id, String firstName, String lastName, String jobTitle, String profilePicURL,
                 HashMap<String, UserSkill> skills, String bio) {
         this.id = id;
@@ -52,7 +56,9 @@ public class User {
     }
 
     public void addSkill(ArrayList<UserSkill> skills){
-        for(UserSkill skill:skills)
-            this.skills.put(skill.getName(),skill);
+        for(UserSkill skill:skills) {
+            if (!this.skills.containsKey(skill.getName()))
+                this.skills.put(skill.getName(), skill);
+        }
     }
 }

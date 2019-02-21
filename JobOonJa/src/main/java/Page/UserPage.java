@@ -22,8 +22,8 @@ public class UserPage implements Page {
                 .view()
                 .html().attrLang("en")
                 .head()
-                .title().text("User").__()
                 .meta().attrCharset("UTF-8").__()
+                .title().text("User").__()
                 .__() //head
                 .body()
                 .div().attrClass("container")

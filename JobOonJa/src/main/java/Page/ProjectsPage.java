@@ -21,8 +21,9 @@ public class ProjectsPage implements Page{
         Map<String, Project> projects = JobOonJa.getInstance().getProjects();
         Table<Body<Html<HtmlView>>> table = StaticHtml.view()
                 .html().attrLang("en")
-                .head().meta().attrCharset("UTF-8")
-                .attrTitle("Projects").__()
+                .head().meta().attrCharset("UTF-8").__()
+                .title().text("Projects").__()
+                .style()
                 .text("table {\n" +
                         "            text-align: center;\n" +
                         "            margin: 0 auto;\n" +
@@ -32,6 +33,7 @@ public class ProjectsPage implements Page{
                         "            margin: 5px 5px 5px 5px;\n" +
                         "            text-align: center;\n" +
                         "        }")
+                .__()
                 .__()
                 .body()
                 .table().tr()

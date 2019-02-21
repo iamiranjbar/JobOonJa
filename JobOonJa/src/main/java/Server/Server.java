@@ -3,8 +3,10 @@ package Server;
 import JobOonJa.JobOonJa;
 import Page.*;
 import Exception.*;
+import Project.ProjectListDTO;
 import Skill.*;
 import User.User;
+import com.jsoniter.JsonIterator;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -27,7 +29,7 @@ import java.util.StringTokenizer;
 
 public class Server {
     private static final JobOonJa jobOonJa = JobOonJa.getInstance();
-    private static final SkillManager skillManager = SkillManager.getInstance();
+
     public void start() throws IOException, RedundantUser {
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
         this.initialize();
@@ -52,21 +54,37 @@ public class Server {
     }
 
     private void getSkills() throws IOException {
-        CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet("http://142.93.134.194:8000/joboonja/skill");
+        String total = this.extractGetData(httpGet);
+        System.out.println(total);
+        SkillListDTO skillList = JsonIterator.deserialize("{\"skills\":" + total + "}", SkillListDTO.class);
+        jobOonJa.addSkills(skillList.getSkills());
+    }
+
+    private String extractGetData(HttpGet httpGet) throws IOException {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
         CloseableHttpResponse response = httpclient.execute(httpGet);
         BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
         String line, total = "";
         while ((line = reader.readLine()) != null) {
             total += line;
         }
+        return total;
+    }
+
+    private void getProjects() throws IOException {
+        HttpGet httpGet = new HttpGet("http://142.93.134.194:8000/joboonja/project");
+        String total = this.extractGetData(httpGet);
         System.out.println(total);
+        ProjectListDTO projectList = JsonIterator.deserialize("{\"projects\":" + total + "}", ProjectListDTO.class);
+        jobOonJa.addProjects(projectList.getProjects());
     }
 
     private void initialize() throws RedundantUser, IOException {
         User user = this.makeUser();
         jobOonJa.register(user);
         this.getSkills();
+        this.getProjects();
     }
 
     class reqHandler implements HttpHandler {
