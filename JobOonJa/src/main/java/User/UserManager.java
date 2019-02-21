@@ -17,16 +17,16 @@ public class UserManager {
         return instance;
     }
 
-    public void add(String username, User user) throws RedundantUser {
-        if (!repository.containsKey(username))
-            repository.put(username, user);
+    public void add(String id, User user) throws RedundantUser {
+        if (!repository.containsKey(id))
+            repository.put(id, user);
         else
             throw new RedundantUser("User has already exist!");
     }
 
-    public User find(String username) throws UserNotFound {
-        if(repository.containsKey(username))
-            return repository.get(username);
+    public User find(String id) throws UserNotFound {
+        if(repository.containsKey(id))
+            return repository.get(id);
         else
             throw new UserNotFound("User not found!");
     }

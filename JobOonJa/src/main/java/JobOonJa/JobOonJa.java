@@ -39,7 +39,7 @@ public class JobOonJa {
     }
 
     public void register(User user) throws RedundantUser {
-        userManager.add(user.getName(), user);
+        userManager.add(user.getId(), user);
     }
 
     public void auction(String projectTitle) {
@@ -54,7 +54,7 @@ public class JobOonJa {
             }
         }
         if (selected != null) {
-            System.out.printf("winner: %s\n", selected.getName());
+            System.out.printf("winner: %s\n", selected.getFirstName());
         } else {
             System.out.println("we do not have any bid for this project.");
         }
