@@ -2,23 +2,21 @@ package Page;
 
 import JobOonJa.JobOonJa;
 import User.User;
-import User.UserManager;
 import htmlflow.StaticHtml;
 import Exception.*;
 
 import com.sun.net.httpserver.HttpExchange;
-
+import java.nio.charset.StandardCharsets;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class UserPage implements Page {
-
+public class UserPage extends Page {
     private String id;
 
     @Override
-    public void render(HttpExchange httpExchange) throws UserNotFound, IOException {
+    protected String renderPageContent() throws UserNotFound {
         User user = JobOonJa.getInstance().getUser(id);
-        String htmlFile = StaticHtml
+        return StaticHtml
                 .view()
                 .html().attrLang("en")
                 .head()
@@ -43,10 +41,6 @@ public class UserPage implements Page {
                 .__() //body
                 .__() //html
                 .render();
-        httpExchange.sendResponseHeaders(200, htmlFile.length());
-        OutputStream os = httpExchange.getResponseBody();
-        os.write(htmlFile.getBytes());
-        os.close();
     }
 
     public UserPage(String id) {

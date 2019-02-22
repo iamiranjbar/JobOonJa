@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static Skill.SkillManager.haveSkills;
+
 public class JobOonJa {
 
     private static final JobOonJa ourInstance = new JobOonJa();
@@ -75,23 +77,32 @@ public class JobOonJa {
         return userManager.find(id);
     }
 
-    public Project getProject(String id) throws ProjectNotFound {
-        return projectManager.find(id);
+    public Project getSuitableProject(String userId, String id) throws ProjectNotFound, InsufficentSkill, UserNotFound {
+        User user = userManager.find(userId);
+        Project project = projectManager.find(id);
+        if (haveSkills(user, project))
+            return project;
+        else throw new InsufficentSkill("You don't have nough skills to see this project!");
+
     }
 
-    public Map<String, Project> getProjects() {
-        return projectManager.getRepository();
-    }
-
-    public void run() {
-
+    public ArrayList<Project> getSuitableProjects(String userId) throws UserNotFound {
+        User user = userManager.find(userId);
+        HashMap<String,Project> repo = projectManager.getRepository();
+        ArrayList<Project> projects = new ArrayList<>();
+        for(HashMap.Entry<String, Project> entry : repo.entrySet()) {
+            Project project = entry.getValue();
+            if(haveSkills(user, project))
+                projects.add(project);
+        }
+        return projects;
     }
 
     public void addSkills(ArrayList<Skill> skills) {
-        skillManager.addList(skills);
+        skillManager.fill(skills);
     }
 
-    public void addProjects(ArrayList<Project> projects) {
-        projectManager.addList(projects);
+    public void addProjects(ArrayList<Project> projects) throws RedundantProject {
+        projectManager.fill(projects);
     }
 }

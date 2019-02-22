@@ -1,6 +1,8 @@
 package Skill;
 
 import Exception.*;
+import Project.Project;
+import User.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,10 +25,9 @@ public class SkillManager {
             repository.put(skill.getName(),skill);
     }
 
-    public void addList(ArrayList<Skill> skills) {
+    public void fill(ArrayList<Skill> skills) {
         for (Skill skill: skills) {
-            if(!repository.containsKey(skill.getName()))
-                repository.put(skill.getName(),skill);
+            this.add(skill);
         }
     }
 
@@ -35,5 +36,16 @@ public class SkillManager {
             return repository.get(name);
         else
             throw new SkillNotFound("skill not found!");
+    }
+
+    public static boolean haveSkills(User user, Project project){
+        HashMap<String,UserSkill> capability = user.getSkills();
+        ArrayList<Skill> requirements = project.getSkills();
+        for (Skill skill: requirements) {
+            String key = skill.getName();
+            if (!capability.containsKey(key) || skill.getPoint() > capability.get(key).getPoint())
+                return false;
+        }
+        return true;
     }
 }

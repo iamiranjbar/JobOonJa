@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class ProjectManager {
     private static final ProjectManager instance = new ProjectManager();
-    private Map<String,Project> repository;
+    private HashMap<String,Project> repository;
 
     private ProjectManager() {
         repository = new HashMap<String, Project>();
@@ -25,10 +25,9 @@ public class ProjectManager {
             throw new RedundantProject("Project has already exist!");
     }
 
-    public void addList(ArrayList<Project> projects) {
+    public void fill(ArrayList<Project> projects) throws RedundantProject {
         for (Project project: projects) {
-            if(!repository.containsKey(project.getId()))
-                repository.put(project.getId(),project);
+            this.add(project.getId(), project);
         }
     }
 
@@ -39,7 +38,7 @@ public class ProjectManager {
             throw new ProjectNotFound("Project not found!");
     }
 
-    public Map<String, Project> getRepository() {
+    public HashMap<String, Project> getRepository() {
         return repository;
     }
 }

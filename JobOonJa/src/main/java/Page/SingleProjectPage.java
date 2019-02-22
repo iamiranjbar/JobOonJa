@@ -1,23 +1,18 @@
 package Page;
 
 import JobOonJa.JobOonJa;
-import Project.ProjectManager;
-import com.sun.net.httpserver.HttpExchange;
 import htmlflow.StaticHtml;
 import Exception.*;
 import Project.*;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-public class SingleProjectPage implements Page {
-
-    String id;
+public class SingleProjectPage extends Page {
+    private String id;
+    private String userId;
 
     @Override
-    public void render(HttpExchange httpExchange) throws ProjectNotFound, UserNotFound, IOException {
-        Project project = JobOonJa.getInstance().getProject(id);
-        String htmlFile = StaticHtml
+    protected String renderPageContent() throws ProjectNotFound, UserNotFound, InsufficentSkill {
+        Project project = JobOonJa.getInstance().getSuitableProject(userId,id);
+        return StaticHtml
                 .view()
                 .html().attrLang("en")
                 .head()
@@ -43,13 +38,10 @@ public class SingleProjectPage implements Page {
                 .__() //body
                 .__() //html
                 .render();
-        httpExchange.sendResponseHeaders(200, htmlFile.length());
-        OutputStream os = httpExchange.getResponseBody();
-        os.write(htmlFile.getBytes());
-        os.close();
     }
 
-    public SingleProjectPage(String id) {
+    public SingleProjectPage(String userId, String id) {
+        this.userId = userId;
         this.id = id;
     }
 }
