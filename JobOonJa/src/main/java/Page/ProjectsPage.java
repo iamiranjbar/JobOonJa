@@ -7,6 +7,7 @@ import Exception.*;
 import htmlflow.HtmlView;
 import htmlflow.StaticHtml;
 import org.xmlet.htmlapifaster.Body;
+import org.xmlet.htmlapifaster.EnumDirType;
 import org.xmlet.htmlapifaster.Html;
 import org.xmlet.htmlapifaster.Table;
 
@@ -44,7 +45,7 @@ public class ProjectsPage extends Page{
         for(Project project : projects) {
             table = table.tr()
                     .th().text(project.getId()).__()
-                    .th().text(project.getTitle()).__()
+                    .th().attrDir(EnumDirType.RTL).text(project.getTitle()).__()
                     .th().text(String.valueOf(project.getBudget())).__()
                     .__();
         }

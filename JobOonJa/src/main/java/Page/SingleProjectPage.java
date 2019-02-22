@@ -4,6 +4,7 @@ import JobOonJa.JobOonJa;
 import htmlflow.StaticHtml;
 import Exception.*;
 import Project.*;
+import org.xmlet.htmlapifaster.EnumDirType;
 
 public class SingleProjectPage extends Page {
     private String id;
@@ -24,12 +25,14 @@ public class SingleProjectPage extends Page {
                 .ul()
                 .li().text("id: " + id)
                 .__()
-                .li().text("title: " + project.getTitle())
+                .li().text("title: ")
+                .div().attrDir(EnumDirType.RTL).text(project.getTitle()).__()
                 .__()
-                .li().text("description: " + project.getDescription())
+                .li().attrDir(EnumDirType.LTR).text("description: ")
+                .div().attrDir(EnumDirType.RTL).text(project.getDescription()).__()
                 .__()
-                .li().img().attrSrc(project.getImageURL()).attrStyle("width: 50px; height: 50px;")
-                .__().text("imageUrl: ")
+                .li().text("imageUrl: ").img().attrSrc(project.getImageURL()).attrStyle("width: 50px; height: 50px;")
+                .__()
                 .__()
                 .li().text("budget: " + String.valueOf(project.getBudget()))
                 .__()
