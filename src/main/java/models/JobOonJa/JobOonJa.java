@@ -97,6 +97,14 @@ public class JobOonJa {
         return projects;
     }
 
+    public ArrayList<User> getUserList(String userId){
+        ArrayList<User> userList = userManager.getUserList();
+        for(int i=0; i<userList.size(); i++)
+            if (userList.get(i).getId().equals(userId))
+                userList.remove(i);
+        return userList;
+    }
+
     public void addSkills(ArrayList<Skill> skills) {
         skillManager.fill(skills);
     }

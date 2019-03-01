@@ -17,7 +17,6 @@ import java.util.StringTokenizer;
 public class ProjectServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
         String url = req.getRequestURI();
         StringTokenizer stringTokenizer = new StringTokenizer(url, "/");
         System.out.println(stringTokenizer.countTokens());

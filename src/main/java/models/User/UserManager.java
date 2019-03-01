@@ -2,6 +2,8 @@ package models.User;
 
 import models.Exception.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class UserManager {
@@ -9,7 +11,7 @@ public class UserManager {
     private HashMap<String, User> repository;
 
     private UserManager() {
-        repository = new HashMap<String, User>();
+        repository = new HashMap<>();
     }
 
     public static UserManager getInstance() {
@@ -28,6 +30,11 @@ public class UserManager {
             return repository.get(id);
         else
             throw new UserNotFound("User not found!");
+    }
+
+    public ArrayList<User> getUserList() {
+        Collection<User> users = repository.values();
+        return new ArrayList<>(users);
     }
 
 }
