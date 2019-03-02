@@ -19,7 +19,6 @@ public class ProjectServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String url = req.getRequestURI();
         StringTokenizer stringTokenizer = new StringTokenizer(url, "/");
-        System.out.println(stringTokenizer.countTokens());
         ArrayList<Project> projects = null;
         try {
             projects = JobOonJa.getInstance().getSuitableProjects("1");
@@ -27,6 +26,7 @@ public class ProjectServlet extends HttpServlet {
             userNotFound.printStackTrace();
         }
         if (stringTokenizer.countTokens() == 2) {
+            req.setCharacterEncoding("UTF-8");
             req.setAttribute("projects", projects);
             req.getRequestDispatcher("projects.jsp").forward(req, resp);
         } else if (stringTokenizer.countTokens() == 3) {

@@ -1,11 +1,20 @@
 package models.JobOonJa;
 
+import com.jsoniter.JsonIterator;
 import models.Bid.*;
 import models.Exception.*;
 import models.Project.*;
 import models.Skill.*;
 import models.User.*;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,7 +22,20 @@ import static models.Skill.SkillManager.haveSkills;
 
 public class JobOonJa {
 
-    private static final JobOonJa ourInstance = new JobOonJa();
+    private static JobOonJa ourInstance;
+
+    static {
+        try {
+            ourInstance = new JobOonJa();
+        } catch (RedundantUser redundantUser) {
+            redundantUser.printStackTrace();
+        } catch (RedundantProject redundantProject) {
+            redundantProject.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private UserManager userManager;
     private ProjectManager projectManager;
     private BidManager bidManager;
@@ -23,12 +45,62 @@ public class JobOonJa {
         return ourInstance;
     }
 
-    private JobOonJa() {
+    private JobOonJa() throws RedundantUser, RedundantProject, IOException {
         userManager = UserManager.getInstance();
         projectManager = ProjectManager.getInstance();
         bidManager = BidManager.getInstance();
         skillManager = SkillManager.getInstance();
+        this.initialize();
     }
+
+    private HashMap<String,UserSkill> makeUserSkill(){
+        HashMap<String,UserSkill> skills = new HashMap<>();
+        skills.put("HTML",new UserSkill("HTML",5));
+        skills.put("Javascript",new UserSkill("Javascript",4));
+        skills.put("C++",new UserSkill("C++",2));
+        skills.put("Java",new UserSkill("Java",3));
+        return skills;
+    }
+
+    private User makeUser(){
+        this.makeUserSkill();
+        return new User("1","علی","شریف‌زاده","برنامه‌نویس وب", "../../../img/kami.jpg",
+                this.makeUserSkill(),"روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلی کارا بکنه ولی پول نداشت");
+    }
+
+    private String extractGetData(HttpGet httpGet) throws IOException {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        CloseableHttpResponse response = httpclient.execute(httpGet);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        String line;
+        StringBuilder total = new StringBuilder();
+        while ((line = reader.readLine()) != null) {
+            total.append(line);
+        }
+        return total.toString();
+    }
+
+    private void getSkills() throws IOException {
+        HttpGet httpGet = new HttpGet("http://142.93.134.194:8000/joboonja/skill");
+        String total = this.extractGetData(httpGet);
+        SkillListDTO skillList = JsonIterator.deserialize("{\"skills\":" + total + "}", SkillListDTO.class);
+        this.addSkills(skillList.getSkills());
+    }
+
+    private void getProjects() throws IOException, RedundantProject {
+        HttpGet httpGet = new HttpGet("http://142.93.134.194:8000/joboonja/project");
+        String total = this.extractGetData(httpGet);
+        ProjectListDTO projectList = JsonIterator.deserialize("{\"projects\":" + total + "}", ProjectListDTO.class);
+        this.addProjects(projectList.getProjects());
+    }
+
+    private void initialize() throws RedundantUser, IOException, RedundantProject {
+        User user = this.makeUser();
+        this.register(user);
+        this.getSkills();
+        this.getProjects();
+    }
+
 
     private int goalFunction(Bid bid) {
         int result = 0;
