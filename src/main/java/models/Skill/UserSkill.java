@@ -3,7 +3,7 @@ package models.Skill;
 import java.util.ArrayList;
 
 public class UserSkill extends Skill {
-    private ArrayList<Integer> endorsers;
+    private ArrayList<String> endorsers;
 
     public UserSkill() {
 
@@ -15,18 +15,22 @@ public class UserSkill extends Skill {
         this.endorsers = new ArrayList<>();
     }
 
-    private boolean isUniqueEndorser(int id){
-        for(int index:this.endorsers){
-            if (index == id)
+    public boolean isUniqueEndorser(String id){
+        for(String index:this.endorsers){
+            if (index.equals(id))
                 return false;
         }
-        return false;
+        return true;
     }
 
-    public void endorse(int id){
+    public void endorse(String id){
         if (isUniqueEndorser(id)) {
             this.point++;
             this.endorsers.add(id);
         }
+    }
+
+    public ArrayList<String> getEndorsers() {
+        return endorsers;
     }
 }

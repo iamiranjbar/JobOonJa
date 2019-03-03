@@ -4,6 +4,7 @@ import models.Skill.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class User {
     private String id;
@@ -57,10 +58,23 @@ public class User {
         return bio;
     }
 
-    public void addSkill(ArrayList<UserSkill> skills){
+    public void addSkill(String skillName){
+        this.skills.put(skillName, new UserSkill(skillName, 0));
+    }
+
+    public void addSkills(ArrayList<UserSkill> skills){
         for(UserSkill skill:skills) {
             if (!this.skills.containsKey(skill.getName()))
                 this.skills.put(skill.getName(), skill);
         }
+    }
+
+    public void deleteSkill(String skillName){
+        this.skills.remove(skillName);
+    }
+
+    public void endorse(String endorser, String skillName){
+        UserSkill userSkill = skills.get(skillName);
+        userSkill.endorse(endorser);
     }
 }

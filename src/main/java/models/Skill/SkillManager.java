@@ -13,7 +13,7 @@ public class SkillManager {
     private Map<String,Skill> repository;
 
     private SkillManager() {
-        repository = new HashMap<String, Skill>();
+        repository = new HashMap<>();
     }
 
     public static SkillManager getInstance() {
@@ -47,5 +47,9 @@ public class SkillManager {
                 return false;
         }
         return true;
+    }
+
+    public ArrayList<Skill> getAllSkills(){
+        return new ArrayList<>(repository.values());
     }
 }

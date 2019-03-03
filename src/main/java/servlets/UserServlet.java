@@ -1,7 +1,8 @@
 package servlets;
 
+import models.Exception.UserNotFound;
 import models.JobOonJa.JobOonJa;
-import models.Skill.UserSkill;
+import models.Skill.Skill;
 import models.User.User;
 
 import javax.servlet.ServletException;
@@ -11,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 @WebServlet({"/users","/users/*"})
 public class UserServlet extends HttpServlet {
@@ -25,23 +25,29 @@ public class UserServlet extends HttpServlet {
         String pathInfo = req.getPathInfo();
         if (pathInfo == null) {
             ArrayList<User> users = jobOonJa.getUserList(loggedInUser);
-            users.add(new User("1","علی","شریف‌زاده","برنامه‌نویس وب", "../../../img/kami.jpg",
-                    this.makeUserSkill(),"روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلی کارا بکنه ولی پول نداشت"));
             req.setAttribute("users",users);
-            req.getRequestDispatcher("users.jsp").forward(req, resp);
+            req.getRequestDispatcher("/users.jsp").forward(req, resp);
         } else {
             String[] pathParts = pathInfo.split("/");
-            String part1 = pathParts[1];
-            System.out.println(part1);
+            String userId = pathParts[1];
+            User user = null;
+            try {
+                user = jobOonJa.getUser(userId);
+            } catch (UserNotFound userNotFound) {
+                userNotFound.printStackTrace();
+            }
+            req.setAttribute("user", user);
+            if (userId.equals(loggedInUser)) {
+                try {
+                    ArrayList<Skill> abilities = jobOonJa.getUserAbilities(loggedInUser);
+                    req.setAttribute("abilities", abilities);
+                } catch (UserNotFound userNotFound) {
+                    userNotFound.printStackTrace();
+                }
+                req.getRequestDispatcher("/home.jsp").forward(req, resp);
+            } else {
+                req.getRequestDispatcher("/profile.jsp").forward(req, resp);
+            }
         }
-    }
-
-    private HashMap<String, UserSkill> makeUserSkill(){
-        HashMap<String,UserSkill> skills = new HashMap<>();
-        skills.put("HTML",new UserSkill("HTML",5));
-        skills.put("Javascript",new UserSkill("Javascript",4));
-        skills.put("C++",new UserSkill("C++",2));
-        skills.put("Java",new UserSkill("Java",3));
-        return skills;
     }
 }

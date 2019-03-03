@@ -1,6 +1,7 @@
 package models.JobOonJa;
 
 import com.jsoniter.JsonIterator;
+import com.jsoniter.fuzzy.StringFloatDecoder;
 import models.Bid.*;
 import models.Exception.*;
 import models.Project.*;
@@ -27,11 +28,7 @@ public class JobOonJa {
     static {
         try {
             ourInstance = new JobOonJa();
-        } catch (RedundantUser redundantUser) {
-            redundantUser.printStackTrace();
-        } catch (RedundantProject redundantProject) {
-            redundantProject.printStackTrace();
-        } catch (IOException e) {
+        } catch (RedundantUser | RedundantProject | IOException e) {
             e.printStackTrace();
         }
     }
@@ -62,10 +59,15 @@ public class JobOonJa {
         return skills;
     }
 
-    private User makeUser(){
+    private User makeAdminUser(){
         this.makeUserSkill();
         return new User("1","علی","شریف‌زاده","برنامه‌نویس وب", "../../../img/kami.jpg",
                 this.makeUserSkill(),"روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلی کارا بکنه ولی پول نداشت");
+    }
+
+    private User makeUser(String id, String firstName, String lastName, String jobTitle, String bio){
+        this.makeUserSkill();
+        return new User(id,firstName,lastName,jobTitle, "",this.makeUserSkill(),bio);
     }
 
     private String extractGetData(HttpGet httpGet) throws IOException {
@@ -95,10 +97,16 @@ public class JobOonJa {
     }
 
     private void initialize() throws RedundantUser, IOException, RedundantProject {
-        User user = this.makeUser();
+        User user = this.makeAdminUser();
         this.register(user);
+        this.register(this.makeUser("2", "ali", "edalat", "student", "pro"));
+        this.register(this.makeUser("3", "amir", "ranjber", "student", "pro"));
         this.getSkills();
         this.getProjects();
+    }
+
+    public String getLogInUser() {
+        return "1";
     }
 
 
@@ -169,12 +177,19 @@ public class JobOonJa {
         return projects;
     }
 
-    public ArrayList<User> getUserList(String userId){
-        ArrayList<User> userList = userManager.getUserList();
-        for(int i=0; i<userList.size(); i++)
-            if (userList.get(i).getId().equals(userId))
+    public ArrayList<User> getUserList(String userId) {
+        ArrayList<User> userList = new ArrayList<>(userManager.getUserList());
+        for (int i = 0; i < userList.size(); i++)
+            if (userList.get(i).getId().equals(userId)) {
                 userList.remove(i);
+                break;
+            }
         return userList;
+    }
+
+    public void addSkillToUser(String userId, String skillName) throws UserNotFound {
+        User user = userManager.find(userId);
+        user.addSkill(skillName);
     }
 
     public void addSkills(ArrayList<Skill> skills) {
@@ -183,5 +198,41 @@ public class JobOonJa {
 
     public void addProjects(ArrayList<Project> projects) throws RedundantProject {
         projectManager.fill(projects);
+    }
+
+    public void deleteUserSkill(String userId, String skillName) throws UserNotFound {
+        User user = userManager.find(userId);
+        user.deleteSkill(skillName);
+    }
+
+    public ArrayList<Skill> getUserAbilities(String userId) throws UserNotFound {
+        ArrayList<Skill> allSkills = skillManager.getAllSkills();
+        User user = userManager.find(userId);
+        HashMap<String, UserSkill> userSkills = user.getSkills();
+        ArrayList<Skill> result = new ArrayList<>();
+        for (Skill skill:allSkills)
+            if (!userSkills.containsKey(skill.getName()))
+                result.add(skill);
+        return result;
+    }
+
+    public void endorse(String endorser, String endorsed, String skillName) throws UserNotFound {
+        User user = userManager.find(endorsed);
+        user.endorse(endorser, skillName);
+    }
+
+    public void bid(String userId, String projectId, int amount) throws ProjectNotFound, UserNotFound, InsufficentBudget, InsufficentSkill {
+        Bid bid = new Bid(userManager.find(userId), projectManager.find(projectId), amount);
+        bidManager.submit(bid);
+    }
+
+    public boolean findBid(String userId, String projectId) {
+        ArrayList<Bid> bids = bidManager.getRepository();
+        for (Bid bid : bids) {
+            if (bid.getUser().getId().equals(userId) && bid.getProject().getId().equals(projectId)) {
+                return  true;
+            }
+        }
+        return false;
     }
 }
