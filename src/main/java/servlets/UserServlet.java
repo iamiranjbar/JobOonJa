@@ -34,6 +34,8 @@ public class UserServlet extends HttpServlet {
             try {
                 user = jobOonJa.getUser(userId);
             } catch (UserNotFound userNotFound) {
+                req.setAttribute("message", userNotFound.getMessage());
+                req.getRequestDispatcher("/exception.jsp").forward(req, resp);
                 userNotFound.printStackTrace();
             }
             req.setAttribute("user", user);
@@ -42,6 +44,8 @@ public class UserServlet extends HttpServlet {
                     ArrayList<Skill> abilities = jobOonJa.getUserAbilities(loggedInUser);
                     req.setAttribute("abilities", abilities);
                 } catch (UserNotFound userNotFound) {
+                    req.setAttribute("message", userNotFound.getMessage());
+                    req.getRequestDispatcher("/exception.jsp").forward(req, resp);
                     userNotFound.printStackTrace();
                 }
                 req.getRequestDispatcher("/home.jsp").forward(req, resp);

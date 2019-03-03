@@ -28,6 +28,8 @@ public class EndorseServlet extends HttpServlet {
             User user = jobOonJa.getUser(endorsed);
             req.setAttribute("user",user);
         } catch (UserNotFound userNotFound) {
+            req.setAttribute("message", userNotFound.getMessage());
+            req.getRequestDispatcher("/exception.jsp").forward(req, resp);
             userNotFound.printStackTrace();
         }
         req.getRequestDispatcher("/profile.jsp").forward(req, resp);

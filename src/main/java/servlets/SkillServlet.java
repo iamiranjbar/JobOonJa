@@ -33,6 +33,8 @@ public class SkillServlet extends HttpServlet {
             ArrayList<Skill> abilities = jobOonJa.getUserAbilities(loggedInUser);
             req.setAttribute("abilities", abilities);
         } catch (UserNotFound userNotFound) {
+            req.setAttribute("message", userNotFound.getMessage());
+            req.getRequestDispatcher("/exception.jsp").forward(req, resp);
             userNotFound.printStackTrace();
         }
         req.getRequestDispatcher("/home.jsp").forward(req, resp);
@@ -53,6 +55,8 @@ public class SkillServlet extends HttpServlet {
             req.setAttribute("user",user);
             req.setAttribute("abilities", abilities);
         } catch (UserNotFound userNotFound) {
+            req.setAttribute("message", userNotFound.getMessage());
+            req.getRequestDispatcher("/exception.jsp").forward(req, resp);
             userNotFound.printStackTrace();
         }
         req.getRequestDispatcher("/home.jsp").forward(req, resp);
