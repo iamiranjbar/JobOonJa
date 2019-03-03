@@ -23,4 +23,16 @@ public class BidDTO {
     public int getBidAmount() {
         return bidAmount;
     }
+
+    public void setBiddingUser(String biddingUser) {
+        this.biddingUser = biddingUser;
+    }
+
+    public void setBidAmount(int bidAmount) {
+        this.bidAmount = bidAmount;
+    }
+
+    public void setProjectTitle(String projectTitle) {
+        this.projectTitle = projectTitle;
+    }
 }

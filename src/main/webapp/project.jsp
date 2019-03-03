@@ -14,11 +14,14 @@
     <li>budget: <c:out value="${project.budget}"/></li>
 </ul>
 <!-- display form if user has not bidded before -->
-<form action="" method="">
-    <label for="bidAmount">Bid Amount:</label>
-    <input type="number" name="bidAmount">
-
-    <button>Submit</button>
-</form>
+<c:if test = "${hasBid == false}">
+    <form action="/JobOonJa_war/bid" method="POST">
+        <label for="bidAmount">Bid Amount:</label>
+        <input type="number" name="bidAmount">
+        <input type="hidden" name="userId" value="1">
+        <input type="hidden" name="projectId" value="${project.id}">
+        <button>Submit</button>
+    </form>
+</c:if>
 </body>
 </html>
