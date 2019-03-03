@@ -15,7 +15,7 @@
 </ul>
 <!-- display form if user has not bidded before -->
 <c:if test = "${hasBid == false}">
-    <form action="/JobOonJa_war/bid" method="POST">
+    <form action="/bid" method="POST">
         <label for="bidAmount">Bid Amount:</label>
         <input type="number" name="bidAmount">
         <input type="hidden" name="userId" value="1">
