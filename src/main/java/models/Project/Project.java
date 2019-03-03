@@ -56,7 +56,7 @@ public class Project {
         return description;
     }
 
-    public String getImageURL() {
+    public String getImageUrl() {
         return imageUrl;
     }
 
