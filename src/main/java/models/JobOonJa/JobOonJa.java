@@ -236,18 +236,4 @@ public class JobOonJa {
         user.endorse(endorser, skillName);
     }
 
-    public void bid(String userId, String projectId, int amount) throws ProjectNotFound, UserNotFound, InsufficentBudget, InsufficentSkill {
-        Bid bid = new Bid(userManager.find(userId), projectManager.find(projectId), amount);
-        bidManager.submit(bid);
-    }
-
-    public boolean findBid(String userId, String projectId) {
-        ArrayList<Bid> bids = bidManager.getRepository();
-        for (Bid bid : bids) {
-            if (bid.getUser().getId().equals(userId) && bid.getProject().getId().equals(projectId)) {
-                return  true;
-            }
-        }
-        return false;
-    }
 }

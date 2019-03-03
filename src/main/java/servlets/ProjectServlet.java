@@ -24,26 +24,30 @@ public class ProjectServlet extends HttpServlet {
         }
     }
 
-    private void renderProjectData(HttpServletRequest req, HttpServletResponse resp, String pathParts) {
+    private void renderProjectData(HttpServletRequest req, HttpServletResponse resp, String pathParts) throws ServletException, IOException {
         try {
-            Project project = JobOonJa.getInstance().getSuitableProject("1", pathParts.substring(1));
-            boolean hasBid = JobOonJa.getInstance().findBid("1", project.getTitle());
+            Project project = JobOonJa.getInstance().getSuitableProject(JobOonJa.getInstance().getLogInUser(), pathParts.substring(1));
+            boolean hasBid = JobOonJa.getInstance().findBid(JobOonJa.getInstance().getLogInUser(), project.getId());
             req.setCharacterEncoding("UTF-8");
             req.setAttribute("project", project);
             req.setAttribute("hasBid", hasBid);
             req.getRequestDispatcher("/project.jsp").forward(req, resp);
         } catch (Exception exception) {
+            req.setAttribute("message", exception.getMessage());
+            req.getRequestDispatcher("/exception.jsp").forward(req, resp);
             exception.printStackTrace();
         }
     }
 
-    private void renderProjectsList(HttpServletRequest req, HttpServletResponse resp) {
+    private void renderProjectsList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            ArrayList<Project> projects = JobOonJa.getInstance().getSuitableProjects("1");
+            ArrayList<Project> projects = JobOonJa.getInstance().getSuitableProjects(JobOonJa.getInstance().getLogInUser());
             req.setCharacterEncoding("UTF-8");
             req.setAttribute("projects", projects);
             req.getRequestDispatcher("/projects.jsp").forward(req, resp);
         } catch (Exception exception) {
+            req.setAttribute("message", exception.getMessage());
+            req.getRequestDispatcher("/exception.jsp").forward(req, resp);
             exception.printStackTrace();
         }
     }

@@ -23,13 +23,15 @@ public class BidServlet extends HttpServlet {
         String projectId = req.getParameter("projectId");
         try {
             JobOonJa.getInstance().bid(userId, projectId, Integer.valueOf(amount));
-            Project project = JobOonJa.getInstance().getSuitableProject("1", projectId);
-            boolean hasBid = JobOonJa.getInstance().findBid("1", projectId);
+            Project project = JobOonJa.getInstance().getSuitableProject(JobOonJa.getInstance().getLogInUser(), projectId);
+            boolean hasBid = JobOonJa.getInstance().findBid(JobOonJa.getInstance().getLogInUser(), projectId);
             req.setCharacterEncoding("UTF-8");
             req.setAttribute("project", project);
             req.setAttribute("hasBid", hasBid);
             req.getRequestDispatcher("/project.jsp").forward(req, resp);
         } catch (Exception exception) {
+            req.setAttribute("message", exception.getMessage());
+            req.getRequestDispatcher("/exception.jsp").forward(req, resp);
             exception.printStackTrace();
         }
     }
