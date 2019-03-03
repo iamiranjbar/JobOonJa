@@ -23,13 +23,14 @@ public class SkillServlet extends HttpServlet {
             HttpServletRequest req,
             HttpServletResponse resp
     ) throws ServletException, IOException {
+        String loggedInUser = jobOonJa.getLogInUser();
         String userId = req.getParameter("userId");
         String skillName = req.getParameter("skillName");
         try {
             jobOonJa.deleteUserSkill(userId,skillName);
             User user = jobOonJa.getUser(userId);
             req.setAttribute("user",user);
-            ArrayList<Skill> abilities = jobOonJa.getUserAbilities("1");
+            ArrayList<Skill> abilities = jobOonJa.getUserAbilities(loggedInUser);
             req.setAttribute("abilities", abilities);
         } catch (UserNotFound userNotFound) {
             userNotFound.printStackTrace();
@@ -42,11 +43,12 @@ public class SkillServlet extends HttpServlet {
             HttpServletRequest req,
             HttpServletResponse resp
     ) throws ServletException, IOException {
+        String loggedInUser = jobOonJa.getLogInUser();
         String userId = req.getParameter("userId");
         String skillName = req.getParameter("skill");
         try {
             jobOonJa.addSkillToUser(userId, skillName);
-            ArrayList<Skill> abilities = jobOonJa.getUserAbilities("1");
+            ArrayList<Skill> abilities = jobOonJa.getUserAbilities(loggedInUser);
             User user = jobOonJa.getUser(userId);
             req.setAttribute("user",user);
             req.setAttribute("abilities", abilities);

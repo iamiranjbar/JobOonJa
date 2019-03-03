@@ -20,10 +20,11 @@ public class EndorseServlet extends HttpServlet {
             HttpServletRequest req,
             HttpServletResponse resp
     ) throws ServletException, IOException {
+        String loggedInUser = jobOonJa.getLogInUser();
         String skillName = req.getParameter("skillName");
         String endorsed = req.getParameter("userId");
         try {
-            jobOonJa.endorse("1", endorsed, skillName);
+            jobOonJa.endorse(loggedInUser, endorsed, skillName);
             User user = jobOonJa.getUser(endorsed);
             req.setAttribute("user",user);
         } catch (UserNotFound userNotFound) {

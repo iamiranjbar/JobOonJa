@@ -39,7 +39,7 @@ public class BidManager {
                 throw new InsufficentSkill("You don't have enough skills!");
         }
         else{
-            throw new InsufficentBudget("Your budget is too low!");
+            throw new InsufficentBudget("Your needing budget is very high!");
         }
     }
 

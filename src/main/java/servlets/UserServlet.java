@@ -16,13 +16,13 @@ import java.util.ArrayList;
 @WebServlet({"/users","/users/*"})
 public class UserServlet extends HttpServlet {
     private JobOonJa jobOonJa = JobOonJa.getInstance();
-    private String loggedInUser = "1";
     @Override
     protected void doGet(
             HttpServletRequest req,
             HttpServletResponse resp
     ) throws ServletException, IOException {
         String pathInfo = req.getPathInfo();
+        String loggedInUser = jobOonJa.getLogInUser();
         if (pathInfo == null) {
             ArrayList<User> users = jobOonJa.getUserList(loggedInUser);
             req.setAttribute("users",users);
