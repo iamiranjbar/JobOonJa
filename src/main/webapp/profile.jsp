@@ -19,16 +19,23 @@
                 skills:
                 <ul>
                     <c:forEach var="skill" items="${user.skills}">
-                        <li>
-                            <c:out value="${skill.value.name}"/>: <c:out value="${skill.value.point}"/>
-                            <form action="/endorse" method="POST">
-                                <%--<c:if test="${not skill.isUniqueEndorser}">--%>
+                        <c:out value="${skill.value.name}"/>: <c:out value="${skill.value.point}"/>
+                        <c:set var="contains" value="false" />
+                        <c:forEach var="item" items="${skill.value.endorsers}">
+                            <c:if test="${item == '1' }">
+                                <c:set var="contains" value="true" />
+                            </c:if>
+                        </c:forEach>
+                            <li>
+                                <c:if test="${not contains}">
+                                <form action="/endorse" method="POST">
                                     <input type="hidden" name="skillName" value="${skill.value.name}">
                                     <input type="hidden" name="userId" value="${user.id}">
                                     <button>Endorse</button>
-                                <%--</c:if>--%>
-                            </form>
-                        </li>
+                                </form>
+                                </c:if>
+                            </li>
+
                     </c:forEach>
                 </ul>
             </li>
