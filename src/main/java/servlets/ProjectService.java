@@ -1,28 +1,19 @@
 package servlets;
 
-import com.jsoniter.output.JsonStream;
 import models.JobOonJa.JobOonJa;
 import models.Project.Project;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 
 @RestController
 public class ProjectService {
-    @RequestMapping(value = "/JobOonJa_war/project", method = RequestMethod.GET)
-    public Project getProjects(){
+    @RequestMapping(value = "/project", method = RequestMethod.GET)
+    public ArrayList<Project> getProjects(){
         System.out.println("projects");
         try {
-            return JobOonJa.getInstance().getSuitableProjects(JobOonJa.getInstance().getLogInUser()).get(0);
+            return JobOonJa.getInstance().getSuitableProjects(JobOonJa.getInstance().getLogInUser());
         } catch (Exception exception) {
             exception.printStackTrace();
             return null;

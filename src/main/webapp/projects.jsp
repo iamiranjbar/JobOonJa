@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Projects</title>
+</head>
+<body>
     <script type="text/javascript">
         function defaultPart() {
             var xhttp = new XMLHttpRequest();
@@ -10,20 +12,14 @@
                 if (this.readyState == 4 && this.status == 200) {
                     var obj = JSON.parse(this.responseText);
                     for (car in obj)
-                        document.getElementById("all").innerHTML += car + ', ';
+                        document.getElementById("all").innerHTML = "all";
                 }
             };
-            return xhttp;
-        }
-        function retreiveDataDefault() {
-            var xhttp = defaultPart();
-            xhttp.open("GET", "/JobOonJa_war/project", true);
+            xhttp.open("GET", "project", true);
             xhttp.send();
         }
     </script>
-</head>
-<body>
     <div id="all"></div>
-    <button type="button" onClick="retreiveDataDefault()">Click Me!</button>
+    <button type="button" onClick="defaultPart()">Click Me!</button>
 </body>
 </html>
