@@ -1,13 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="JobOonJa:war exploded">
     <output-path>$PROJECT_DIR$/target/JobOonJa</output-path>
-    <properties id="maven-jee-properties">
-      <options>
-        <exploded>true</exploded>
-        <module>JobOonJa</module>
-        <packaging>war</packaging>
-      </options>
-    </properties>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
@@ -20,13 +13,13 @@
           <element id="library" level="project" name="Maven: commons-logging:commons-logging:1.2" />
           <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.11" />
           <element id="library" level="project" name="Maven: javax.servlet:jstl:1.2" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-context:5.1.5.RELEASE" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-aop:5.1.5.RELEASE" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-beans:5.1.5.RELEASE" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-expression:5.1.5.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-core:4.3.0.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-web:4.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-aop:4.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-beans:4.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context:4.3.0.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:4.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-expression:4.3.0.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-test:4.3.0.RELEASE" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.5.3" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.5.0" />
