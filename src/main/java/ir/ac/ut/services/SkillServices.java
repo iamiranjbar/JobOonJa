@@ -12,9 +12,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+
 @RestController
 public class SkillServices {
     private JobOonJa jobOonJa = JobOonJa.getInstance();
+
+    @RequestMapping(value = "/skill/{userId}", method = RequestMethod.GET)
+    public ResponseEntity<ArrayList<Skill> > getUserSkills(@PathVariable(value = "userId") String userId){
+        try {
+            return ResponseEntity.ok(jobOonJa.getUserAbilities(userId));
+        } catch (UserNotFound userNotFound) {
+            userNotFound.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 
     @RequestMapping(value = "/skill/{userId}/{skillName}", method = RequestMethod.DELETE)
     public ResponseEntity<User> deleteUserSkill(@PathVariable(value = "userId") String userId,
