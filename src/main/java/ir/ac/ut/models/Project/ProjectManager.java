@@ -1,6 +1,8 @@
 package ir.ac.ut.models.Project;
 
+import ir.ac.ut.models.Bid.Bid;
 import ir.ac.ut.models.Exception.*;
+import ir.ac.ut.models.User.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -145,7 +145,7 @@ public class JobOonJa {
     }
 
     public void addProject(Project project) throws RedundantProject {
-        projectManager.add(project.getTitle(), project);
+        projectManager.add(project.getId(), project);
     }
 
     public void bid(Bid bid) throws InsufficentBudget, InsufficentSkill {
@@ -157,7 +157,7 @@ public class JobOonJa {
         bidManager.submit(bid);
     }
 
-    public boolean  findBid(String userId, String projectId) {
+    public boolean findBid(String userId, String projectId) {
         ArrayList<Bid> bids = bidManager.getRepository();
         for (Bid bid : bids) {
             if (bid.getUser().getId().equals(userId) && bid.getProject().getId().equals(projectId)) {

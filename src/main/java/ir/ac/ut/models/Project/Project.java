@@ -1,5 +1,6 @@
 package ir.ac.ut.models.Project;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import ir.ac.ut.models.Bid.Bid;
 import ir.ac.ut.models.Skill.Skill;
 import ir.ac.ut.models.User.User;
@@ -24,6 +25,8 @@ public class Project {
     private int budget;
     @JsonProperty(required = true)
     private long deadline;
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    private long creationDate;
     private User winner;
     private ArrayList<Bid> bids;
 
@@ -78,5 +81,9 @@ public class Project {
 
     public User getWinner() {
         return winner;
+    }
+
+    void addBid(Bid bid){
+        this.bids.add(bid);
     }
 }
