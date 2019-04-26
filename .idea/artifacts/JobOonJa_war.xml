@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="JobOonJa:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="IERIA.war">
-      <element id="artifact" artifact-name="JobOonJa:war exploded" />
-    </root>
-  </artifact>
-</component>

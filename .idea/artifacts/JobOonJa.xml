@@ -1,6 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="JobOonJa">
-    <output-path>$PROJECT_DIR$/classes/artifacts/JobOonJa</output-path>
-    <root id="archive" name="JobOonJa.war" />
-  </artifact>
-</component>
