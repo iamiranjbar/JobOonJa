@@ -80,8 +80,12 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
     }
 
     @Override
-    protected ArrayList<User> convertResultSetToDomainModelList(ResultSet rs) {
-        return null;
+    protected ArrayList<User> convertResultSetToDomainModelList(ResultSet rs) throws SQLException {
+        ArrayList<User> users = new ArrayList<>();
+        while (rs.next()){
+            users.add(this.convertResultSetToDomainModel(rs));
+        }
+        return users;
     }
 
     @Override
