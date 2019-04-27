@@ -5,5 +5,4 @@ import ir.ac.ut.models.User.User;
 
 public interface IUserMapper extends IMapper<User, String> {
 
-
 }

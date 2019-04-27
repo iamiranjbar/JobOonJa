@@ -10,6 +10,8 @@ public class User {
     private String id;
     private String firstName;
     private String lastName;
+    private String username;
+    private String password;
     private String jobTitle;
     private String profilePicURL;
     private HashMap<String, UserSkill> skills;
@@ -19,11 +21,13 @@ public class User {
 
     }
 
-    public User(String id, String firstName, String lastName, String jobTitle, String profilePicURL,
+    public User(String id, String firstName, String lastName, String username, String password,  String jobTitle, String profilePicURL,
                 HashMap<String, UserSkill> skills, String bio) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.username = username;
+        this.password = password;
         this.jobTitle = jobTitle;
         this.profilePicURL = profilePicURL;
         this.skills = skills;
