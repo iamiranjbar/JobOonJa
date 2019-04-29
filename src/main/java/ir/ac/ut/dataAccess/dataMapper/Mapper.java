@@ -7,17 +7,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public abstract class Mapper<T,I> implements IMapper<T,I> {
 
     abstract protected String getFindStatement();
     abstract protected String getFindAllStatement();
-    abstract protected String getInsertStatement(T data);
+    abstract protected String getInsertStatement();
     abstract protected T convertResultSetToDomainModel(ResultSet rs) throws SQLException;
     abstract protected ArrayList<T> convertResultSetToDomainModelList(ResultSet rs) throws SQLException;
-    abstract protected void fillInsertValues(PreparedStatement st);
+    abstract protected void fillInsertValues(PreparedStatement st, T data);
 
 
     public T find(I id) throws SQLException {
@@ -53,8 +52,8 @@ public abstract class Mapper<T,I> implements IMapper<T,I> {
 
     public boolean insert(T data) throws SQLException {
         Connection con = ConnectionPool.getConnection();
-        PreparedStatement st = con.prepareStatement(getInsertStatement(data));
-        fillInsertValues(st);
+        PreparedStatement st = con.prepareStatement(getInsertStatement());
+        fillInsertValues(st, data);
         return st.execute();
     }
 }

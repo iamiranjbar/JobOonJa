@@ -6,6 +6,7 @@ import ir.ac.ut.models.User.User;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserMapper extends Mapper<User, String> implements IUserMapper {
 
@@ -22,15 +23,15 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
     private UserMapper() throws SQLException {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement createTableStatement = con.prepareStatement("CREATE TABLE IF NOT EXISTS user (id CHAR(20),\n" +
-        "    firstname CHAR(20),\n" +
-        "    lastname CHAR(20),\n" +
-        "    username CHAR(20),\n" +
-        "    password CHAR(20),\n" +
-        "    jobTitle CHAR(20),\n" +
-        "    profilePic CHAR(40),\n" +
-        "    bio CHAR(100),\n" +
-        "    PRIMARY KEY(id),\n" +
-        "    UNIQUE(username));");
+            "    firstname CHAR(20),\n" +
+            "    lastname CHAR(20),\n" +
+            "    username CHAR(20),\n" +
+            "    password CHAR(20),\n" +
+            "    jobTitle CHAR(20),\n" +
+            "    profilePic CHAR(40),\n" +
+            "    bio CHAR(100),\n" +
+            "    PRIMARY KEY(id),\n" +
+            "    UNIQUE(username));");
         createTableStatement.executeUpdate();
         createTableStatement.close();
         con.close();
@@ -56,13 +57,8 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
 
 
     @Override
-    protected String getInsertStatement(User data) {
-        try {
-            throw new Exception();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("You shouldn't call get user insert query string.");
-        }
+    protected String getInsertStatement() {
+        System.out.println("You shouldn't call get user insert query string.");
         return null;
     }
 
@@ -76,6 +72,7 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
         String jobTitle = rs.getString(6);
         String profilePic = rs.getString(7);
         String bio = rs.getString(8);
+        // TODO: get user skills
         return new User(id, firstname, lastname, username, password, jobTitle, profilePic, null, bio);
     }
 
@@ -89,13 +86,9 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
     }
 
     @Override
-    protected void fillInsertValues(PreparedStatement st) {
-        try {
-            throw new Exception();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("You shouldn't call fill of user insert.");
-        }
+    protected void fillInsertValues(PreparedStatement st, User user) {
+        System.out.println("You shouldn't call fill of user insert.");
     }
 
+    // TODO: Add user specific methods
 }
