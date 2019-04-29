@@ -61,6 +61,11 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
     }
 
 
+    private String getDeleteStatement() {
+        return "DELETE FROM userSkill us WHERE (us.userId == ? and us.skillName == ?)";
+    }
+
+
     @Override
     protected void fillInsertValues(PreparedStatement st, UserSkill data) {
         System.out.println("Not use because of special use case");
@@ -125,6 +130,20 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
         PreparedStatement preparedStatement = con.prepareStatement(getInsertStatement());
         fillInsertValuesWithUserId(preparedStatement, userSkill, userId);
         return preparedStatement.execute();
+    }
+
+    @Override
+    public  boolean delete(UserSkill userSkill, String userId) throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement preparedStatement = con.prepareStatement(getDeleteStatement());
+        fillDeleteValuesWithUserId(preparedStatement, userSkill, userId);
+        return preparedStatement.execute();
+    }
+
+    @Override
+    public void fillDeleteValuesWithUserId(PreparedStatement preparedStatement, UserSkill userSkill, String userId) throws SQLException {
+        preparedStatement.setString(1, userId);
+        preparedStatement.setString(2, userSkill.getName());
     }
 
     @Override

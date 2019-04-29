@@ -12,4 +12,6 @@ public interface IUserSkillMapper extends IMapper<UserSkill, String> {
     ArrayList<UserSkill> findAll(String userId) throws SQLException;
     boolean insert(UserSkill userSkill, String userId) throws SQLException;
     void fillInsertValuesWithUserId(PreparedStatement preparedStatement, UserSkill userSkill, String userId) throws SQLException;
+    boolean delete(UserSkill userSkill, String userId) throws SQLException;
+    void fillDeleteValuesWithUserId(PreparedStatement preparedStatement, UserSkill userSkill, String userId) throws SQLException;
 }
