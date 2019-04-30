@@ -16,7 +16,7 @@ public abstract class Mapper<T,I> implements IMapper<T,I> {
     abstract protected String getInsertStatement();
     abstract protected T convertResultSetToDomainModel(ResultSet rs) throws SQLException;
     abstract protected ArrayList<T> convertResultSetToDomainModelList(ResultSet rs) throws SQLException;
-    abstract protected void fillInsertValues(PreparedStatement st, T data);
+    abstract protected void fillInsertValues(PreparedStatement st, T data) throws SQLException;
 
 
     public T find(I id) throws SQLException {

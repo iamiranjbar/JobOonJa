@@ -58,8 +58,8 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
 
     @Override
     protected String getInsertStatement() {
-        System.out.println("You shouldn't call get user insert query string.");
-        return null;
+//        System.out.println("You shouldn't call get user insert query string.");
+        return "INSERT INTO user(Id,firstname,lastname,username,password,jobTitle,profilePic,bio) VALUES(?,?,?,?,?,?,?,?)";
     }
 
     @Override
@@ -86,8 +86,17 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
     }
 
     @Override
-    protected void fillInsertValues(PreparedStatement st, User user) {
-        System.out.println("You shouldn't call fill of user insert.");
+    protected void fillInsertValues(PreparedStatement st, User user) throws SQLException {
+//        System.out.println("You shouldn't call fill of user insert.");
+    	st.setString(1, user.getId());
+        st.setString(2, user.getFirstName());
+        st.setString(3, user.getLastName());
+        st.setString(4, user.getUsername());
+        st.setString(5, user.getPassword());
+        st.setString(6, user.getJobTitle());
+        st.setString(7, user.getProfilePicURL());
+        st.setString(8, user.getBio());
+        
     }
 
     // TODO: Add user specific methods

@@ -61,13 +61,13 @@ public class JobOonJa {
 
     private User makeAdminUser(){
         this.makeUserSkill();
-        return new User("1","علی","شریف‌زاده","برنامه‌نویس وب", "http://aamooze.com/wp-content/uploads/2018/05/asghar.jpg",
+        return new User("1","علی","شریف‌زاده","1","1","برنامه‌نویس وب", "http://aamooze.com/wp-content/uploads/2018/05/asghar.jpg",
                 this.makeUserSkill(),"روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلی کارا بکنه ولی پول نداشت");
     }
 
     private User makeUser(String id, String firstName, String lastName, String jobTitle, String bio){
         this.makeUserSkill();
-        return new User(id,firstName,lastName,jobTitle, "http://aamooze.com/wp-content/uploads/2018/05/asghar.jpg",this.makeUserSkill(),bio);
+        return new User(id,firstName,lastName,"1","1",jobTitle, "http://aamooze.com/wp-content/uploads/2018/05/asghar.jpg",this.makeUserSkill(),bio);
     }
 
     private String extractGetData(HttpGet httpGet) throws IOException {
