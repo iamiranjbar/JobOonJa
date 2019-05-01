@@ -2,6 +2,11 @@ package ir.ac.ut.models.JobOonJa;
 
 import com.jsoniter.JsonIterator;
 import com.jsoniter.fuzzy.StringFloatDecoder;
+
+import ir.ac.ut.dataAccess.dataMapper.endorse.EndorseMapper;
+import ir.ac.ut.dataAccess.dataMapper.skill.SkillMapper;
+import ir.ac.ut.dataAccess.dataMapper.user.UserMapper;
+import ir.ac.ut.dataAccess.dataMapper.userSkill.UserSkillMapper;
 import ir.ac.ut.models.Bid.*;
 import ir.ac.ut.models.Exception.*;
 import ir.ac.ut.models.Project.*;
@@ -16,6 +21,7 @@ import org.apache.http.impl.client.HttpClients;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -28,7 +34,7 @@ public class JobOonJa {
     static {
         try {
             ourInstance = new JobOonJa();
-        } catch (RedundantUser | RedundantProject | IOException e) {
+        } catch (RedundantUser | RedundantProject | IOException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -37,16 +43,25 @@ public class JobOonJa {
     private ProjectManager projectManager;
     private BidManager bidManager;
     private SkillManager skillManager;
+    private UserMapper userMapper;
+    private UserSkillMapper userSkillMapper;
+    private SkillMapper skillMapper;
+    private EndorseMapper endorseMapper;
+    
 
     public static JobOonJa getInstance() {
         return ourInstance;
     }
 
-    private JobOonJa() throws RedundantUser, RedundantProject, IOException {
+    private JobOonJa() throws RedundantUser, RedundantProject, IOException, SQLException {
         userManager = UserManager.getInstance();
         projectManager = ProjectManager.getInstance();
         bidManager = BidManager.getInstance();
         skillManager = SkillManager.getInstance();
+        userMapper = UserMapper.getInstance();
+        userSkillMapper = UserSkillMapper.getInstance();
+        skillMapper = SkillMapper.getInstance();
+        endorseMapper = EndorseMapper.getInstance();
         this.initialize();
     }
 
@@ -61,13 +76,13 @@ public class JobOonJa {
 
     private User makeAdminUser(){
         this.makeUserSkill();
-        return new User("1","علی","شریف‌زاده","برنامه‌نویس وب", "http://aamooze.com/wp-content/uploads/2018/05/asghar.jpg",
+        return new User("1","علی","شریف‌زاده","1","1","برنامه‌نویس وب", "http://aamooze.com/wp-content/uploads/2018/05/asghar.jpg",
                 this.makeUserSkill(),"روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلی کارا بکنه ولی پول نداشت");
     }
 
     private User makeUser(String id, String firstName, String lastName, String jobTitle, String bio){
         this.makeUserSkill();
-        return new User(id,firstName,lastName,jobTitle, "http://aamooze.com/wp-content/uploads/2018/05/asghar.jpg",this.makeUserSkill(),bio);
+        return new User(id,firstName,lastName,"1"+id,"1"+id,jobTitle, "http://aamooze.com/wp-content/uploads/2018/05/asghar.jpg",this.makeUserSkill(),bio);
     }
 
     private String extractGetData(HttpGet httpGet) throws IOException {
@@ -82,7 +97,7 @@ public class JobOonJa {
         return total.toString();
     }
 
-    private void getSkills() throws IOException {
+    private void getSkills() throws IOException, SQLException {
         HttpGet httpGet = new HttpGet("http://142.93.134.194:8000/joboonja/skill");
         String total = this.extractGetData(httpGet);
         SkillListDTO skillList = JsonIterator.deserialize("{\"skills\":" + total + "}", SkillListDTO.class);
@@ -96,7 +111,7 @@ public class JobOonJa {
         this.addProjects(projectList.getProjects());
     }
 
-    private void initialize() throws RedundantUser, IOException, RedundantProject {
+    private void initialize() throws RedundantUser, IOException, RedundantProject, SQLException {
         User user = this.makeAdminUser();
         this.register(user);
         this.register(this.makeUser("2", "ali", "edalat", "student", "pro"));
@@ -122,8 +137,8 @@ public class JobOonJa {
         return result;
     }
 
-    public void register(User user) throws RedundantUser {
-        userManager.add(user.getId(), user);
+    public void register(User user) throws RedundantUser, SQLException {
+        userMapper.insert(user);
     }
 
     public void auction(String projectTitle) {
@@ -167,8 +182,8 @@ public class JobOonJa {
         return false;
     }
 
-    public User getUser(String id) throws UserNotFound {
-        return userManager.find(id);
+    public User getUser(String id) throws UserNotFound, SQLException {
+        return userMapper.find(id);
     }
 
     public Project getSuitableProject(String userId, String id) throws ProjectNotFound, InsufficentSkill, UserNotFound {
@@ -192,8 +207,8 @@ public class JobOonJa {
         return projects;
     }
 
-    public ArrayList<User> getUserList(String userId) {
-        ArrayList<User> userList = new ArrayList<>(userManager.getUserList());
+    public ArrayList<User> getUserList(String userId) throws SQLException {
+        ArrayList<User> userList = new ArrayList<>(userMapper.findAll());
         for (int i = 0; i < userList.size(); i++)
             if (userList.get(i).getId().equals(userId)) {
                 userList.remove(i);
@@ -202,27 +217,27 @@ public class JobOonJa {
         return userList;
     }
 
-    public void addSkillToUser(String userId, String skillName) throws UserNotFound {
-        User user = userManager.find(userId);
-        user.addSkill(skillName);
+    public void addSkillToUser(String userId, String skillName) throws UserNotFound, SQLException {
+       userSkillMapper.insert(new UserSkill(skillName, 0), userId);
     }
 
-    public void addSkills(ArrayList<Skill> skills) {
-        skillManager.fill(skills);
+    public void addSkills(ArrayList<Skill> skills) throws SQLException {
+        for(Skill skill : skills) {
+        	skillMapper.insert(skill);
+        }
     }
 
     public void addProjects(ArrayList<Project> projects) throws RedundantProject {
         projectManager.fill(projects);
     }
 
-    public void deleteUserSkill(String userId, String skillName) throws UserNotFound {
-        User user = userManager.find(userId);
-        user.deleteSkill(skillName);
+    public void deleteUserSkill(String userId, String skillName) throws UserNotFound, SQLException {
+        userSkillMapper.delete(new UserSkill(skillName, 0), userId);
     }
 
-    public ArrayList<Skill> getUserAbilities(String userId) throws UserNotFound {
-        ArrayList<Skill> allSkills = skillManager.getAllSkills();
-        User user = userManager.find(userId);
+    public ArrayList<Skill> getUserAbilities(String userId) throws UserNotFound, SQLException {
+        ArrayList<Skill> allSkills = (ArrayList<Skill>) skillMapper.findAll();
+        User user = userMapper.find(userId);
         HashMap<String, UserSkill> userSkills = user.getSkills();
         ArrayList<Skill> result = new ArrayList<>();
         for (Skill skill:allSkills)
@@ -231,9 +246,8 @@ public class JobOonJa {
         return result;
     }
 
-    public void endorse(String endorser, String endorsed, String skillName) throws UserNotFound {
-        User user = userManager.find(endorsed);
-        user.endorse(endorser, skillName);
+    public void endorse(String endorser, String endorsed, String skillName) throws UserNotFound, SQLException {
+        endorseMapper.insert(endorser, endorsed, skillName);
     }
 
 }

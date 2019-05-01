@@ -2,6 +2,7 @@ package ir.ac.ut.dataAccess.dataMapper.userSkill;
 
 import ir.ac.ut.dataAccess.ConnectionPool;
 import ir.ac.ut.dataAccess.dataMapper.Mapper;
+import ir.ac.ut.dataAccess.dataMapper.endorse.EndorseMapper;
 import ir.ac.ut.models.Skill.UserSkill;
 
 import java.sql.Connection;
@@ -57,12 +58,12 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
 
     @Override
     protected String getInsertStatement() {
-        return "INSERT INTO userSkill(userId,skillName,point) VALUES(?,?,0)";
+        return "INSERT INTO userSkill(userId,skillName,point) VALUES(?,?,?)";
     }
 
 
     private String getDeleteStatement() {
-        return "DELETE FROM userSkill us WHERE (us.userId == ? and us.skillName == ?)";
+        return "DELETE FROM userSkill WHERE (userId == ? AND skillName == ?)";
     }
 
 
@@ -73,9 +74,9 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
 
     private String getFindQuery(){
         return "SELECT * " +
-                "FROM userSkills us" +
-                "WHERE us.userId = ? AND " +
-                "us.skillName = ?";
+                "FROM userSkill" +
+                "WHERE userId == ? AND " +
+                "skillName == ?";
     }
 
     private void fillFindQuery(PreparedStatement preparedStatement, String userId, String skillName) throws SQLException {
@@ -103,9 +104,7 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
     }
 
     private String getFindAllQuery(){
-        return "SELECT * " +
-                "FROM userSkills us" +
-                "WHERE us.userId = ?";
+        return "SELECT * FROM userSkill WHERE userId == ?";
     }
 
     @Override
@@ -115,8 +114,6 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
         preparedStatement.setString(1, userId);
         try {
             ResultSet resultSet = preparedStatement.executeQuery();
-            preparedStatement.close();
-            con.close();
             return convertResultSetToDomainModelList(resultSet);
         } catch (SQLException e) {
             System.out.println("error in UserKkillMapper.findAll query.");
@@ -126,10 +123,18 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
 
     @Override
     public boolean insert(UserSkill userSkill, String userId) throws SQLException {
+    	boolean result = true;
+    	EndorseMapper endorseMapper = EndorseMapper.getInstance();
         Connection con = ConnectionPool.getConnection();
         PreparedStatement preparedStatement = con.prepareStatement(getInsertStatement());
         fillInsertValuesWithUserId(preparedStatement, userSkill, userId);
-        return preparedStatement.execute();
+        result &= preparedStatement.execute();
+        for(String endorser : userSkill.getEndorsers()) {
+        	result &= endorseMapper.insert(endorser, userId, userSkill.getName());
+        }
+        preparedStatement.close();
+        con.close();
+        return result;
     }
 
     @Override
@@ -150,14 +155,20 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
     public void fillInsertValuesWithUserId(PreparedStatement preparedStatement, UserSkill userSkill, String userId) throws SQLException {
         preparedStatement.setString(1, userId);
         preparedStatement.setString(2, userSkill.getName());
+        preparedStatement.setInt(3, userSkill.getPoint());
     }
 
     @Override
     protected UserSkill convertResultSetToDomainModel(ResultSet resultSet) throws SQLException {
-        String userId = resultSet.getString(1);
+        EndorseMapper endorseMapper = EndorseMapper.getInstance();
+    	String userId = resultSet.getString(1);
         String skillName = resultSet.getString(2);
         int point = resultSet.getInt(3);
-        return new UserSkill(skillName, point);
+        ArrayList<String> endorsers = new ArrayList<>();
+        endorsers = (ArrayList<String>) endorseMapper.findAll(userId, skillName);
+        UserSkill userSkill = new UserSkill(skillName, point);
+        userSkill.setEndorsers(endorsers);
+        return userSkill;
     }
 
     @Override

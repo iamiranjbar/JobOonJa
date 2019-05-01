@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 @RestController
@@ -22,7 +23,7 @@ public class SkillServices {
     public ResponseEntity<ArrayList<Skill> > getUserSkills(@PathVariable(value = "userId") String userId){
         try {
             return ResponseEntity.ok(jobOonJa.getUserAbilities(userId));
-        } catch (UserNotFound userNotFound) {
+        } catch (UserNotFound | SQLException userNotFound) {
             userNotFound.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -35,7 +36,7 @@ public class SkillServices {
             jobOonJa.deleteUserSkill(userId,skillName);
             User user = jobOonJa.getUser(userId);
             return ResponseEntity.ok(user);
-        } catch (UserNotFound userNotFound) {
+        } catch (UserNotFound | SQLException userNotFound) {
             userNotFound.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -48,7 +49,7 @@ public class SkillServices {
             jobOonJa.addSkillToUser(userId, skillName);
             User user = jobOonJa.getUser(userId);
             return ResponseEntity.ok(user);
-        } catch (UserNotFound userNotFound) {
+        } catch (UserNotFound | SQLException userNotFound) {
             userNotFound.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -62,7 +63,7 @@ public class SkillServices {
             jobOonJa.endorse(loggedInUser, endorsed, skillName);
             User user = jobOonJa.getUser(endorsed);
             return ResponseEntity.ok(user);
-        } catch (UserNotFound userNotFound) {
+        } catch (UserNotFound | SQLException userNotFound) {
             userNotFound.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }

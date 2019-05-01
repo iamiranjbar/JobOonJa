@@ -26,8 +26,8 @@ public class User {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.username = username;
-        this.password = password;
+        this.setUsername(username);
+        this.setPassword(password);
         this.jobTitle = jobTitle;
         this.profilePicURL = profilePicURL;
         this.skills = skills;
@@ -81,4 +81,20 @@ public class User {
         UserSkill userSkill = skills.get(skillName);
         userSkill.endorse(endorser);
     }
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 }
