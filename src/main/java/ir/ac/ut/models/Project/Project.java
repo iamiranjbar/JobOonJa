@@ -25,7 +25,7 @@ public class Project {
     private int budget;
     @JsonProperty(required = true)
     private long deadline;
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonProperty(required = true)
     private long creationDate;
     private User winner;
     private ArrayList<Bid> bids;
@@ -35,7 +35,7 @@ public class Project {
     }
 
     public Project(String id, String title, String description, String imageURL, ArrayList<Skill> skills,
-                   ArrayList<Bid> bids, int budget, long deadline, User winner) {
+                   ArrayList<Bid> bids, int budget, long deadline, long creationDate, User winner) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -44,6 +44,7 @@ public class Project {
         this.bids = bids;
         this.budget = budget;
         this.deadline = deadline;
+        this.creationDate = creationDate;
         this.winner = winner;
     }
 
@@ -77,6 +78,10 @@ public class Project {
 
     public long getDeadline() {
         return deadline;
+    }
+    
+    public long getCreationDate() {
+    	return creationDate;
     }
 
     public User getWinner() {

@@ -16,19 +16,16 @@ public abstract class Mapper<T,I> implements IMapper<T,I> {
     abstract protected String getInsertStatement();
     abstract protected T convertResultSetToDomainModel(ResultSet rs) throws SQLException;
     abstract protected ArrayList<T> convertResultSetToDomainModelList(ResultSet rs) throws SQLException;
-    abstract protected void fillInsertValues(PreparedStatement st, T data);
+    abstract protected void fillInsertValues(PreparedStatement st, T data) throws SQLException;
 
 
     public T find(I id) throws SQLException {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(getFindStatement());
         st.setString(1, id.toString());
-        ResultSet resultSet;
         try {
-            resultSet = st.executeQuery();
-            resultSet.next();
-            st.close();
-            con.close();
+        	ResultSet resultSet = st.executeQuery();
+//            resultSet.next();
             return convertResultSetToDomainModel(resultSet);
         } catch (SQLException ex) {
             System.out.println("error in Mapper.findByID query.");
@@ -41,8 +38,6 @@ public abstract class Mapper<T,I> implements IMapper<T,I> {
         PreparedStatement st = con.prepareStatement(getFindAllStatement());
         try {
             ResultSet resultSet = st.executeQuery();
-            st.close();
-            con.close();
             return convertResultSetToDomainModelList(resultSet);
         } catch (SQLException e) {
             System.out.println("error in Mapper.findAll query.");

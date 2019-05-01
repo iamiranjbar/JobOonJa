@@ -33,4 +33,8 @@ public class UserSkill extends Skill {
     public ArrayList<String> getEndorsers() {
         return endorsers;
     }
+    
+    public void setEndorsers(ArrayList<String> endorsers) {
+		this.endorsers = endorsers;
+	}
 }
