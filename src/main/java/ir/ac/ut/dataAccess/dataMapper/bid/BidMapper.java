@@ -10,7 +10,9 @@ import java.util.List;
 import ir.ac.ut.dataAccess.ConnectionPool;
 import ir.ac.ut.dataAccess.dataMapper.Mapper;
 import ir.ac.ut.dataAccess.dataMapper.project.ProjectMapper;
+
 import ir.ac.ut.dataAccess.dataMapper.projectSkill.ProjectSkillMapper;
+
 import ir.ac.ut.dataAccess.dataMapper.user.UserMapper;
 import ir.ac.ut.models.Bid.Bid;
 import ir.ac.ut.models.Project.Project;
@@ -21,6 +23,7 @@ public class BidMapper extends Mapper<Bid, String> implements IBidMapper {
 	
 	private static BidMapper instance;
 	
+
 	static {
         try {
             instance = new BidMapper();
@@ -86,6 +89,7 @@ public class BidMapper extends Mapper<Bid, String> implements IBidMapper {
         }
         return bids;
 	}
+
 	
 	//TODO: check skils and amount in insert
 	@Override
