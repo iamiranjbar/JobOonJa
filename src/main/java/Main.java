@@ -17,6 +17,7 @@ import ir.ac.ut.models.Exception.UserNotFound;
 import ir.ac.ut.models.JobOonJa.JobOonJa;
 import ir.ac.ut.models.Project.Project;
 import ir.ac.ut.models.Skill.Skill;
+import ir.ac.ut.dataAccess.dataMapper.user.UserMapper;
 import ir.ac.ut.models.Skill.UserSkill;
 import ir.ac.ut.models.User.User;
 

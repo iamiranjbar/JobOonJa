@@ -105,7 +105,7 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
         st.setString(5, user.getPassword());
         st.setString(6, user.getJobTitle());
         st.setString(7, user.getProfilePicURL());
-        st.setString(8, user.getBio());   
+        st.setString(8, user.getBio());
     }
 
     // TODO: Add user specific methods
