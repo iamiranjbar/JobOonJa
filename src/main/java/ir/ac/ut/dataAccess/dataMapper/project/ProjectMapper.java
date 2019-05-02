@@ -8,12 +8,10 @@ import java.util.ArrayList;
 
 import ir.ac.ut.dataAccess.ConnectionPool;
 import ir.ac.ut.dataAccess.dataMapper.Mapper;
-
 import ir.ac.ut.dataAccess.dataMapper.auction.AuctionMapper;
 import ir.ac.ut.dataAccess.dataMapper.bid.BidMapper;
 import ir.ac.ut.dataAccess.dataMapper.projectSkill.ProjectSkillMapper;
 import ir.ac.ut.dataAccess.dataMapper.user.UserMapper;
-
 import ir.ac.ut.dataAccess.dataMapper.userSkill.UserSkillMapper;
 import ir.ac.ut.models.Bid.Bid;
 import ir.ac.ut.models.Project.Project;
@@ -55,19 +53,36 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 	
 	@Override
 	protected String getFindStatement() {
-		// TODO Auto-generated method stub
-		return null;
+		return "SELECT * FROM project WHERE id == ?";
 	}
 
 	@Override
 	protected String getFindAllStatement() {
-		// TODO Auto-generated method stub
-		return null;
+		return "SELECT * FROM project";
 	}
 
 	@Override
 	protected String getInsertStatement() {
 		return "INSERT INTO project(id, title, description, imageURL, budget, deadLine, creationDate) VALUES(?,?,?,?,?,?,?)";
+	}
+	
+	private String getMaxCreationDateQuery() {
+		return "SELECT MAX(creationDate) FROM project";
+	}
+	
+	public long getMaxCreationDate() throws SQLException {
+		Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(getMaxCreationDateQuery());
+        ResultSet resultSet = st.executeQuery();
+        if(!resultSet.next()) {
+        	st.close();
+        	con.close();
+        	return 0;
+        }
+        long result = resultSet.getLong(1);
+        st.close();
+        con.close();
+        return result;
 	}
 
 	@Override
@@ -94,8 +109,11 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 
 	@Override
 	protected ArrayList<Project> convertResultSetToDomainModelList(ResultSet rs) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Project> projects = new ArrayList<>();
+        while (rs.next()){
+            projects.add(this.convertResultSetToDomainModel(rs));
+        }
+        return projects;
 	}
 
 	@Override
@@ -115,10 +133,17 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
     	Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(getInsertStatement());
         fillInsertValues(st, project);
-        result &= st.execute();
-        for(Skill skill : project.getSkills()) {
-        	result &= projectSkillMapper.insert(skill, project.getId());
-        }
+        try {
+	        result &= st.execute();
+	        for(Skill skill : project.getSkills()) {
+	        	result &= projectSkillMapper.insert(skill, project.getId());
+	        }
+        } catch (Exception e) {
+        	st.close();
+        	con.close();
+        	e.printStackTrace();
+			return false;
+		}
         st.close();
         con.close();
         return result;

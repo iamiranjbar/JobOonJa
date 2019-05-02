@@ -90,11 +90,15 @@ public class EndorseMapper extends Mapper<String, String> implements IEndorseMap
         st.setString(2, skillName);
         try {
             ResultSet resultSet = st.executeQuery();
-//            st.close();
-//            con.close();
-            return convertResultSetToDomainModelList(resultSet);
+            List<String> result = convertResultSetToDomainModelList(resultSet);
+            st.close();
+            con.close();
+            return result;
         } catch (SQLException e) {
             System.out.println("error in EndorseMapper.findAll query.");
+            st.close();
+            con.close();
+            e.printStackTrace();
             throw e;
         }
     }
@@ -108,14 +112,22 @@ public class EndorseMapper extends Mapper<String, String> implements IEndorseMap
         try {
 			result &= preparedStatement.execute();
 		} catch (Exception e) {
-			con.close();
 			preparedStatement.close();
+			con.close();
+			e.printStackTrace();
 			return false;
 		}
         preparedStatement.close();
         PreparedStatement updatPreparedStatement = con.prepareStatement(getUpdateStatement());
         fillUpdateValues(updatPreparedStatement, endorsedId, skillName);
-        result &= updatPreparedStatement.execute();
+        try {
+        	result &= updatPreparedStatement.execute();
+        } catch (Exception e) {
+        	updatPreparedStatement.close();
+        	con.close();
+        	e.printStackTrace();
+			return false;
+		}
         updatPreparedStatement.close();
         con.close();
         return result;

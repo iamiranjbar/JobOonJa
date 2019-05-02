@@ -96,7 +96,14 @@ public class ProjectSkillMapper extends Mapper<Skill, String> implements IProjec
     	Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(getInsertStatement());
         fillInsertValues(st, skill, projectId);
-        result &= st.execute();
+        try {
+        	result &= st.execute();
+        } catch (Exception e) {
+			st.close();
+			con.close();
+			e.printStackTrace();
+			return false;
+		}
         st.close();
         con.close();
         return result;
@@ -108,9 +115,15 @@ public class ProjectSkillMapper extends Mapper<Skill, String> implements IProjec
         fillFindAllValues(st, projectId);
         try {
             ResultSet resultSet = st.executeQuery();
-            return convertResultSetToDomainModelList(resultSet);
+            List<Skill> result = convertResultSetToDomainModelList(resultSet);
+            st.close();
+            con.close();
+            return result;
         } catch (SQLException e) {
             System.out.println("error in ProjectSkillMapper.findAll query.");
+            st.close();
+            con.close();
+            e.printStackTrace();
             throw e;
         }
 	}

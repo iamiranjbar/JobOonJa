@@ -90,15 +90,20 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
          Connection con = ConnectionPool.getConnection();
          PreparedStatement preparedStatement = con.prepareStatement(getFindQuery());
          fillFindQuery(preparedStatement, userId, skillName);
-         ResultSet resultSet;
          try {
-            resultSet = preparedStatement.executeQuery();
-            resultSet.next();
+        	 ResultSet resultSet = preparedStatement.executeQuery();
+            if (!resultSet.next()) {
+    			return null;
+    		}
+            UserSkill result = this.convertResultSetToDomainModel(resultSet);
             preparedStatement.close();
             con.close();
-            return this.convertResultSetToDomainModel(resultSet);
+            return result;
          } catch (SQLException ex) {
             System.out.println("error in UserSkillMapper.find query.");
+            preparedStatement.close();
+            con.close();
+            ex.printStackTrace();
             throw ex;
          }
     }
@@ -114,9 +119,15 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
         preparedStatement.setString(1, userId);
         try {
             ResultSet resultSet = preparedStatement.executeQuery();
-            return convertResultSetToDomainModelList(resultSet);
+            ArrayList<UserSkill> result = convertResultSetToDomainModelList(resultSet);
+            preparedStatement.close();
+            con.close();
+            return result;
         } catch (SQLException e) {
             System.out.println("error in UserKkillMapper.findAll query.");
+            preparedStatement.close();
+            con.close();
+            e.printStackTrace();
             throw e;
         }
     }
@@ -128,10 +139,17 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
         Connection con = ConnectionPool.getConnection();
         PreparedStatement preparedStatement = con.prepareStatement(getInsertStatement());
         fillInsertValuesWithUserId(preparedStatement, userSkill, userId);
-        result &= preparedStatement.execute();
-        for(String endorser : userSkill.getEndorsers()) {
-        	result &= endorseMapper.insert(endorser, userId, userSkill.getName());
-        }
+        try {
+	        result &= preparedStatement.execute();
+	        for(String endorser : userSkill.getEndorsers()) {
+	        	result &= endorseMapper.insert(endorser, userId, userSkill.getName());
+	        }
+        } catch (Exception e) {
+			preparedStatement.close();
+			con.close();
+			e.printStackTrace();
+			return false;
+		}
         preparedStatement.close();
         con.close();
         return result;
@@ -142,7 +160,17 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
         Connection con = ConnectionPool.getConnection();
         PreparedStatement preparedStatement = con.prepareStatement(getDeleteStatement());
         fillDeleteValuesWithUserId(preparedStatement, userSkill, userId);
-        return preparedStatement.execute();
+        try {
+	        boolean result = preparedStatement.execute();
+	        preparedStatement.close();
+	        con.close();
+	        return result;
+        } catch (Exception e) {
+        	preparedStatement.close();
+        	con.close();
+        	e.printStackTrace();
+			return false;
+		}
     }
 
     @Override

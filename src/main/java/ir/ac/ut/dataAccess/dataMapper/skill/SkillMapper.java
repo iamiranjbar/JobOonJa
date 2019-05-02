@@ -84,7 +84,14 @@ public class SkillMapper extends Mapper<Skill, String> implements ISkillMapper {
 		Connection con = ConnectionPool.getConnection();
         PreparedStatement preparedStatement = con.prepareStatement(getInsertStatement());
         fillInsertValues(preparedStatement, skill);
-        result &= preparedStatement.execute();
+        try {
+        	result &= preparedStatement.execute();
+        } catch (Exception e) {
+			preparedStatement.close();
+			con.close();
+			e.printStackTrace();
+			return false;
+		}
         preparedStatement.close();
         con.close();
         return result;

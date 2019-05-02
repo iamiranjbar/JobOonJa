@@ -52,7 +52,7 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
     }
     
     private String getSearchStatement() {
-    	return "SELECT * FROM user WHERE (firstname || ' ' || lastname) == ?";
+    	return "SELECT * FROM user WHERE instr(firstname || ' ' || lastname, ?) > 0";
     }
 
     @Override
@@ -105,7 +105,7 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
         st.setString(5, user.getPassword());
         st.setString(6, user.getJobTitle());
         st.setString(7, user.getProfilePicURL());
-        st.setString(8, user.getBio());
+        st.setString(8, user.getBio());   
     }
 
     // TODO: Add user specific methods
@@ -115,10 +115,17 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
     	Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(getInsertStatement());
         fillInsertValues(st, user);
-        result &= st.execute();
-        for(UserSkill userSkill : user.getSkills().values()) {
-        	result &= userSkillMapper.insert(userSkill, user.getId());
-        }
+        try {
+	        result &= st.execute();
+	        for(UserSkill userSkill : user.getSkills().values()) {
+	        	result &= userSkillMapper.insert(userSkill, user.getId());
+	        }
+        } catch (Exception e) {
+        	st.close();
+            con.close();
+            e.printStackTrace();
+            return false;
+		}
         st.close();
         con.close();
         return result;
@@ -132,9 +139,15 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
         ResultSet resultSet;
         try {
             resultSet = st.executeQuery();
-            return convertResultSetToDomainModelList(resultSet);
+            List<User> result = convertResultSetToDomainModelList(resultSet);
+            st.close();
+            con.close();
+            return result;
         } catch (SQLException ex) {
             System.out.println("error in Mapper.findByID query.");
+            st.close();
+            con.close();
+            ex.printStackTrace();
             throw ex;
         }
     }

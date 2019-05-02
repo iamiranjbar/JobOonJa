@@ -10,9 +10,7 @@ import java.util.List;
 import ir.ac.ut.dataAccess.ConnectionPool;
 import ir.ac.ut.dataAccess.dataMapper.Mapper;
 import ir.ac.ut.dataAccess.dataMapper.project.ProjectMapper;
-
 import ir.ac.ut.dataAccess.dataMapper.projectSkill.ProjectSkillMapper;
-
 import ir.ac.ut.dataAccess.dataMapper.user.UserMapper;
 import ir.ac.ut.models.Bid.Bid;
 import ir.ac.ut.models.Project.Project;
@@ -23,7 +21,6 @@ public class BidMapper extends Mapper<Bid, String> implements IBidMapper {
 	
 	private static BidMapper instance;
 	
-
 	static {
         try {
             instance = new BidMapper();
@@ -89,7 +86,6 @@ public class BidMapper extends Mapper<Bid, String> implements IBidMapper {
         }
         return bids;
 	}
-
 	
 	//TODO: check skils and amount in insert
 	@Override
@@ -115,11 +111,19 @@ public class BidMapper extends Mapper<Bid, String> implements IBidMapper {
         try {
             ResultSet resultSet = st.executeQuery();
             if (!resultSet.next()) {
+            	st.close();
+            	con.close();
     			return null;
     		}
-            return convertResultSetToDomainModel(resultSet);
+            Bid result = convertResultSetToDomainModel(resultSet);
+            st.close();
+            con.close();
+            return result;
         } catch (SQLException e) {
             System.out.println("error in ProjectSkillMapper.find query.");
+            st.close();
+            con.close();
+            e.printStackTrace();
             throw e;
         }
 	}
@@ -130,9 +134,15 @@ public class BidMapper extends Mapper<Bid, String> implements IBidMapper {
         fillFindAllValues(st, projectId);
         try {
             ResultSet resultSet = st.executeQuery();
-            return convertResultSetToDomainModelList(resultSet);
+            ArrayList<Bid> result = convertResultSetToDomainModelList(resultSet);
+            st.close();
+            con.close();
+            return result;
         } catch (SQLException e) {
             System.out.println("error in ProjectSkillMapper.findAll query.");
+            st.close();
+            con.close();
+            e.printStackTrace();
             throw e;
         }
 	}

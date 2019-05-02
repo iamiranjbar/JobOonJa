@@ -25,10 +25,16 @@ public abstract class Mapper<T,I> implements IMapper<T,I> {
         st.setString(1, id.toString());
         try {
         	ResultSet resultSet = st.executeQuery();
-//            resultSet.next();
-            return convertResultSetToDomainModel(resultSet);
+        	if (!resultSet.next())
+    			return null;
+        	T result = convertResultSetToDomainModel(resultSet);
+        	st.close();
+        	con.close();
+            return result;
         } catch (SQLException ex) {
             System.out.println("error in Mapper.findByID query.");
+            st.close();
+        	con.close();
             throw ex;
         }
     }
@@ -38,9 +44,14 @@ public abstract class Mapper<T,I> implements IMapper<T,I> {
         PreparedStatement st = con.prepareStatement(getFindAllStatement());
         try {
             ResultSet resultSet = st.executeQuery();
-            return convertResultSetToDomainModelList(resultSet);
+            List<T> result = convertResultSetToDomainModelList(resultSet);
+            st.close();
+        	con.close();
+            return result;
         } catch (SQLException e) {
             System.out.println("error in Mapper.findAll query.");
+            st.close();
+            con.close();
             throw e;
         }
     }
@@ -49,6 +60,16 @@ public abstract class Mapper<T,I> implements IMapper<T,I> {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(getInsertStatement());
         fillInsertValues(st, data);
-        return st.execute();
+        try {
+	        boolean result = st.execute();
+	        st.close();
+	        con.close();
+	        return result;
+        } catch (Exception e) {
+			st.close();
+			con.close();
+			e.printStackTrace();
+			return false;
+		}
     }
 }

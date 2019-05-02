@@ -5,6 +5,7 @@ import com.jsoniter.fuzzy.StringFloatDecoder;
 
 import ir.ac.ut.dataAccess.dataMapper.bid.BidMapper;
 import ir.ac.ut.dataAccess.dataMapper.endorse.EndorseMapper;
+import ir.ac.ut.dataAccess.dataMapper.project.ProjectMapper;
 import ir.ac.ut.dataAccess.dataMapper.skill.SkillMapper;
 import ir.ac.ut.dataAccess.dataMapper.user.UserMapper;
 import ir.ac.ut.dataAccess.dataMapper.userSkill.UserSkillMapper;
@@ -40,15 +41,13 @@ public class JobOonJa {
         }
     }
 
-    private UserManager userManager;
-    private ProjectManager projectManager;
     private BidManager bidManager;
-    private SkillManager skillManager;
     private UserMapper userMapper;
     private UserSkillMapper userSkillMapper;
     private SkillMapper skillMapper;
     private EndorseMapper endorseMapper;
     private BidMapper bidMapper;
+    private ProjectMapper projectMapper;
     
 
     public static JobOonJa getInstance() {
@@ -56,15 +55,12 @@ public class JobOonJa {
     }
 
     private JobOonJa() throws RedundantUser, RedundantProject, IOException, SQLException {
-        userManager = UserManager.getInstance();
-        projectManager = ProjectManager.getInstance();
-        bidManager = BidManager.getInstance();
-        skillManager = SkillManager.getInstance();
         userMapper = UserMapper.getInstance();
         userSkillMapper = UserSkillMapper.getInstance();
         skillMapper = SkillMapper.getInstance();
         endorseMapper = EndorseMapper.getInstance();
         bidMapper = BidMapper.getInstance();
+        projectMapper = ProjectMapper.getInstance();
         this.initialize();
     }
 
@@ -107,7 +103,7 @@ public class JobOonJa {
         this.addSkills(skillList.getSkills());
     }
 
-    private void getProjects() throws IOException, RedundantProject {
+    private void getProjects() throws IOException, RedundantProject, SQLException {
         HttpGet httpGet = new HttpGet("http://142.93.134.194:8000/joboonja/project");
         String total = this.extractGetData(httpGet);
         ProjectListDTO projectList = JsonIterator.deserialize("{\"projects\":" + total + "}", ProjectListDTO.class);
@@ -162,17 +158,29 @@ public class JobOonJa {
         }
     }
 
-    public void addProject(Project project) throws RedundantProject {
-        projectManager.add(project.getId(), project);
+    public void addProject(Project project) throws RedundantProject, SQLException {
+        projectMapper.insert(project);
+    }
+    
+    private void submit(Bid bid) throws SQLException, InsufficentSkill, InsufficentBudget {
+    	 if (bid.getAmount() <= bid.getProject().getBudget()) {
+             if (haveSkills(bid.getUser(),bid.getProject()))
+                 bidMapper.insert(bid);
+             else
+                 throw new InsufficentSkill("You don't have enough skills!");
+         }
+         else{
+             throw new InsufficentBudget("Your needing budget is very high!");
+         }
     }
 
-    public void bid(Bid bid) throws InsufficentBudget, InsufficentSkill {
-        bidManager.submit(bid);
+    public void bid(Bid bid) throws InsufficentBudget, InsufficentSkill, SQLException {
+        this.submit(bid);
     }
 
-    public void bid(String userId, String projectId, int amount) throws ProjectNotFound, UserNotFound, InsufficentBudget, InsufficentSkill {
-        Bid bid = new Bid(userManager.find(userId), projectManager.find(projectId), amount);
-        bidManager.submit(bid);
+    public void bid(String userId, String projectId, int amount) throws ProjectNotFound, UserNotFound, InsufficentBudget, InsufficentSkill, SQLException {
+        Bid bid = new Bid(userMapper.find(userId), projectMapper.find(projectId), amount);
+        this.submit(bid);
     }
 
     public boolean findBid(String userId, String projectId) throws SQLException {
@@ -187,23 +195,22 @@ public class JobOonJa {
         return userMapper.find(id);
     }
 
-    public Project getSuitableProject(String userId, String id) throws ProjectNotFound, InsufficentSkill, UserNotFound {
-        User user = userManager.find(userId);
-        Project project = projectManager.find(id);
+    public Project getSuitableProject(String userId, String id) throws ProjectNotFound, InsufficentSkill, UserNotFound, SQLException {
+        User user = userMapper.find(userId);
+        Project project = projectMapper.find(id);
         if (haveSkills(user, project))
             return project;
         else throw new InsufficentSkill("You don't have nough skills to see this project!");
 
     }
 
-    public ArrayList<Project> getSuitableProjects(String userId) throws UserNotFound {
-        User user = userManager.find(userId);
-        HashMap<String,Project> repo = projectManager.getRepository();
+    public ArrayList<Project> getSuitableProjects(String userId) throws UserNotFound, SQLException {
+        User user = userMapper.find(userId);
+        ArrayList<Project> repo = (ArrayList<Project>) projectMapper.findAll();
         ArrayList<Project> projects = new ArrayList<>();
-        for(HashMap.Entry<String, Project> entry : repo.entrySet()) {
-            Project project = entry.getValue();
-            if(haveSkills(user, project))
-                projects.add(project);
+        for( Project entry : repo) {
+            if(haveSkills(user, entry))
+                projects.add(entry);
         }
         return projects;
     }
@@ -228,8 +235,10 @@ public class JobOonJa {
         }
     }
 
-    public void addProjects(ArrayList<Project> projects) throws RedundantProject {
-        projectManager.fill(projects);
+    public void addProjects(ArrayList<Project> projects) throws RedundantProject, SQLException {
+        for(Project project : projects) {
+        	projectMapper.insert(project);
+        }
     }
 
     public void deleteUserSkill(String userId, String skillName) throws UserNotFound, SQLException {
