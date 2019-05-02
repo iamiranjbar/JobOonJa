@@ -90,6 +90,11 @@ public class EndorseMapper extends Mapper<String, String> implements IEndorseMap
         st.setString(2, skillName);
         try {
             ResultSet resultSet = st.executeQuery();
+            if(resultSet == null) {
+            	st.close();
+                con.close();
+                return new ArrayList<String>();
+            }
             List<String> result = convertResultSetToDomainModelList(resultSet);
             st.close();
             con.close();

@@ -110,7 +110,7 @@ public class BidMapper extends Mapper<Bid, String> implements IBidMapper {
         fillFindValues(st, projectId, userId);
         try {
             ResultSet resultSet = st.executeQuery();
-            if (!resultSet.next()) {
+            if (!resultSet.next() || resultSet == null) {
             	st.close();
             	con.close();
     			return null;
@@ -134,6 +134,11 @@ public class BidMapper extends Mapper<Bid, String> implements IBidMapper {
         fillFindAllValues(st, projectId);
         try {
             ResultSet resultSet = st.executeQuery();
+            if (resultSet == null) {
+            	st.close();
+            	con.close();
+            	return new ArrayList<Bid>();
+            }
             ArrayList<Bid> result = convertResultSetToDomainModelList(resultSet);
             st.close();
             con.close();
