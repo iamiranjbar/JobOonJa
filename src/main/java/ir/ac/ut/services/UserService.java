@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 @RestController
@@ -33,6 +34,17 @@ public class UserService {
             return ResponseEntity.ok(user);
         } catch (Exception exception) {
             exception.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @RequestMapping(value = "/user/search/{name}", method = RequestMethod.GET)
+    public ResponseEntity<ArrayList<User>> searchUser(@PathVariable(value = "name") String name){
+        try {
+            ArrayList<User> foundUsers = jobOonJa.searchUser(name);
+            return ResponseEntity.ok(foundUsers);
+        } catch (SQLException e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }

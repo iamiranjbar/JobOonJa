@@ -100,11 +100,11 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 		long creationDate = rs.getLong(7);
 		ArrayList<Bid> bids = bidMapper.findAll(id);
 		ArrayList<Skill> skills = (ArrayList<Skill>) projectSkillMapper.findAll(id);
-		String winnerId = auctionMapper.find(id);
-		if (winnerId == null) {
-			return new Project(id, title, description, imageURL, skills, bids, budget, deadLine, creationDate, null);
-		}
-		return new Project(id, title, description, imageURL, skills, bids, budget, deadLine, creationDate, userMapper.find(winnerId));
+//		String winnerId = auctionMapper.find(id);
+//		if (winnerId == null) {
+		return new Project(id, title, description, imageURL, skills, bids, budget, deadLine, creationDate, null);
+//		}
+//		return new Project(id, title, description, imageURL, skills, bids, budget, deadLine, creationDate, userMapper.find(winnerId));
 	}
 
 	@Override

@@ -78,7 +78,6 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
         String jobTitle = rs.getString(6);
         String profilePic = rs.getString(7);
         String bio = rs.getString(8);
-        // TODO: get user skills
         ArrayList<UserSkill> userSkills = userSkillMapper.findAll(id);
         HashMap<String, UserSkill> userSkillsMap = new HashMap<>();
         for(UserSkill userSkill : userSkills) {
@@ -132,14 +131,14 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
     }
     
     // TODO: check name for searching.
-    public List<User> searchByName(String name) throws SQLException {
+    public ArrayList<User> searchByName(String name) throws SQLException {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(getSearchStatement());
         st.setString(1, name);
         ResultSet resultSet;
         try {
             resultSet = st.executeQuery();
-            List<User> result = convertResultSetToDomainModelList(resultSet);
+            ArrayList<User> result = convertResultSetToDomainModelList(resultSet);
             st.close();
             con.close();
             return result;

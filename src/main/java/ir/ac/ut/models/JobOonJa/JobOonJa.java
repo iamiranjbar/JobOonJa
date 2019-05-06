@@ -113,8 +113,9 @@ public class JobOonJa {
     private void initialize() throws RedundantUser, IOException, RedundantProject, SQLException {
         User user = this.makeAdminUser();
         this.register(user);
-        this.register(this.makeUser("2", "ali", "edalat", "student", "pro"));
-        this.register(this.makeUser("3", "amir", "ranjber", "student", "pro"));
+        this.register(this.makeUser("4", "علی", "عدالت", "توسعه دهنده رابط کاربری",
+                "مخلص همه سینگلا!"));
+        this.register(this.makeUser("5", "امیر", "رنجبر", "متخصص SEO", "خرابتم ننه!"));
         this.getSkills();
         this.getProjects();
     }
@@ -193,6 +194,10 @@ public class JobOonJa {
 
     public User getUser(String id) throws UserNotFound, SQLException {
         return userMapper.find(id);
+    }
+
+    public ArrayList<User> searchUser(String name) throws SQLException {
+        return userMapper.searchByName(name);
     }
 
     public Project getSuitableProject(String userId, String id) throws ProjectNotFound, InsufficentSkill, UserNotFound, SQLException {
