@@ -213,12 +213,12 @@ public class JobOonJa {
         User user = userMapper.find(userId);
         ArrayList<Project> repo = (ArrayList<Project>) projectMapper.findAllSuitable(userId);
 
-        ArrayList<Project> projects = new ArrayList<>();
-        for( Project entry : repo) {
-            if(haveSkills(user, entry))
-                projects.add(entry);
-        }
-        return projects;
+//        ArrayList<Project> projects = new ArrayList<>();
+//        for( Project entry : repo) {
+//            if(haveSkills(user, entry))
+//                projects.add(entry);
+//        }
+        return repo;
     }
 
     public ArrayList<Project> searchProjects(String searchField) throws SQLException {

@@ -184,15 +184,31 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 	}
 
 	private String getFindSuitableStatement(){
-	    return "SELECT * FROM project p WHERE p.id NOT IN (SELECT p.id FROM project p, projectSkill ps, userSkill us"
-                + "WHERE p.id == ps.projectId AND us.userId == ? AND us.skillName == ps.skillName And us.point <  ps.point)" +
-                "ORDER BY creationDate DESC;";
+	    return "SELECT * " +
+                "FROM project p " +
+                "WHERE p.id NOT IN (SELECT p.id " +
+                "FROM project p, projectSkill ps, userSkill us " +
+                "WHERE p.id = ps.projectId AND us.userId = ? AND us.skillName = ps.skillName And us.point <  ps.point) " +
+                "AND p.id NOT IN (SELECT p2.id " +
+                "FROM project p2 " +
+                "WHERE EXISTS( " +
+                "SELECT ps2.skillName " +
+                "FROM projectSkill ps2 " +
+                "WHERE ps2.projectId = p2.id " +
+                "EXCEPT " +
+                "SELECT us2.skillName " +
+                "FROM userSkill us2 " +
+                "WHERE us2.userId = ? " +
+                ") " +
+                ") " +
+                "ORDER BY creationDate DESC";
 
     }
 	public ArrayList<Project> findAllSuitable(String id) throws SQLException {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(getFindSuitableStatement());
         st.setString(1, id);
+        st.setString(2, id);
         try {
             ResultSet resultSet = st.executeQuery();
             if (!resultSet.next() || resultSet == null) {
