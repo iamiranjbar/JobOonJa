@@ -17,6 +17,7 @@ import ir.ac.ut.models.Bid.Bid;
 import ir.ac.ut.models.Project.Project;
 import ir.ac.ut.models.Skill.Skill;
 import ir.ac.ut.models.Skill.UserSkill;
+import ir.ac.ut.models.User.User;
 
 public class ProjectMapper extends Mapper<Project, String> implements IProjectMapper {
 	
@@ -65,8 +66,12 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 	protected String getInsertStatement() {
 		return "INSERT INTO project(id, title, description, imageURL, budget, deadLine, creationDate) VALUES(?,?,?,?,?,?,?)";
 	}
-	
-	private String getMaxCreationDateQuery() {
+
+    private String getSearchStatement(){
+        return "SELECT * FROM project WHERE instr(title || ' ' || description, ?) > 0";
+    }
+
+    private String getMaxCreationDateQuery() {
 		return "SELECT MAX(creationDate) FROM project";
 	}
 	
@@ -149,4 +154,23 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
         return result;
 	}
 
+	public ArrayList<Project> search(String searchField) throws SQLException {
+		Connection con = ConnectionPool.getConnection();
+		PreparedStatement st = con.prepareStatement(getSearchStatement());
+		st.setString(1, searchField);
+		ResultSet resultSet;
+		try {
+			resultSet = st.executeQuery();
+			ArrayList<Project> result = convertResultSetToDomainModelList(resultSet);
+			st.close();
+			con.close();
+			return result;
+		} catch (SQLException ex) {
+			System.out.println("error in ProjectMapper.search query.");
+			st.close();
+			con.close();
+			ex.printStackTrace();
+			throw ex;
+		}
+	}
 }

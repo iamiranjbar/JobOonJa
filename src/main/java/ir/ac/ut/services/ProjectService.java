@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 @RestController
@@ -60,4 +61,14 @@ public class ProjectService {
         }
     }
 
+    @RequestMapping(value = "/project/search/{searchField}", method = RequestMethod.GET)
+    public ResponseEntity<ArrayList<Project>> search(@PathVariable(value = "searchField") String searchField){
+        try {
+            ArrayList<Project> projects = jobOonJa.searchProjects(searchField);
+            return ResponseEntity.ok(projects);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 }

@@ -220,6 +220,10 @@ public class JobOonJa {
         return projects;
     }
 
+    public ArrayList<Project> searchProjects(String searchField) throws SQLException {
+        return projectMapper.search(searchField);
+    }
+
     public ArrayList<User> getUserList(String userId) throws SQLException {
         ArrayList<User> userList = new ArrayList<>(userMapper.findAll());
         for (int i = 0; i < userList.size(); i++)
@@ -234,13 +238,13 @@ public class JobOonJa {
        userSkillMapper.insert(new UserSkill(skillName, 0), userId);
     }
 
-    public void addSkills(ArrayList<Skill> skills) throws SQLException {
+    private void addSkills(ArrayList<Skill> skills) throws SQLException {
         for(Skill skill : skills) {
         	skillMapper.insert(skill);
         }
     }
 
-    public void addProjects(ArrayList<Project> projects) throws RedundantProject, SQLException {
+    private void addProjects(ArrayList<Project> projects) throws RedundantProject, SQLException {
         for(Project project : projects) {
         	projectMapper.insert(project);
         }
