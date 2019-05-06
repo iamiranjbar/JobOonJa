@@ -12,6 +12,16 @@ public class BidDTO {
     @JsonProperty(required = true)
     private int bidAmount;
 
+    public BidDTO(){
+
+    }
+
+    public BidDTO(String userId, String projectId, int amount) {
+        this.biddingUser = userId;
+        this.projectTitle = projectId;
+        this.bidAmount = amount;
+    }
+
     public String getBiddingUser() {
         return biddingUser;
     }

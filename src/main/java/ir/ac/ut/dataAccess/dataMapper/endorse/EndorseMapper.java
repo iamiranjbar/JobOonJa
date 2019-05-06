@@ -71,7 +71,8 @@ public class EndorseMapper extends Mapper<String, String> implements IEndorseMap
 
     @Override
     protected String convertResultSetToDomainModel(ResultSet rs) throws SQLException {
-        return rs.getString(1);
+        String endorser = rs.getString(1);
+        return endorser;
     }
 
     @Override

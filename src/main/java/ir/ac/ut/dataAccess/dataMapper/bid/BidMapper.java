@@ -13,11 +13,12 @@ import ir.ac.ut.dataAccess.dataMapper.project.ProjectMapper;
 import ir.ac.ut.dataAccess.dataMapper.projectSkill.ProjectSkillMapper;
 import ir.ac.ut.dataAccess.dataMapper.user.UserMapper;
 import ir.ac.ut.models.Bid.Bid;
+import ir.ac.ut.models.Bid.BidDTO;
 import ir.ac.ut.models.Project.Project;
 import ir.ac.ut.models.Skill.Skill;
 import ir.ac.ut.models.User.User;
 
-public class BidMapper extends Mapper<Bid, String> implements IBidMapper {
+public class BidMapper extends Mapper<BidDTO, String> implements IBidMapper {
 	
 	private static BidMapper instance;
 	
@@ -67,20 +68,20 @@ public class BidMapper extends Mapper<Bid, String> implements IBidMapper {
 	}
 
 	@Override
-	protected Bid convertResultSetToDomainModel(ResultSet rs) throws SQLException {
+	protected BidDTO convertResultSetToDomainModel(ResultSet rs) throws SQLException {
 		String userId = rs.getString(1);
 		String projectId = rs.getString(2);
 		int amount = rs.getInt(3);
-		UserMapper userMapper = UserMapper.getInstance();
-		ProjectMapper projectMapper = ProjectMapper.getInstance();
-		User user = userMapper.find(userId);
-		Project project = projectMapper.find(projectId);
-		return new Bid(user, project, amount);
+//		UserMapper userMapper = UserMapper.getInstance();
+//		ProjectMapper projectMapper = ProjectMapper.getInstance();
+//		User user = userMapper.find(userId);
+//		Project project = projectMapper.find(projectId);
+		return new BidDTO(userId, projectId, amount);
 	}
 
 	@Override
-	protected ArrayList<Bid> convertResultSetToDomainModelList(ResultSet rs) throws SQLException {
-		ArrayList<Bid> bids = new ArrayList<>();
+	protected ArrayList<BidDTO> convertResultSetToDomainModelList(ResultSet rs) throws SQLException {
+		ArrayList<BidDTO> bids = new ArrayList<>();
         while (rs.next()){
             bids.add(this.convertResultSetToDomainModel(rs));
         }
@@ -89,10 +90,10 @@ public class BidMapper extends Mapper<Bid, String> implements IBidMapper {
 	
 	//TODO: check skils and amount in insert
 	@Override
-	protected void fillInsertValues(PreparedStatement st, Bid data) throws SQLException {
-		st.setString(1, data.getUser().getId());
-		st.setString(2, data.getProject().getId());
-		st.setInt(3, data.getAmount());
+	protected void fillInsertValues(PreparedStatement st, BidDTO data) throws SQLException {
+		st.setString(1, data.getBiddingUser());
+		st.setString(2, data.getProjectTitle());
+		st.setInt(3, data.getBidAmount());
 	}
 	
 	public void fillFindAllValues(PreparedStatement st, String projectid) throws SQLException {
@@ -104,7 +105,7 @@ public class BidMapper extends Mapper<Bid, String> implements IBidMapper {
 		st.setString(2, userId);
 	}
 	
-	public Bid find(String projectId, String userId) throws SQLException {
+	public BidDTO find(String projectId, String userId) throws SQLException {
 		Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(getFindStatement());
         fillFindValues(st, projectId, userId);
@@ -115,7 +116,7 @@ public class BidMapper extends Mapper<Bid, String> implements IBidMapper {
             	con.close();
     			return null;
     		}
-            Bid result = convertResultSetToDomainModel(resultSet);
+            BidDTO result = convertResultSetToDomainModel(resultSet);
             st.close();
             con.close();
             return result;
@@ -128,7 +129,7 @@ public class BidMapper extends Mapper<Bid, String> implements IBidMapper {
         }
 	}
 	
-	public ArrayList<Bid> findAll(String projectId) throws SQLException {
+	public ArrayList<BidDTO> findAll(String projectId) throws SQLException {
 		Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(getFindAllStatement());
         fillFindAllValues(st, projectId);
@@ -137,14 +138,14 @@ public class BidMapper extends Mapper<Bid, String> implements IBidMapper {
             if (resultSet == null) {
             	st.close();
             	con.close();
-            	return new ArrayList<Bid>();
+            	return new ArrayList<BidDTO>();
             }
-            ArrayList<Bid> result = convertResultSetToDomainModelList(resultSet);
+            ArrayList<BidDTO> result = convertResultSetToDomainModelList(resultSet);
             st.close();
             con.close();
             return result;
         } catch (SQLException e) {
-            System.out.println("error in ProjectSkillMapper.findAll query.");
+            System.out.println("error in bidMapper.findAll query.");
             st.close();
             con.close();
             e.printStackTrace();

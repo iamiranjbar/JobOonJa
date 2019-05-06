@@ -42,6 +42,10 @@ public class UserService {
     public ResponseEntity<ArrayList<User>> searchUser(@PathVariable(value = "name") String name){
         try {
             ArrayList<User> foundUsers = jobOonJa.searchUser(name);
+            for (int i = 0; i < foundUsers.size(); i++) {
+                if (foundUsers.get(i).getId().equals("1"))
+                    foundUsers.remove(i);
+            }
             return ResponseEntity.ok(foundUsers);
         } catch (SQLException e) {
             e.printStackTrace();

@@ -48,7 +48,7 @@ public class DatabaseListener implements Runnable {
 	
 	@Override
 	public void run() {
-		System.out.println("ali..");
+//		System.out.println("ali..");
 		try {
 			this.getProjects();
 		} catch (IOException | RedundantProject | SQLException e) {

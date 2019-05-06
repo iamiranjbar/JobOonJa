@@ -59,7 +59,8 @@ public class AuctionMapper extends Mapper<String, String> implements IAuctionMap
 
 	@Override
 	protected String convertResultSetToDomainModel(ResultSet rs) throws SQLException {
-		return rs.getString(1);
+		String winner = rs.getString(1);
+		return winner;
 	}
 
 	@Override

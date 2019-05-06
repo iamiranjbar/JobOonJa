@@ -2,6 +2,7 @@ package ir.ac.ut.models.Project;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import ir.ac.ut.models.Bid.Bid;
+import ir.ac.ut.models.Bid.BidDTO;
 import ir.ac.ut.models.Skill.Skill;
 import ir.ac.ut.models.User.User;
 import com.jsoniter.annotation.JsonObject;
@@ -28,14 +29,14 @@ public class Project {
     @JsonProperty(required = true)
     private long creationDate;
     private User winner;
-    private ArrayList<Bid> bids;
+    private ArrayList<BidDTO> bids;
 
     public Project() {
 
     }
 
     public Project(String id, String title, String description, String imageURL, ArrayList<Skill> skills,
-                   ArrayList<Bid> bids, int budget, long deadline, long creationDate, User winner) {
+                   ArrayList<BidDTO> bids, int budget, long deadline, long creationDate, User winner) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -68,7 +69,7 @@ public class Project {
         return skills;
     }
 
-    public ArrayList<Bid> getBids() {
+    public ArrayList<BidDTO> getBids() {
         return bids;
     }
 
@@ -88,7 +89,7 @@ public class Project {
         return winner;
     }
 
-    void addBid(Bid bid){
+    void addBid(BidDTO bid){
         this.bids.add(bid);
     }
 }

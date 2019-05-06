@@ -14,6 +14,7 @@ import ir.ac.ut.dataAccess.dataMapper.projectSkill.ProjectSkillMapper;
 import ir.ac.ut.dataAccess.dataMapper.user.UserMapper;
 import ir.ac.ut.dataAccess.dataMapper.userSkill.UserSkillMapper;
 import ir.ac.ut.models.Bid.Bid;
+import ir.ac.ut.models.Bid.BidDTO;
 import ir.ac.ut.models.Project.Project;
 import ir.ac.ut.models.Skill.Skill;
 import ir.ac.ut.models.Skill.UserSkill;
@@ -94,7 +95,7 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 	protected Project convertResultSetToDomainModel(ResultSet rs) throws SQLException {
 		ProjectSkillMapper projectSkillMapper = ProjectSkillMapper.getInstance();
 		BidMapper bidMapper = BidMapper.getInstance();
-		AuctionMapper auctionMapper = AuctionMapper.getInstance();
+//		AuctionMapper auctionMapper = AuctionMapper.getInstance();
 		UserMapper userMapper = UserMapper.getInstance();
 		String id = rs.getString(1);
 		String title = rs.getString(2);
@@ -103,11 +104,18 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 		int budget = rs.getInt(5);
 		long deadLine = rs.getLong(6);
 		long creationDate = rs.getLong(7);
-		ArrayList<Bid> bids = bidMapper.findAll(id);
+		ArrayList<BidDTO> bidDTOs = bidMapper.findAll(id);
+//		ArrayList<Bid> bids = new ArrayList<>();
+//		for (BidDTO bidDTO: bidDTOs){
+//		    User biddingUser = userMapper.find(bidDTO.getBiddingUser());
+//		    Project biddingProject = this.find(id);
+//		    int amount = bidDTO.getBidAmount();
+//		    bids.add(new Bid(biddingUser, biddingProject, amount));
+//        }
 		ArrayList<Skill> skills = (ArrayList<Skill>) projectSkillMapper.findAll(id);
 //		String winnerId = auctionMapper.find(id);
 //		if (winnerId == null) {
-		return new Project(id, title, description, imageURL, skills, bids, budget, deadLine, creationDate, null);
+		return new Project(id, title, description, imageURL, skills, bidDTOs, budget, deadLine, creationDate, null);
 //		}
 //		return new Project(id, title, description, imageURL, skills, bids, budget, deadLine, creationDate, userMapper.find(winnerId));
 	}
@@ -116,6 +124,7 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 	protected ArrayList<Project> convertResultSetToDomainModelList(ResultSet rs) throws SQLException {
 		ArrayList<Project> projects = new ArrayList<>();
         while (rs.next()){
+//			System.out.println("salam");
             projects.add(this.convertResultSetToDomainModel(rs));
         }
         return projects;
@@ -173,4 +182,33 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 			throw ex;
 		}
 	}
+
+	private String getFindSuitableStatement(){
+	    return "SELECT * FROM project p WHERE p.id NOT IN (SELECT p.id FROM project p, projectSkill ps, userSkill us"
+                + "WHERE p.id == ps.projectId AND us.userId == ? AND us.skillName == ps.skillName And us.point <  ps.point)" +
+                "ORDER BY creationDate DESC;";
+
+    }
+	public ArrayList<Project> findAllSuitable(String id) throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(getFindSuitableStatement());
+        st.setString(1, id);
+        try {
+            ResultSet resultSet = st.executeQuery();
+            if (!resultSet.next() || resultSet == null) {
+                st.close();
+                con.close();
+                return null;
+            }
+            ArrayList<Project> result = convertResultSetToDomainModelList(resultSet);
+            st.close();
+            con.close();
+            return result;
+        } catch (SQLException ex) {
+            System.out.println("error in Mapper.findSuitable query.");
+            st.close();
+            con.close();
+            throw ex;
+        }
+    }
 }

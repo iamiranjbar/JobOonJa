@@ -166,7 +166,7 @@ public class JobOonJa {
     private void submit(Bid bid) throws SQLException, InsufficentSkill, InsufficentBudget {
     	 if (bid.getAmount() <= bid.getProject().getBudget()) {
              if (haveSkills(bid.getUser(),bid.getProject()))
-                 bidMapper.insert(bid);
+                 bidMapper.insert(new BidDTO(bid.getUser().getId(), bid.getProject().getId(), bid.getAmount()));
              else
                  throw new InsufficentSkill("You don't have enough skills!");
          }
@@ -185,7 +185,7 @@ public class JobOonJa {
     }
 
     public boolean findBid(String userId, String projectId) throws SQLException {
-    	Bid bid = bidMapper.find(projectId, userId);
+    	BidDTO bid = bidMapper.find(projectId, userId);
     	if (bid == null) {
     		return false;
     	}
@@ -211,7 +211,8 @@ public class JobOonJa {
 
     public ArrayList<Project> getSuitableProjects(String userId) throws UserNotFound, SQLException {
         User user = userMapper.find(userId);
-        ArrayList<Project> repo = (ArrayList<Project>) projectMapper.findAll();
+        ArrayList<Project> repo = (ArrayList<Project>) projectMapper.findAllSuitable(userId);
+
         ArrayList<Project> projects = new ArrayList<>();
         for( Project entry : repo) {
             if(haveSkills(user, entry))
