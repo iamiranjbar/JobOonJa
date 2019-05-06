@@ -201,14 +201,17 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
                 "WHERE us2.userId = ? " +
                 ") " +
                 ") " +
-                "ORDER BY creationDate DESC";
+                "ORDER BY creationDate DESC " +
+                "LIMIT ? " +
+                "OFFSET 0";
 
     }
-	public ArrayList<Project> findAllSuitable(String id) throws SQLException {
+	public ArrayList<Project> findAllSuitable(String id, String limit) throws SQLException {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(getFindSuitableStatement());
         st.setString(1, id);
         st.setString(2, id);
+        st.setString(3,limit);
         try {
             ResultSet resultSet = st.executeQuery();
             if (!resultSet.next() || resultSet == null) {

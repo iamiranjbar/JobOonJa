@@ -209,9 +209,9 @@ public class JobOonJa {
 
     }
 
-    public ArrayList<Project> getSuitableProjects(String userId) throws UserNotFound, SQLException {
+    public ArrayList<Project> getSuitableProjects(String userId, String limit) throws UserNotFound, SQLException {
         User user = userMapper.find(userId);
-        ArrayList<Project> repo = (ArrayList<Project>) projectMapper.findAllSuitable(userId);
+        ArrayList<Project> repo = (ArrayList<Project>) projectMapper.findAllSuitable(userId, limit);
 
 //        ArrayList<Project> projects = new ArrayList<>();
 //        for( Project entry : repo) {

@@ -17,10 +17,10 @@ import java.util.ArrayList;
 public class ProjectService {
     private JobOonJa jobOonJa = JobOonJa.getInstance();
 
-    @RequestMapping(value = "/project", method = RequestMethod.GET)
-    public ResponseEntity<ArrayList<Project> > getProjects(){
+    @RequestMapping(value = "/projects/{limit}", method = RequestMethod.GET)
+    public ResponseEntity<ArrayList<Project> > getProjects(@PathVariable String limit){
         try {
-            ArrayList<Project> projects = jobOonJa.getSuitableProjects(jobOonJa.getLogInUser());
+            ArrayList<Project> projects = jobOonJa.getSuitableProjects(jobOonJa.getLogInUser(),limit);
             return ResponseEntity.ok(projects);
         } catch (Exception exception) {
             exception.printStackTrace();
