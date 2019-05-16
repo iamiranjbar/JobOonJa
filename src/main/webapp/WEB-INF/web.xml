@@ -6,6 +6,14 @@
 	<display-name>IE RIA</display-name>
 
 	<filter>
+		<filter-name>JwtFilter</filter-name>
+		<filter-class>ir.ac.ut.filter.TokenFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>JwtFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter>
 		<filter-name>CORS Filter</filter-name>
 		<filter-class>org.ebaysf.web.cors.CORSFilter</filter-class>
 		<init-param>
