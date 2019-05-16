@@ -149,6 +149,15 @@ public class JobOonJa {
         throw new Exception("invalid username or password.");
     }
 
+    public boolean usernameExist(String username) {
+        try {
+            User user = userMapper.searchByUsername(username);
+            return true;
+        } catch (Exception e) {
+            return  false;
+        }
+    }
+
     public void auction(String projectTitle) {
         ArrayList<Bid> bids = bidManager.getRepository();
         int maximum = 0;

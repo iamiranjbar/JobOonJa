@@ -40,9 +40,21 @@ public class AuthenticationService {
             String id = jobOonJa.findRegisterUserByUsername(username, password);
             return (ResponseEntity) ResponseEntity.ok(Jwt.createJWT(String.valueOf(id), "JobOonJa",
                     "auth-login", 111223));
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Login is failed. username or password is invalid.");
+        }
+
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity checkUsernameExistance(@RequestParam("username") String username) {
+        try {
+            boolean result = jobOonJa.usernameExist(username);
+            return (ResponseEntity) ResponseEntity.ok(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("username is invalid.");
         }
 
     }
