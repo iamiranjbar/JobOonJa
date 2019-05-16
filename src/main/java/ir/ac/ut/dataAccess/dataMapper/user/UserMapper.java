@@ -50,6 +50,12 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
                 "FROM user u " +
                 "WHERE u.id = ?";
     }
+
+    private String getFindStatementByUsername() {
+        return "SELECT * " +
+                "FROM user u " +
+                "WHERE u.username = ?";
+    }
     
     private String getSearchStatement() {
     	return "SELECT * FROM user WHERE instr(firstname || ' ' || lastname, ?) > 0";
@@ -144,6 +150,26 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
             return result;
         } catch (SQLException ex) {
             System.out.println("error in Mapper.findByID query.");
+            st.close();
+            con.close();
+            ex.printStackTrace();
+            throw ex;
+        }
+    }
+
+    public User searchByUsername(String username) throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(getFindStatementByUsername());
+        st.setString(1, username);
+        ResultSet resultSet;
+        try {
+            resultSet = st.executeQuery();
+            User result = convertResultSetToDomainModel(resultSet);
+            st.close();
+            con.close();
+            return result;
+        } catch (SQLException ex) {
+            System.out.println("error in Mapper.findByUsername query.");
             st.close();
             con.close();
             ex.printStackTrace();

@@ -34,6 +34,18 @@ public class User {
         this.bio = bio;
     }
 
+    public User(String id, String firstName, String lastName, String username, String password,  String jobTitle,
+                String profilePicURL, String bio) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.setUsername(username);
+        this.setPassword(password);
+        this.jobTitle = jobTitle;
+        this.profilePicURL = profilePicURL;
+        this.bio = bio;
+    }
+
     public String getId() {
         return id;
     }
