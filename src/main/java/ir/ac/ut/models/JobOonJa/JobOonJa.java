@@ -122,11 +122,6 @@ public class JobOonJa {
         this.getProjects();
     }
 
-    public String getLogInUser() {
-        return "1";
-    }
-
-
     private int goalFunction(Bid bid) {
         int result = 0;
         ArrayList<Skill> jobSkills = bid.getProject().getSkills();

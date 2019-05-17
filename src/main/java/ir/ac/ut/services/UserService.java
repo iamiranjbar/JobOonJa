@@ -41,11 +41,11 @@ public class UserService {
     }
 
     @RequestMapping(value = "/user/search/{name}", method = RequestMethod.GET)
-    public ResponseEntity<ArrayList<User>> searchUser(@PathVariable(value = "name") String name){
+    public ResponseEntity<ArrayList<User>> searchUser(@PathVariable(value = "name") String name,@RequestAttribute Claims claims){
         try {
             ArrayList<User> foundUsers = jobOonJa.searchUser(name);
             for (int i = 0; i < foundUsers.size(); i++) {
-                if (foundUsers.get(i).getId().equals("1"))
+                if (foundUsers.get(i).getId().equals(claims.getId()))
                     foundUsers.remove(i);
             }
             return ResponseEntity.ok(foundUsers);

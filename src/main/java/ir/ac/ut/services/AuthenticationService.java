@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Array;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 @RestController
 public class AuthenticationService {
@@ -40,7 +42,13 @@ public class AuthenticationService {
         try {
             String id = jobOonJa.findRegisterUserByUsername(username, password);
             String jwt = Jwt.createJWT(id, "JobOonJa", "auth-login", 600000);
-            return ResponseEntity.ok(jwt);
+            ArrayList response = new ArrayList<String>(){
+                {
+                    add(jwt);
+                    add(id);
+                }
+            };
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Login is failed. username or password is invalid.");

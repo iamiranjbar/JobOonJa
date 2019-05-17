@@ -1,5 +1,6 @@
 package ir.ac.ut.services;
 
+import io.jsonwebtoken.Claims;
 import ir.ac.ut.models.Exception.UserNotFound;
 import ir.ac.ut.models.JobOonJa.JobOonJa;
 import ir.ac.ut.models.Skill.Skill;
@@ -7,10 +8,7 @@ import ir.ac.ut.models.Skill.UserSkill;
 import ir.ac.ut.models.User.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -57,8 +55,9 @@ public class SkillServices {
 
     @RequestMapping(value = "/skill/{userId}/{skillName}/endorse" , method = RequestMethod.POST)
     public ResponseEntity<User> endorse(@PathVariable(value = "userId") String endorsed,
-                                        @PathVariable(value = "skillName") String skillName){
-        String loggedInUser = jobOonJa.getLogInUser();
+                                        @PathVariable(value = "skillName") String skillName,
+                                        @RequestAttribute Claims claims){
+        String loggedInUser = claims.getId();
         try {
             jobOonJa.endorse(loggedInUser, endorsed, skillName);
             User user = jobOonJa.getUser(endorsed);
