@@ -5,9 +5,11 @@ import ir.ac.ut.models.User.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import io.jsonwebtoken.Claims;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,9 +19,9 @@ public class UserService {
     private JobOonJa jobOonJa = JobOonJa.getInstance();
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public ResponseEntity<ArrayList<User> > getUsers(){
+    public ResponseEntity<ArrayList<User> > getUsers(@RequestAttribute Claims claims){
         try {
-            ArrayList<User> users = jobOonJa.getUserList(jobOonJa.getLogInUser());
+            ArrayList<User> users = jobOonJa.getUserList(claims.getId());
             return ResponseEntity.ok(users);
         } catch (Exception exception) {
             exception.printStackTrace();
