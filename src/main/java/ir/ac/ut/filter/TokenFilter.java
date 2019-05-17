@@ -5,15 +5,16 @@ import io.jsonwebtoken.SignatureException;
 import ir.ac.ut.jwt.Jwt;
 import org.springframework.web.filter.GenericFilterBean;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-public class TokenFilter extends GenericFilterBean {
+public class TokenFilter implements Filter {
+
+    private ArrayList<String> excludedUrls;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -21,6 +22,12 @@ public class TokenFilter extends GenericFilterBean {
         final HttpServletResponse response = (HttpServletResponse) servletResponse;
         final String authHeader = request.getHeader("authorization");
 
+        String path =  request.getServletPath();
+
+        if(excludedUrls.contains(path)) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            filterChain.doFilter(servletRequest, servletResponse);
+        }
         if ("OPTIONS".equals(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
             filterChain.doFilter(servletRequest, servletResponse);
@@ -52,4 +59,15 @@ public class TokenFilter extends GenericFilterBean {
             filterChain.doFilter(servletRequest, servletResponse);
         }
     }
+
+    @Override
+    public void destroy() {
+
+    }
+
+    public void init(FilterConfig filterConfig) {
+        String excludePattern = filterConfig.getInitParameter("excludedUrls");
+        excludedUrls = (ArrayList<String>) Arrays.asList(excludePattern.split(","));
+    }
+
 }

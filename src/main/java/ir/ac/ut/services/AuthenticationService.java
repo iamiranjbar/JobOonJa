@@ -47,8 +47,8 @@ public class AuthenticationService {
 
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity checkUsernameExistance(@RequestParam("username") String username) {
+    @RequestMapping(value = "/validate/{username}", method = RequestMethod.GET)
+    public ResponseEntity checkUsernameExistance(@PathVariable("username") String username) {
         try {
             boolean result = jobOonJa.usernameExist(username);
             return (ResponseEntity) ResponseEntity.ok(result);
