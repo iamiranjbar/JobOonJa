@@ -12,7 +12,7 @@ import java.sql.SQLException;
 @RestController
 public class AuthenticationService {
     private JobOonJa jobOonJa = JobOonJa.getInstance();
-    private int maxId = 10;
+    private int maxId = 50;
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public ResponseEntity signup(@RequestParam("firstName") String firstName,

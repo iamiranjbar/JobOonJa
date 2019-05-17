@@ -19,6 +19,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.mindrot.jbcrypt.BCrypt;
 
 
 import java.io.BufferedReader;
@@ -144,7 +145,11 @@ public class JobOonJa {
 
     public String findRegisterUserByUsername(String username, String password) throws Exception {
         User user = userMapper.searchByUsername(username);
-        if (user.getPassword().equals(password)) {
+        System.out.println("*********");
+        System.out.println(password);
+        System.out.println(user.getPassword());
+        System.out.println("*********");
+        if (BCrypt.checkpw(password, user.getPassword())) {
             return user.getId();
         }
         throw new Exception("invalid username or password.");

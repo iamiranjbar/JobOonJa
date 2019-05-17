@@ -29,23 +29,26 @@ public class TokenFilter extends GenericFilterBean {
 
         String path =  request.getServletPath();
         String[] pathParts = path.split("/");
-        if(pathParts.length > 0 && excludedUrls.contains(pathParts[1])) {
+        System.out.println(path);
+        if (pathParts.length > 1)
+            System.out.println(pathParts[1]);
+        if(pathParts.length > 1 && excludedUrls.contains(pathParts[1])) {
             response.setStatus(HttpServletResponse.SC_OK);
             filterChain.doFilter(servletRequest, servletResponse);
         }
-        if ("OPTIONS".equals(request.getMethod())) {
+        else if ("OPTIONS".equals(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
             if (authHeader == null) {
-                System.out.println(">>>>>>>null");
+//                System.out.println(">>>>>>>null");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().println("header is null.");
                 return;
             }
 
             if (!authHeader.startsWith("Bearer ")) {
-                System.out.println(">>>>>>>bad header");
+//                System.out.println(">>>>>>>bad header");
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 response.getWriter().println("header style is not good.");
                 return;
@@ -58,7 +61,7 @@ public class TokenFilter extends GenericFilterBean {
                 final Claims claims = Jwt.decodeJWT(token);
                 request.setAttribute("claims", claims);
             } catch (final SignatureException e) {
-                System.out.println(">>>>>>>bad header");
+//                System.out.println(">>>>>>>bad header");
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 response.getWriter().println("SignatureException.");
                 return;

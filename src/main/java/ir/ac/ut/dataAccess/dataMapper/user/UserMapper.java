@@ -115,16 +115,17 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
 
     // TODO: Add user specific methods
     public boolean insert(User user) throws SQLException{
-    	boolean result = true;
+    	boolean result;
     	UserSkillMapper userSkillMapper = UserSkillMapper.getInstance();
     	Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(getInsertStatement());
         fillInsertValues(st, user);
         try {
-	        result &= st.execute();
-	        for(UserSkill userSkill : user.getSkills().values()) {
-	        	result &= userSkillMapper.insert(userSkill, user.getId());
-	        }
+	        result = st.execute();
+            if (user.getSkills().size() > 0)
+                for(UserSkill userSkill : user.getSkills().values()) {
+                    result = result && userSkillMapper.insert(userSkill, user.getId());
+                }
         } catch (Exception e) {
         	st.close();
             con.close();
