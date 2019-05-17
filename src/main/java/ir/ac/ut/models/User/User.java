@@ -43,6 +43,7 @@ public class User {
         this.setPassword(password);
         this.jobTitle = jobTitle;
         this.profilePicURL = profilePicURL;
+        this.skills = new HashMap<>();
         this.bio = bio;
     }
 

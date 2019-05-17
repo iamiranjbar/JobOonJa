@@ -154,7 +154,7 @@ public class JobOonJa {
             User user = userMapper.searchByUsername(username);
             return true;
         } catch (Exception e) {
-            return  false;
+            return false;
         }
     }
 
