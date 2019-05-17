@@ -12,9 +12,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class TokenFilter implements Filter {
+public class TokenFilter extends GenericFilterBean {
 
-    private ArrayList<String> excludedUrls;
+    ArrayList<String> excludedUrls = new ArrayList<String>() {
+        {
+            add("/login");
+            add("/signup");
+            add("/validate");
+        }
+    };
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -60,14 +66,16 @@ public class TokenFilter implements Filter {
         }
     }
 
-    @Override
-    public void destroy() {
-
-    }
-
-    public void init(FilterConfig filterConfig) {
-        String excludePattern = filterConfig.getInitParameter("excludedUrls");
-        excludedUrls = (ArrayList<String>) Arrays.asList(excludePattern.split(","));
-    }
+//    @Override
+//    public void destroy() {
+//
+//    }
+//
+//    public void init(FilterConfig filterConfig) {
+//        String excludePattern = filterConfig.getInitParameter("excludedUrls");
+//        excludedUrls = (ArrayList<String>) Arrays.asList(excludePattern.split(","));
+//        for( String a : excludedUrls)
+//            System.out.println(a);
+//    }
 
 }

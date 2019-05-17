@@ -8,10 +8,10 @@
 	<filter>
 		<filter-name>JwtFilter</filter-name>
 		<filter-class>ir.ac.ut.filter.TokenFilter</filter-class>
-		<init-param>
-			<param-name>excludedUrls</param-name>
-			<param-value>/login,/signup,/validate</param-value>
-		</init-param>
+		<!--<init-param>-->
+			<!--<param-name>excludedUrls</param-name>-->
+			<!--<param-value>/login,/signup,/validate</param-value>-->
+		<!--</init-param>-->
 	</filter>
 	<filter-mapping>
 		<filter-name>JwtFilter</filter-name>
