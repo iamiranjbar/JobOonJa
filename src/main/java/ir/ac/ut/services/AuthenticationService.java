@@ -26,7 +26,7 @@ public class AuthenticationService {
             if (!jobOonJa.usernameExist(username)) {
                 jobOonJa.register(new User(String.valueOf(maxId++), firstName, lastName, username, password, title,
                         imageLink, bio));
-                return ResponseEntity.status(HttpStatus.OK);
+                return ResponseEntity.status(HttpStatus.OK).body(null);
             } else return ResponseEntity.status(HttpStatus.FORBIDDEN).body("user already exist!");
         } catch (Exception exception) {
             exception.printStackTrace();

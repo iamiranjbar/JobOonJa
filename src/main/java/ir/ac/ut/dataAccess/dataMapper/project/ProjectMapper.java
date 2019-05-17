@@ -106,9 +106,12 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 		long creationDate = rs.getLong(7);
 		ArrayList<BidDTO> bidDTOs = bidMapper.findAll(id);
 		ArrayList<Skill> skills = (ArrayList<Skill>) projectSkillMapper.findAll(id);
-		String winnerId = auctionMapper.find(id);
-//		System.out.println(winnerId);
-//		String winnerId = null;
+		String winnerId;
+		try {
+			winnerId = auctionMapper.find(id);
+		} catch(Exception e) {
+			winnerId = "";
+		}
 		if (winnerId.equals("")) {
 			return new Project(id, title, description, imageURL, skills, bidDTOs, budget, deadLine, creationDate, null);
 		}
@@ -203,7 +206,7 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
     }
 
     private String getFindExpiredStatement() {
-		return "SELECT * FROM project WHERE strftime('%s','now') < deadLine";
+		return "SELECT * FROM project WHERE strftime('%s','now')*1000 < deadLine";
 	}
 
     public ArrayList<Project> findAllExpired() throws SQLException {

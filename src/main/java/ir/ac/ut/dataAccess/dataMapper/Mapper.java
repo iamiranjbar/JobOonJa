@@ -28,6 +28,7 @@ public abstract class Mapper<T,I> implements IMapper<T,I> {
         	if (!resultSet.next() || resultSet == null) {
         		st.close();
         		con.close();
+                System.out.println("find");
     			return null;
         	}
         	T result = convertResultSetToDomainModel(resultSet);
