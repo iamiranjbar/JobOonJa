@@ -3,6 +3,7 @@ package ir.ac.ut.models.JobOonJa;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.fuzzy.StringFloatDecoder;
 
+import ir.ac.ut.dataAccess.dataMapper.auction.AuctionMapper;
 import ir.ac.ut.dataAccess.dataMapper.bid.BidMapper;
 import ir.ac.ut.dataAccess.dataMapper.endorse.EndorseMapper;
 import ir.ac.ut.dataAccess.dataMapper.project.ProjectMapper;
@@ -158,7 +159,7 @@ public class JobOonJa {
         }
     }
 
-    public String auction(String projectId) throws SQLException {
+    public void auction(String projectId) throws SQLException {
         ArrayList<BidDTO> bidsDto = bidMapper.findAll(projectId);
         ArrayList<Bid> bids = new ArrayList<>();
         for (BidDTO bid : bidsDto) {
@@ -175,9 +176,8 @@ public class JobOonJa {
             }
         }
         if (selected != null) {
-            return selected.getId();
-        } else {
-            return  null;
+            AuctionMapper auctionMapper = AuctionMapper.getInstance();
+            auctionMapper.insert(selected.getId(), projectId);
         }
     }
 

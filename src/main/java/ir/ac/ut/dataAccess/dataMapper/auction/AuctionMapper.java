@@ -84,4 +84,21 @@ public class AuctionMapper extends Mapper<String, String> implements IAuctionMap
 		st.setString(2, projectId);
 	}
 
+	public boolean insert(String winner, String projectid) throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(getInsertStatement());
+        fillInsertValues(st, winner, projectid);
+        try {
+            boolean result = st.execute();
+            st.close();
+            con.close();
+            return result;
+        } catch (Exception e) {
+            st.close();
+            con.close();
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
