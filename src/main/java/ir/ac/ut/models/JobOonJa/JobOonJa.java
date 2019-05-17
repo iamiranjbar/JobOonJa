@@ -158,21 +158,26 @@ public class JobOonJa {
         }
     }
 
-    public void auction(String projectTitle) {
-        ArrayList<Bid> bids = bidManager.getRepository();
+    public String auction(String projectId) throws SQLException {
+        ArrayList<BidDTO> bidsDto = bidMapper.findAll(projectId);
+        ArrayList<Bid> bids = new ArrayList<>();
+        for (BidDTO bid : bidsDto) {
+            User user = userMapper.find(bid.getBiddingUser());
+            Project project = projectMapper.find(bid.getProjectTitle());
+            bids.add(new Bid(user, project, bid.getBidAmount()));
+        }
         int maximum = 0;
         User selected = null;
         for (Bid bid : bids) {
-            if (bid.getProject().getTitle().equals(projectTitle)
-                    && goalFunction(bid) > maximum) {
+            if (goalFunction(bid) > maximum) {
                 maximum = goalFunction(bid);
                 selected = bid.getUser();
             }
         }
         if (selected != null) {
-            System.out.printf("winner: %s\n", selected.getFirstName());
+            return selected.getId();
         } else {
-            System.out.println("we do not have any bid for this project.");
+            return  null;
         }
     }
 

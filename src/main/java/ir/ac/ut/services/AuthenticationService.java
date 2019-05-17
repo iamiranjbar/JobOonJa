@@ -26,8 +26,7 @@ public class AuthenticationService {
             if (!jobOonJa.usernameExist(username)) {
                 jobOonJa.register(new User(String.valueOf(maxId++), firstName, lastName, username, password, title,
                         imageLink, bio));
-                return ResponseEntity.ok(Jwt.createJWT(String.valueOf(maxId - 1), "JobOonJa",
-                        "auth-signup", 111223));
+                return ResponseEntity.status(HttpStatus.OK);
             } else return ResponseEntity.status(HttpStatus.FORBIDDEN).body("user already exist!");
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -40,10 +39,7 @@ public class AuthenticationService {
                                  @RequestParam("password") String password) {
         try {
             String id = jobOonJa.findRegisterUserByUsername(username, password);
-            String jwt = Jwt.createJWT(id, "JobOonJa", "auth-login", 111223);
-            System.out.println("**********");
-            System.out.println(jwt);
-            System.out.println("**********");
+            String jwt = Jwt.createJWT(id, "JobOonJa", "auth-login", 600000);
             return ResponseEntity.ok(jwt);
         } catch (Exception e) {
             e.printStackTrace();

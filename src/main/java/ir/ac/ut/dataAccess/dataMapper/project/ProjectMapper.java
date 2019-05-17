@@ -95,7 +95,7 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 	protected Project convertResultSetToDomainModel(ResultSet rs) throws SQLException {
 		ProjectSkillMapper projectSkillMapper = ProjectSkillMapper.getInstance();
 		BidMapper bidMapper = BidMapper.getInstance();
-//		AuctionMapper auctionMapper = AuctionMapper.getInstance();
+		AuctionMapper auctionMapper = AuctionMapper.getInstance();
 		UserMapper userMapper = UserMapper.getInstance();
 		String id = rs.getString(1);
 		String title = rs.getString(2);
@@ -105,19 +105,14 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 		long deadLine = rs.getLong(6);
 		long creationDate = rs.getLong(7);
 		ArrayList<BidDTO> bidDTOs = bidMapper.findAll(id);
-//		ArrayList<Bid> bids = new ArrayList<>();
-//		for (BidDTO bidDTO: bidDTOs){
-//		    User biddingUser = userMapper.find(bidDTO.getBiddingUser());
-//		    Project biddingProject = this.find(id);
-//		    int amount = bidDTO.getBidAmount();
-//		    bids.add(new Bid(biddingUser, biddingProject, amount));
-//        }
 		ArrayList<Skill> skills = (ArrayList<Skill>) projectSkillMapper.findAll(id);
-//		String winnerId = auctionMapper.find(id);
-//		if (winnerId == null) {
-		return new Project(id, title, description, imageURL, skills, bidDTOs, budget, deadLine, creationDate, null);
-//		}
-//		return new Project(id, title, description, imageURL, skills, bids, budget, deadLine, creationDate, userMapper.find(winnerId));
+		String winnerId = auctionMapper.find(id);
+//		System.out.println(winnerId);
+//		String winnerId = null;
+		if (winnerId.equals("")) {
+			return new Project(id, title, description, imageURL, skills, bidDTOs, budget, deadLine, creationDate, null);
+		}
+		return new Project(id, title, description, imageURL, skills, bidDTOs, budget, deadLine, creationDate, userMapper.find(winnerId));
 	}
 
 	@Override
@@ -206,6 +201,33 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
                 "OFFSET 0";
 
     }
+
+    private String getFindExpiredStatement() {
+		return "SELECT * FROM project WHERE strftime('%s','now') < deadLine";
+	}
+
+    public ArrayList<Project> findAllExpired() throws SQLException {
+		Connection con = ConnectionPool.getConnection();
+		PreparedStatement st = con.prepareStatement(getFindExpiredStatement());
+		try {
+			ResultSet resultSet = st.executeQuery();
+			if (!resultSet.next() || resultSet == null) {
+				st.close();
+				con.close();
+				return null;
+			}
+			ArrayList<Project> result = convertResultSetToDomainModelList(resultSet);
+			st.close();
+			con.close();
+			return result;
+		} catch (SQLException ex) {
+			System.out.println("error in Mapper.findSuitable query.");
+			st.close();
+			con.close();
+			throw ex;
+		}
+	}
+
 	public ArrayList<Project> findAllSuitable(String id, String limit) throws SQLException {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(getFindSuitableStatement());
