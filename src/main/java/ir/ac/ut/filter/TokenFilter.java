@@ -10,15 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class TokenFilter extends GenericFilterBean {
 
-    ArrayList<String> excludedUrls = new ArrayList<String>() {
+    private ArrayList<String> excludedUrls = new ArrayList<String>() {
         {
-            add("/login");
-            add("/signup");
-            add("/validate");
+            add("login");
+            add("signup");
+            add("validate");
         }
     };
 
@@ -29,8 +28,8 @@ public class TokenFilter extends GenericFilterBean {
         final String authHeader = request.getHeader("authorization");
 
         String path =  request.getServletPath();
-
-        if(excludedUrls.contains(path)) {
+        String[] pathParts = path.split("/");
+        if(pathParts.length > 0 && excludedUrls.contains(pathParts[1])) {
             response.setStatus(HttpServletResponse.SC_OK);
             filterChain.doFilter(servletRequest, servletResponse);
         }
@@ -42,12 +41,14 @@ public class TokenFilter extends GenericFilterBean {
                 System.out.println("null");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().println("header is null.");
+                return;
             }
 
             if (!authHeader.startsWith("Bearer ")) {
                 System.out.println("bad header");
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 response.getWriter().println("header style is not good.");
+                return;
             }
 
             final String token = authHeader.substring(7);
@@ -60,6 +61,7 @@ public class TokenFilter extends GenericFilterBean {
                 System.out.println("bad header");
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 response.getWriter().println("SignatureException.");
+                return;
             }
 
             filterChain.doFilter(servletRequest, servletResponse);
