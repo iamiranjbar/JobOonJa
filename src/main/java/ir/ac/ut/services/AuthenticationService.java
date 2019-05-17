@@ -52,7 +52,7 @@ public class AuthenticationService {
     public ResponseEntity checkUsernameExistance(@PathVariable("username") String username) {
         try {
             boolean result = jobOonJa.usernameExist(username);
-            return (ResponseEntity) ResponseEntity.ok(result);
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("username is invalid.");

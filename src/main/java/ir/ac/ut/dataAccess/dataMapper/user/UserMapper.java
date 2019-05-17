@@ -172,7 +172,6 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
             System.out.println("error in Mapper.findByUsername query.");
             st.close();
             con.close();
-            ex.printStackTrace();
             throw ex;
         }
     }

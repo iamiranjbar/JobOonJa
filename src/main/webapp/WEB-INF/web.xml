@@ -5,14 +5,14 @@
 <web-app>
 	<display-name>IE RIA</display-name>
 
-<!--	<filter>-->
-<!--		<filter-name>JwtFilter</filter-name>-->
-<!--		<filter-class>ir.ac.ut.filter.TokenFilter</filter-class>-->
-<!--		&lt;!&ndash;<init-param>&ndash;&gt;-->
-<!--			&lt;!&ndash;<param-name>excludedUrls</param-name>&ndash;&gt;-->
-<!--			&lt;!&ndash;<param-value>/login,/signup,/validate</param-value>&ndash;&gt;-->
-<!--		&lt;!&ndash;</init-param>&ndash;&gt;-->
-<!--	</filter>-->
+	<filter>
+		<filter-name>JwtFilter</filter-name>
+		<filter-class>ir.ac.ut.filter.TokenFilter</filter-class>
+		<init-param>
+			<param-name>excludedUrls</param-name>
+			<param-value>/login,/signup,/validate</param-value>
+		</init-param>
+	</filter>
 	<filter>
 		<filter-name>CORS Filter</filter-name>
 		<filter-class>org.ebaysf.web.cors.CORSFilter</filter-class>
@@ -26,13 +26,13 @@
 		</init-param>
 		<init-param>
 			<param-name>cors.allowed.headers</param-name>
-			<param-value>Content-Type,X-Requested-With,accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers,Access-Control-Allow-Origin</param-value>
+			<param-value>Content-Type,X-Requested-With,accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers,Access-Control-Allow-Origin,autorization</param-value>
 		</init-param>
 	</filter>
-<!--	<filter-mapping>-->
-<!--		<filter-name>JwtFilter</filter-name>-->
-<!--		<url-pattern>/*</url-pattern>-->
-<!--	</filter-mapping>-->
+	<filter-mapping>
+		<filter-name>JwtFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 	<filter-mapping>
 		<filter-name>CORS Filter</filter-name>
 		<url-pattern>/*</url-pattern>
