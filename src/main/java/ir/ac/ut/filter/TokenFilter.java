@@ -38,14 +38,14 @@ public class TokenFilter extends GenericFilterBean {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
             if (authHeader == null) {
-                System.out.println("null");
+                System.out.println(">>>>>>>null");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().println("header is null.");
                 return;
             }
 
             if (!authHeader.startsWith("Bearer ")) {
-                System.out.println("bad header");
+                System.out.println(">>>>>>>bad header");
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 response.getWriter().println("header style is not good.");
                 return;
@@ -58,7 +58,7 @@ public class TokenFilter extends GenericFilterBean {
                 final Claims claims = Jwt.decodeJWT(token);
                 request.setAttribute("claims", claims);
             } catch (final SignatureException e) {
-                System.out.println("bad header");
+                System.out.println(">>>>>>>bad header");
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 response.getWriter().println("SignatureException.");
                 return;

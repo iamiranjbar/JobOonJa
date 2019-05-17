@@ -10,6 +10,7 @@
 	<properties>
 		<springframework.version>4.3.0.RELEASE</springframework.version>
 		<jackson.version>2.5.3</jackson.version>
+		<jaxb.version>2.3.0</jaxb.version>
 	</properties>
 
 	<dependencies>
@@ -97,7 +98,11 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
-
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>${jaxb.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

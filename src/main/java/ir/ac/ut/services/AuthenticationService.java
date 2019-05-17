@@ -23,10 +23,12 @@ public class AuthenticationService {
                                  @RequestParam("imageLink") String imageLink,
                                  @RequestParam("bio") String bio){
         try {
-            jobOonJa.register(new User(String.valueOf(maxId++), firstName, lastName, username, password, title,
-                    imageLink, bio));
-            return (ResponseEntity) ResponseEntity.ok(Jwt.createJWT(String.valueOf(maxId-1), "JobOonJa",
-                    "auth-signup", 111223));
+            if (!jobOonJa.usernameExist(username)) {
+                jobOonJa.register(new User(String.valueOf(maxId++), firstName, lastName, username, password, title,
+                        imageLink, bio));
+                return ResponseEntity.ok(Jwt.createJWT(String.valueOf(maxId - 1), "JobOonJa",
+                        "auth-signup", 111223));
+            } else return ResponseEntity.status(HttpStatus.FORBIDDEN).body("user already exist!");
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Signup is failed.");
@@ -34,12 +36,15 @@ public class AuthenticationService {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity signup(@RequestParam("username") String username,
+    public ResponseEntity login(@RequestParam("username") String username,
                                  @RequestParam("password") String password) {
         try {
             String id = jobOonJa.findRegisterUserByUsername(username, password);
-            return (ResponseEntity) ResponseEntity.ok(Jwt.createJWT(String.valueOf(id), "JobOonJa",
-                    "auth-login", 111223));
+            String jwt = Jwt.createJWT(id, "JobOonJa", "auth-login", 111223);
+            System.out.println("**********");
+            System.out.println(jwt);
+            System.out.println("**********");
+            return ResponseEntity.ok(jwt);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Login is failed. username or password is invalid.");

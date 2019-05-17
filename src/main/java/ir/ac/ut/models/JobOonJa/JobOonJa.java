@@ -143,7 +143,7 @@ public class JobOonJa {
 
     public String findRegisterUserByUsername(String username, String password) throws Exception {
         User user = userMapper.searchByUsername(username);
-        if (user.getPassword() == password) {
+        if (user.getPassword().equals(password)) {
             return user.getId();
         }
         throw new Exception("invalid username or password.");
