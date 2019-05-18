@@ -14,7 +14,6 @@ import java.util.ArrayList;
 @RestController
 public class AuthenticationService {
     private JobOonJa jobOonJa = JobOonJa.getInstance();
-    private int maxId = 50;
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public ResponseEntity signup(@RequestParam("firstName") String firstName,
@@ -26,7 +25,8 @@ public class AuthenticationService {
                                  @RequestParam("bio") String bio){
         try {
             if (!jobOonJa.usernameExist(username)) {
-                jobOonJa.register(new User(String.valueOf(maxId++), firstName, lastName, username, password, title,
+                int maxId = jobOonJa.getMaxUserId();
+                jobOonJa.register(new User(String.valueOf(++maxId), firstName, lastName, username, password, title,
                         imageLink, bio));
                 return ResponseEntity.status(HttpStatus.OK).body(null);
             } else return ResponseEntity.status(HttpStatus.FORBIDDEN).body("user already exist!");

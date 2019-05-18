@@ -176,4 +176,30 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
             throw ex;
         }
     }
+
+    private String getMaxIdStatement(){
+        return "SELECT MAX(u.id) FROM user u";
+    }
+
+    private String getMaxId(ResultSet resultSet) throws SQLException {
+        return resultSet.getString(1);
+    }
+
+    public String findMaxId() throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(getMaxIdStatement());
+        ResultSet resultSet;
+        try {
+            resultSet = st.executeQuery();
+            String result = getMaxId(resultSet);
+            st.close();
+            con.close();
+            return result;
+        } catch (SQLException ex) {
+            System.out.println("error in Mapper.findByUsername query.");
+            st.close();
+            con.close();
+            throw ex;
+        }
+    }
 }

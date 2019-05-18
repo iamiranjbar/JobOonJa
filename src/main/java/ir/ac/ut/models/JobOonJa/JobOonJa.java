@@ -292,4 +292,7 @@ public class JobOonJa {
         endorseMapper.insert(endorser, endorsed, skillName);
     }
 
+    public int getMaxUserId() throws SQLException {
+        return Integer.parseInt(userMapper.findMaxId());
+    }
 }
