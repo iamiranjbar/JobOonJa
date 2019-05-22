@@ -2,10 +2,12 @@ package ir.ac.ut.listener;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@WebListener
 public class BackgroundAuctionJobManager implements ServletContextListener {
     private ScheduledExecutorService scheduler;
 

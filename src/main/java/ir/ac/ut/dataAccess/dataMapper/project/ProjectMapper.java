@@ -91,6 +91,13 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
         return result;
 	}
 
+
+	public boolean isNullOrEmpty(String str) {
+		if(str != null && !str.trim().isEmpty())
+			return false;
+		return true;
+	}
+
 	@Override
 	protected Project convertResultSetToDomainModel(ResultSet rs) throws SQLException {
 		ProjectSkillMapper projectSkillMapper = ProjectSkillMapper.getInstance();
@@ -112,7 +119,10 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 		} catch(Exception e) {
 			winnerId = "";
 		}
-		if (winnerId.equals("")) {
+		System.out.println("**********");
+		System.out.println(winnerId);
+		System.out.println("**********");
+		if (isNullOrEmpty(winnerId)) {
 			return new Project(id, title, description, imageURL, skills, bidDTOs, budget, deadLine, creationDate, null);
 		}
 		return new Project(id, title, description, imageURL, skills, bidDTOs, budget, deadLine, creationDate, userMapper.find(winnerId));
@@ -206,7 +216,7 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
     }
 
     private String getFindExpiredStatement() {
-		return "SELECT * FROM project WHERE strftime('%s','now')*1000 < deadLine";
+		return "SELECT * FROM project WHERE strftime('%s','now')*1000 > deadLine";
 	}
 
     public ArrayList<Project> findAllExpired() throws SQLException {
