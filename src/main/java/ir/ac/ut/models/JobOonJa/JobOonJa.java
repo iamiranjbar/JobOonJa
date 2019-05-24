@@ -204,11 +204,15 @@ public class JobOonJa {
     }
 
     public boolean findBid(String userId, String projectId) throws SQLException {
-    	BidDTO bid = bidMapper.find(projectId, userId);
-    	if (bid == null) {
-    		return false;
-    	}
-    	return true;
+        try {
+            BidDTO bid = bidMapper.find(projectId, userId);
+            if (bid == null) {
+                return false;
+            }
+            return true;
+        } catch (SQLException s){
+            return false;
+        }
     }
 
     public User getUser(String id) throws UserNotFound, SQLException {
@@ -229,15 +233,7 @@ public class JobOonJa {
     }
 
     public ArrayList<Project> getSuitableProjects(String userId, String limit) throws UserNotFound, SQLException {
-        User user = userMapper.find(userId);
-        ArrayList<Project> repo = (ArrayList<Project>) projectMapper.findAllSuitable(userId, limit);
-
-//        ArrayList<Project> projects = new ArrayList<>();
-//        for( Project entry : repo) {
-//            if(haveSkills(user, entry))
-//                projects.add(entry);
-//        }
-        return repo;
+        return projectMapper.findAllSuitable(userId, limit);
     }
 
     public ArrayList<Project> searchProjects(String searchField) throws SQLException {

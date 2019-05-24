@@ -100,6 +100,7 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 
 	@Override
 	protected Project convertResultSetToDomainModel(ResultSet rs) throws SQLException {
+		System.out.println("heloooooo");
 		ProjectSkillMapper projectSkillMapper = ProjectSkillMapper.getInstance();
 		BidMapper bidMapper = BidMapper.getInstance();
 		AuctionMapper auctionMapper = AuctionMapper.getInstance();
@@ -119,9 +120,6 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 		} catch(Exception e) {
 			winnerId = "";
 		}
-		System.out.println("**********");
-		System.out.println(winnerId);
-		System.out.println("**********");
 		if (isNullOrEmpty(winnerId)) {
 			return new Project(id, title, description, imageURL, skills, bidDTOs, budget, deadLine, creationDate, null);
 		}
@@ -132,7 +130,7 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 	protected ArrayList<Project> convertResultSetToDomainModelList(ResultSet rs) throws SQLException {
 		ArrayList<Project> projects = new ArrayList<>();
         while (rs.next()){
-//			System.out.println("salam");
+			System.out.println("<><><><>Fuckkkkkkkk<><><><><>");
             projects.add(this.convertResultSetToDomainModel(rs));
         }
         return projects;
@@ -216,8 +214,7 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
                 ") " +
 				") " +
                 "ORDER BY creationDate DESC " +
-                "LIMIT 0,? ";
-
+                "LIMIT 0,?;";
     }
 
     private String getFindExpiredStatement() {
@@ -249,9 +246,11 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 	public ArrayList<Project> findAllSuitable(String id, String limit) throws SQLException {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(getFindSuitableStatement());
-//        st.setString(1, id);
-//        st.setString(2, id);
-//        st.setInt(3,Integer.parseInt(limit));
+		System.out.println(getFindSuitableStatement());
+        st.setString(1, id);
+        st.setString(2, id);
+        st.setInt(3,Integer.parseInt(limit));
+		System.out.println(st.toString());
         try {
             ResultSet resultSet = st.executeQuery();
             if (resultSet.isClosed()) {

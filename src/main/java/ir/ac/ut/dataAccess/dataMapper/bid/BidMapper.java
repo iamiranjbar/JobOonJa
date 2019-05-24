@@ -116,6 +116,8 @@ public class BidMapper extends Mapper<BidDTO, String> implements IBidMapper {
             	con.close();
     			return null;
     		}
+            if (!resultSet.next())
+            	throw new SQLException();
             BidDTO result = convertResultSetToDomainModel(resultSet);
             st.close();
             con.close();
