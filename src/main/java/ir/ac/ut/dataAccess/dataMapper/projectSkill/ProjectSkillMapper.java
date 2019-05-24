@@ -115,7 +115,6 @@ public class ProjectSkillMapper extends Mapper<Skill, String> implements IProjec
         fillFindAllValues(st, projectId);
         try {
             ResultSet resultSet = st.executeQuery();
-			resultSet.next();
             List<Skill> result = convertResultSetToDomainModelList(resultSet);
             st.close();
             con.close();

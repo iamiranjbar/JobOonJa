@@ -92,13 +92,13 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
          fillFindQuery(preparedStatement, userId, skillName);
          try {
         	 ResultSet resultSet = preparedStatement.executeQuery();
-            if (!resultSet.next()) {
-    			return null;
-    		}
-            UserSkill result = this.convertResultSetToDomainModel(resultSet);
-            preparedStatement.close();
-            con.close();
-            return result;
+             if(!resultSet.next()){
+                 throw new SQLException();
+             }
+             UserSkill result = this.convertResultSetToDomainModel(resultSet);
+             preparedStatement.close();
+             con.close();
+             return result;
          } catch (SQLException ex) {
             System.out.println("error in UserSkillMapper.find query.");
             preparedStatement.close();
@@ -119,13 +119,12 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
         preparedStatement.setString(1, userId);
         try {
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
             ArrayList<UserSkill> result = convertResultSetToDomainModelList(resultSet);
             preparedStatement.close();
             con.close();
             return result;
         } catch (SQLException e) {
-            System.out.println("error in UserKkillMapper.findAll query.");
+            System.out.println("error in UserSkillMapper.findAll query.");
             preparedStatement.close();
             con.close();
             e.printStackTrace();
@@ -133,7 +132,6 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
         }
     }
 
-    @Override
     public boolean insert(UserSkill userSkill, String userId) throws SQLException {
     	boolean result = true;
     	EndorseMapper endorseMapper = EndorseMapper.getInstance();

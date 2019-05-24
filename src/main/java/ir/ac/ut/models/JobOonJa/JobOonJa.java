@@ -78,14 +78,13 @@ public class JobOonJa {
     }
 
     private User makeAdminUser(){
-        this.makeUserSkill();
         return new User("1","علی","شریف‌زاده","1","1","برنامه‌نویس وب", "http://aamooze.com/wp-content/uploads/2018/05/asghar.jpg",
                 this.makeUserSkill(),"روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلی کارا بکنه ولی پول نداشت");
     }
 
     private User makeUser(String id, String firstName, String lastName, String jobTitle, String bio){
-        this.makeUserSkill();
-        return new User(id,firstName,lastName,"1"+id,"1"+id,jobTitle, "http://aamooze.com/wp-content/uploads/2018/05/asghar.jpg",this.makeUserSkill(),bio);
+        return new User(id,firstName,lastName,"1"+id,"1"+id,jobTitle,
+                "http://aamooze.com/wp-content/uploads/2018/05/asghar.jpg",this.makeUserSkill(),bio);
     }
 
     private String extractGetData(HttpGet httpGet) throws IOException {
@@ -115,12 +114,12 @@ public class JobOonJa {
     }
 
     private void initialize() throws RedundantUser, IOException, RedundantProject, SQLException {
+        this.getSkills();
         User user = this.makeAdminUser();
         this.register(user);
         this.register(this.makeUser("4", "علی", "عدالت", "توسعه دهنده رابط کاربری",
                 "مخلص همه سینگلا!"));
         this.register(this.makeUser("5", "امیر", "رنجبر", "متخصص SEO", "خرابتم ننه!"));
-        this.getSkills();
         this.getProjects();
     }
 
@@ -142,10 +141,6 @@ public class JobOonJa {
 
     public String findRegisterUserByUsername(String username, String password) throws Exception {
         User user = userMapper.searchByUsername(username);
-        System.out.println("*********");
-        System.out.println(password);
-        System.out.println(user.getPassword());
-        System.out.println("*********");
         if (BCrypt.checkpw(password, user.getPassword())) {
             return user.getId();
         }

@@ -86,6 +86,9 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
         String profilePic = rs.getString(7);
         String bio = rs.getString(8);
         ArrayList<UserSkill> userSkills = userSkillMapper.findAll(id);
+        for(UserSkill userSkill : userSkills){
+            System.out.println(userSkill.getName());
+        }
         HashMap<String, UserSkill> userSkillsMap = new HashMap<>();
         for(UserSkill userSkill : userSkills) {
         	userSkillsMap.put(userSkill.getName(), userSkill);
@@ -125,7 +128,7 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
 	        result = st.execute();
             if (user.getSkills().size() > 0)
                 for(UserSkill userSkill : user.getSkills().values()) {
-                    result = result && userSkillMapper.insert(userSkill, user.getId());
+                    userSkillMapper.insert(userSkill, user.getId());
                 }
         } catch (Exception e) {
         	st.close();
@@ -146,7 +149,11 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
         ResultSet resultSet;
         try {
             resultSet = st.executeQuery();
-            resultSet.next();
+            if(resultSet.isClosed()) {
+                st.close();
+                con.close();
+                throw new SQLException();
+            }
             ArrayList<User> result = convertResultSetToDomainModelList(resultSet);
             st.close();
             con.close();
@@ -167,7 +174,9 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
         ResultSet resultSet;
         try {
             resultSet = st.executeQuery();
-            resultSet.next();
+            if(!resultSet.next()){
+                throw new SQLException();
+            }
             User result = convertResultSetToDomainModel(resultSet);
             st.close();
             con.close();
@@ -185,7 +194,7 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
     }
 
     private String getMaxId(ResultSet resultSet) throws SQLException {
-        if (resultSet == null)
+        if (resultSet.isClosed())
             return "0";
         return resultSet.getString(1);
     }

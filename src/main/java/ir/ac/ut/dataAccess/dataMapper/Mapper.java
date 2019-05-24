@@ -25,12 +25,15 @@ public abstract class Mapper<T,I> implements IMapper<T,I> {
         st.setString(1, id.toString());
         try {
         	ResultSet resultSet = st.executeQuery();
-        	if (!resultSet.next() || resultSet == null) {
+        	if (resultSet.isClosed()) {
         		st.close();
         		con.close();
                 System.out.println("find");
     			return null;
         	}
+            if(!resultSet.next()){
+                throw new SQLException();
+            }
         	T result = convertResultSetToDomainModel(resultSet);
         	st.close();
         	con.close();
@@ -48,12 +51,11 @@ public abstract class Mapper<T,I> implements IMapper<T,I> {
         PreparedStatement st = con.prepareStatement(getFindAllStatement());
         try {
             ResultSet resultSet = st.executeQuery();
-            if (resultSet == null) {
+            if (resultSet.isClosed()) {
 				st.close();
 				con.close();
 				return new ArrayList<T>();
 			}
-            resultSet.next();
             List<T> result = convertResultSetToDomainModelList(resultSet);
             st.close();
         	con.close();

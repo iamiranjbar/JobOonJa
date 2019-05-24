@@ -24,6 +24,7 @@ public class AuthenticationService {
                                  @RequestParam("imageLink") String imageLink,
                                  @RequestParam("bio") String bio){
         try {
+            System.out.println("HElpooooooooo!!");
             if (!jobOonJa.usernameExist(username)) {
                 int maxId = jobOonJa.getMaxUserId();
                 jobOonJa.register(new User(String.valueOf(++maxId), firstName, lastName, username, password, title,

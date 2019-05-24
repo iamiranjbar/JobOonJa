@@ -178,7 +178,11 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 		ResultSet resultSet;
 		try {
 			resultSet = st.executeQuery();
-			resultSet.next();
+			if(resultSet.isClosed()) {
+				st.close();
+				con.close();
+				throw new SQLException();
+			}
 			ArrayList<Project> result = convertResultSetToDomainModelList(resultSet);
 			st.close();
 			con.close();
@@ -225,7 +229,7 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 		PreparedStatement st = con.prepareStatement(getFindExpiredStatement());
 		try {
 			ResultSet resultSet = st.executeQuery();
-			if (!resultSet.next() || resultSet == null) {
+			if (resultSet.isClosed()) {
 				st.close();
 				con.close();
 				return null;
@@ -245,12 +249,12 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 	public ArrayList<Project> findAllSuitable(String id, String limit) throws SQLException {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(getFindSuitableStatement());
-        st.setString(1, id);
-        st.setString(2, id);
-        st.setInt(3,Integer.parseInt(limit));
+//        st.setString(1, id);
+//        st.setString(2, id);
+//        st.setInt(3,Integer.parseInt(limit));
         try {
             ResultSet resultSet = st.executeQuery();
-            if (!resultSet.next() || resultSet == null) {
+            if (resultSet.isClosed()) {
                 st.close();
                 con.close();
                 return null;

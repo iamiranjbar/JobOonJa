@@ -111,7 +111,7 @@ public class BidMapper extends Mapper<BidDTO, String> implements IBidMapper {
         fillFindValues(st, projectId, userId);
         try {
             ResultSet resultSet = st.executeQuery();
-            if (!resultSet.next() || resultSet == null) {
+            if (resultSet.isClosed()) {
             	st.close();
             	con.close();
     			return null;
@@ -135,12 +135,11 @@ public class BidMapper extends Mapper<BidDTO, String> implements IBidMapper {
         fillFindAllValues(st, projectId);
         try {
             ResultSet resultSet = st.executeQuery();
-            if (resultSet == null) {
+            if (resultSet.isClosed()) {
             	st.close();
             	con.close();
             	return new ArrayList<BidDTO>();
             }
-			resultSet.next();
             ArrayList<BidDTO> result = convertResultSetToDomainModelList(resultSet);
             st.close();
             con.close();
