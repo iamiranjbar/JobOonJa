@@ -25,8 +25,8 @@ public class SkillMapper extends Mapper<Skill, String> implements ISkillMapper {
 	private SkillMapper() throws SQLException {
 		Connection con = ConnectionPool.getConnection();
         PreparedStatement createTableStatement = con.prepareStatement("CREATE TABLE IF NOT EXISTS skill(\n" + 
-        		"    skillName CHAR(15),\n" + 
-        		"    PRIMARY KEY(skillName)\n" + 
+        		"	skillName CHAR(15),\n" +
+				"   PRIMARY KEY(skillName)" +
         		");");
         createTableStatement.executeUpdate();
         createTableStatement.close();

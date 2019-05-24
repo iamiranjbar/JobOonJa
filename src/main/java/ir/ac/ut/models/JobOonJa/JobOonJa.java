@@ -7,6 +7,7 @@ import ir.ac.ut.dataAccess.dataMapper.auction.AuctionMapper;
 import ir.ac.ut.dataAccess.dataMapper.bid.BidMapper;
 import ir.ac.ut.dataAccess.dataMapper.endorse.EndorseMapper;
 import ir.ac.ut.dataAccess.dataMapper.project.ProjectMapper;
+import ir.ac.ut.dataAccess.dataMapper.projectSkill.ProjectSkillMapper;
 import ir.ac.ut.dataAccess.dataMapper.skill.SkillMapper;
 import ir.ac.ut.dataAccess.dataMapper.user.UserMapper;
 import ir.ac.ut.dataAccess.dataMapper.userSkill.UserSkillMapper;
@@ -43,13 +44,13 @@ public class JobOonJa {
         }
     }
 
-    private BidManager bidManager;
     private UserMapper userMapper;
     private UserSkillMapper userSkillMapper;
     private SkillMapper skillMapper;
     private EndorseMapper endorseMapper;
     private BidMapper bidMapper;
     private ProjectMapper projectMapper;
+    private ProjectSkillMapper projectSkillMapper;
     
 
     public static JobOonJa getInstance() {
@@ -57,12 +58,13 @@ public class JobOonJa {
     }
 
     private JobOonJa() throws RedundantUser, RedundantProject, IOException, SQLException {
-        userMapper = UserMapper.getInstance();
-        userSkillMapper = UserSkillMapper.getInstance();
         skillMapper = SkillMapper.getInstance();
+        userMapper = UserMapper.getInstance();
+        projectMapper = ProjectMapper.getInstance();
+        userSkillMapper = UserSkillMapper.getInstance();
+        projectSkillMapper = ProjectSkillMapper.getInstance();
         endorseMapper = EndorseMapper.getInstance();
         bidMapper = BidMapper.getInstance();
-        projectMapper = ProjectMapper.getInstance();
         this.initialize();
     }
 

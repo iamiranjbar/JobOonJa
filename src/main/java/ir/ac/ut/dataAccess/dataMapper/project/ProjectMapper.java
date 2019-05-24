@@ -35,14 +35,14 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 	private ProjectMapper() throws SQLException {
 		Connection con = ConnectionPool.getConnection();
         PreparedStatement createTableStatement = con.prepareStatement("CREATE TABLE IF NOT EXISTS project(\n" + 
-        		"    id CHAR(20),\n" + 
-        		"    title CHAR(20),\n" + 
-        		"    description CHAR(100),\n" + 
-        		"    imageURL CHAR(40),\n" + 
-        		"    budget INTEGER,\n" + 
-        		"    deadLine INTEGER,\n" + 
-        		"    creationDate INTEGER,\n" + 
-        		"    PRIMARY KEY(id)\n" + 
+        		"    id CHAR(200),\n" +
+				"    title CHAR(200),\n" +
+				"    description longtext,\n" +
+				"    imageURL longtext,\n" +
+				"    budget INTEGER,\n" +
+				"    deadLine LONG,\n" +
+				"    creationDate LONG,\n" +
+				"    PRIMARY KEY(id)" +
         		");");
         createTableStatement.executeUpdate();
         createTableStatement.close();
@@ -55,7 +55,7 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 	
 	@Override
 	protected String getFindStatement() {
-		return "SELECT * FROM project WHERE id == ?";
+		return "SELECT * FROM project WHERE id = ?";
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 	}
 
     private String getSearchStatement(){
-        return "SELECT * FROM project WHERE instr(title || ' ' || description, ?) > 0";
+        return "SELECT * FROM project WHERE instr(CONCAT(title , ' ' , description), ?) > 0";
     }
 
     private String getMaxCreationDateQuery() {
@@ -178,6 +178,7 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 		ResultSet resultSet;
 		try {
 			resultSet = st.executeQuery();
+			resultSet.next();
 			ArrayList<Project> result = convertResultSetToDomainModelList(resultSet);
 			st.close();
 			con.close();
@@ -203,20 +204,20 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
                 "SELECT ps2.skillName " +
                 "FROM projectSkill ps2 " +
                 "WHERE ps2.projectId = p2.id " +
-                "EXCEPT " +
+                "AND ps2.skillName NOT IN( " +
                 "SELECT us2.skillName " +
                 "FROM userSkill us2 " +
                 "WHERE us2.userId = ? " +
                 ") " +
                 ") " +
+				") " +
                 "ORDER BY creationDate DESC " +
-                "LIMIT ? " +
-                "OFFSET 0";
+                "LIMIT 0,? ";
 
     }
 
     private String getFindExpiredStatement() {
-		return "SELECT * FROM project WHERE strftime('%s','now')*1000 > deadLine";
+		return "SELECT * FROM project WHERE UNIX_TIMESTAMP()*1000 > deadLine";
 	}
 
     public ArrayList<Project> findAllExpired() throws SQLException {
@@ -246,7 +247,7 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
         PreparedStatement st = con.prepareStatement(getFindSuitableStatement());
         st.setString(1, id);
         st.setString(2, id);
-        st.setString(3,limit);
+        st.setInt(3,Integer.parseInt(limit));
         try {
             ResultSet resultSet = st.executeQuery();
             if (!resultSet.next() || resultSet == null) {

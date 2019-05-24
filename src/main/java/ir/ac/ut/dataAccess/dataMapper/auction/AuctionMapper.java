@@ -24,13 +24,13 @@ public class AuctionMapper extends Mapper<String, String> implements IAuctionMap
 	private AuctionMapper() throws SQLException {
 		Connection con = ConnectionPool.getConnection();
         PreparedStatement createTableStatement = con.prepareStatement("CREATE TABLE IF NOT EXISTS auction(\n" + 
-        		"    winner CHAR(20),\n" + 
-        		"    projectId CHAR(20),\n" + 
-        		"    PRIMARY KEY(projectId, winner),\n" + 
-        		"    FOREIGN KEY (winner)\n" + 
-        		"    REFERENCES user,\n" + 
-        		"    FOREIGN KEY (projectId)\n" + 
-        		"    REFERENCES project\n" + 
+        		"winner CHAR(200),\n" +
+				"projectId CHAR(20),\n" +
+				"PRIMARY KEY(projectId, winner),\n" +
+				"FOREIGN KEY (winner)\n" +
+				"REFERENCES user(id),\n" +
+				"FOREIGN KEY (projectId)\n" +
+				"REFERENCES project(id)" +
         		");");
         createTableStatement.executeUpdate();
         createTableStatement.close();
@@ -43,7 +43,7 @@ public class AuctionMapper extends Mapper<String, String> implements IAuctionMap
 
 	@Override
 	protected String getFindStatement() {
-		return "SELECT * FROM auction WHERE projectId == ?";
+		return "SELECT * FROM auction WHERE projectId = ?";
 	}
 
 	@Override

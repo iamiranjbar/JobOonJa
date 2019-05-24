@@ -31,9 +31,9 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
             "    point INTEGER,\n" +
             "    PRIMARY KEY(userId, skillName),\n" +
             "    FOREIGN KEY(skillName)\n" +
-            "    REFERENCES skill,\n" +
+            "    REFERENCES skill(skillName),\n" +
             "    FOREIGN KEY (userId)\n" +
-            "    REFERENCES user\n" +
+            "    REFERENCES user(id)\n" +
             ");");
         createTableStatement.executeUpdate();
         createTableStatement.close();
@@ -63,7 +63,7 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
 
 
     private String getDeleteStatement() {
-        return "DELETE FROM userSkill WHERE (userId == ? AND skillName == ?)";
+        return "DELETE FROM userSkill WHERE (userId = ? AND skillName = ?)";
     }
 
 
@@ -75,8 +75,8 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
     private String getFindQuery(){
         return "SELECT * " +
                 "FROM userSkill" +
-                "WHERE userId == ? AND " +
-                "skillName == ?";
+                "WHERE userId = ? AND " +
+                "skillName = ?";
     }
 
     private void fillFindQuery(PreparedStatement preparedStatement, String userId, String skillName) throws SQLException {
@@ -109,7 +109,7 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
     }
 
     private String getFindAllQuery(){
-        return "SELECT * FROM userSkill WHERE userId == ?";
+        return "SELECT * FROM userSkill WHERE userId = ?";
     }
 
     @Override
@@ -119,6 +119,7 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
         preparedStatement.setString(1, userId);
         try {
             ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
             ArrayList<UserSkill> result = convertResultSetToDomainModelList(resultSet);
             preparedStatement.close();
             con.close();

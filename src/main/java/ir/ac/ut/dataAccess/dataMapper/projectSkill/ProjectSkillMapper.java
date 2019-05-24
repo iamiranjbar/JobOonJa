@@ -26,14 +26,14 @@ public class ProjectSkillMapper extends Mapper<Skill, String> implements IProjec
 	private ProjectSkillMapper() throws SQLException {
 		Connection con = ConnectionPool.getConnection();
         PreparedStatement createTableStatement = con.prepareStatement("CREATE TABLE IF NOT EXISTS projectSkill(\n" + 
-        		"    projectId CHAR(20),\n" + 
-        		"    skillName CHAR(15),\n" + 
-        		"    point INTEGER,\n" + 
-        		"    PRIMARY KEY(projectId, skillName),\n" + 
-        		"    FOREIGN KEY(skillName)\n" + 
-        		"    REFERENCES skill,\n" + 
-        		"    FOREIGN KEY (projectId)\n" + 
-        		"    REFERENCES project\n" + 
+        		"    projectId CHAR(200),\n" +
+				"    skillName CHAR(15),\n" +
+				"    point INTEGER,\n" +
+				"    PRIMARY KEY(projectId, skillName),\n" +
+				"    FOREIGN KEY(skillName)\n" +
+				"    REFERENCES skill(skillName),\n" +
+				"    FOREIGN KEY(projectId)\n" +
+				"    REFERENCES project(id)" +
         		");");
         createTableStatement.executeUpdate();
         createTableStatement.close();
@@ -52,7 +52,7 @@ public class ProjectSkillMapper extends Mapper<Skill, String> implements IProjec
 
 	@Override
 	protected String getFindAllStatement() {
-		return "SELECT * FROM projectSkill WHERE projectId == ?";
+		return "SELECT * FROM projectSkill WHERE projectId = ?";
 	}
 
 	@Override
@@ -115,6 +115,7 @@ public class ProjectSkillMapper extends Mapper<Skill, String> implements IProjec
         fillFindAllValues(st, projectId);
         try {
             ResultSet resultSet = st.executeQuery();
+			resultSet.next();
             List<Skill> result = convertResultSetToDomainModelList(resultSet);
             st.close();
             con.close();

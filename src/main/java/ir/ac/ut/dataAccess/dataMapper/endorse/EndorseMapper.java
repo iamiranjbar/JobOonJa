@@ -33,15 +33,15 @@ public class EndorseMapper extends Mapper<String, String> implements IEndorseMap
 	private EndorseMapper() throws SQLException {
 		 Connection con = ConnectionPool.getConnection();
 	        PreparedStatement createTableStatement = con.prepareStatement("CREATE TABLE IF NOT EXISTS endorse(\n" + 
-	        		"    endorserId CHAR(20),\n" + 
-	        		"    endorsedId CHAR(20),\n" + 
-	        		"    skillName CHAR(15),\n" + 
-	        		"    PRIMARY KEY(endorserId, endorsedId, skillName),\n" + 
-	        		"    FOREIGN KEY (endorsedId, skillName)\n" + 
-	        		"    REFERENCES userSkill,\n" + 
-	        		"    FOREIGN KEY (endorserId)\n" + 
-	        		"    REFERENCES user\n" + 
-	        		");");
+                "    endorserId CHAR(20),\n" +
+                "    endorsedId CHAR(20),\n" +
+                "    skillName CHAR(15),\n" +
+                "    PRIMARY KEY(endorserId, endorsedId, skillName),\n" +
+                "    FOREIGN KEY (endorsedId, skillName)\n" +
+                "    REFERENCES userSkill(userId, skillName),\n" +
+                "    FOREIGN KEY (endorserId)\n" +
+                "    REFERENCES user(id)"+
+                ");");
 	        createTableStatement.executeUpdate();
 	        createTableStatement.close();
 	        con.close();
@@ -61,7 +61,7 @@ public class EndorseMapper extends Mapper<String, String> implements IEndorseMap
 
     @Override
     protected String getFindAllStatement() {
-        return "SELECT endorserId FROM endorse WHERE endorsedId == ? AND skillName == ?";
+        return "SELECT endorserId FROM endorse WHERE endorsedId = ? AND skillName = ?";
     }
 
     @Override
@@ -96,6 +96,7 @@ public class EndorseMapper extends Mapper<String, String> implements IEndorseMap
                 con.close();
                 return new ArrayList<String>();
             }
+            resultSet.next();
             List<String> result = convertResultSetToDomainModelList(resultSet);
             st.close();
             con.close();
@@ -146,7 +147,7 @@ public class EndorseMapper extends Mapper<String, String> implements IEndorseMap
 	}
 
 	private String getUpdateStatement() {
-		return "UPDATE userSkill SET point = point + 1 WHERE userId == ? AND skillName == ?";
+		return "UPDATE userSkill SET point = point + 1 WHERE userId = ? AND skillName = ?";
 	}
 
 	@Override

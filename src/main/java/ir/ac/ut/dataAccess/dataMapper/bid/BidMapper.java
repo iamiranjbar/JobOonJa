@@ -33,14 +33,14 @@ public class BidMapper extends Mapper<BidDTO, String> implements IBidMapper {
 	private BidMapper() throws SQLException {
 		Connection con = ConnectionPool.getConnection();
         PreparedStatement createTableStatement = con.prepareStatement("CREATE TABLE IF NOT EXISTS bid(\n" + 
-        		"    userId CHAR(20),\n" + 
-        		"    projectId CHAR(20),\n" + 
-        		"    offer INTEGER,\n" + 
-        		"    PRIMARY KEY(userId, projectId),\n" + 
-        		"    FOREIGN KEY (userId)\n" + 
-        		"    REFERENCES user,\n" + 
-        		"    FOREIGN KEY (projectId)\n" + 
-        		"    REFERENCES project\n" + 
+        		"userId CHAR(200),\n" +
+				"projectId CHAR(20),\n" +
+				"offer INTEGER,\n" +
+				"PRIMARY KEY(userId, projectId),\n" +
+				"FOREIGN KEY (userId)\n" +
+				"REFERENCES user(id),\n" +
+				"FOREIGN KEY (projectId)\n" +
+				"REFERENCES project(id)"+
         		");");
         createTableStatement.executeUpdate();
         createTableStatement.close();
@@ -54,12 +54,12 @@ public class BidMapper extends Mapper<BidDTO, String> implements IBidMapper {
 	
 	@Override
 	protected String getFindStatement() {
-		return "SELECT * FROM bid WHERE projectId == ? AND userId == ?";
+		return "SELECT * FROM bid WHERE projectId = ? AND userId = ?";
 	}
 
 	@Override
 	protected String getFindAllStatement() {
-		return "SELECT * FROM bid WHERE projectId == ?";
+		return "SELECT * FROM bid WHERE projectId = ?";
 	}
 
 	@Override
@@ -140,6 +140,7 @@ public class BidMapper extends Mapper<BidDTO, String> implements IBidMapper {
             	con.close();
             	return new ArrayList<BidDTO>();
             }
+			resultSet.next();
             ArrayList<BidDTO> result = convertResultSetToDomainModelList(resultSet);
             st.close();
             con.close();

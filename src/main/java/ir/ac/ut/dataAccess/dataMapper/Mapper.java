@@ -53,6 +53,7 @@ public abstract class Mapper<T,I> implements IMapper<T,I> {
 				con.close();
 				return new ArrayList<T>();
 			}
+            resultSet.next();
             List<T> result = convertResultSetToDomainModelList(resultSet);
             st.close();
         	con.close();

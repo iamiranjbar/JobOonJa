@@ -34,7 +34,8 @@
           <element id="library" level="project" name="Maven: org.ebaysf.web:cors-filter:1.0.0" />
           <element id="library" level="project" name="Maven: javax.servlet:servlet-api:2.5" />
           <element id="library" level="project" name="Maven: org.xerial:sqlite-jdbc:3.27.2.1" />
-          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.41" />
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:8.0.16" />
+          <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:3.6.1" />
           <element id="library" level="project" name="Maven: commons-dbcp:commons-dbcp:1.4" />
           <element id="library" level="project" name="Maven: commons-pool:commons-pool:1.5.4" />
           <element id="library" level="project" name="Maven: org.mindrot:jbcrypt:0.3m" />

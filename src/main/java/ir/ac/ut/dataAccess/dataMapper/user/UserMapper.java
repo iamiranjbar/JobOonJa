@@ -29,12 +29,13 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
             "    firstname CHAR(20),\n" +
             "    lastname CHAR(20),\n" +
             "    username CHAR(20),\n" +
-            "    password CHAR(20),\n" +
-            "    jobTitle CHAR(20),\n" +
-            "    profilePic CHAR(40),\n" +
+            "    password CHAR(60),\n" +
+            "    jobTitle longtext,\n" +
+            "    profilePic longtext,\n" +
             "    bio CHAR(100),\n" +
             "    PRIMARY KEY(id),\n" +
-            "    UNIQUE(username));");
+            "    UNIQUE(username));"
+        );
         createTableStatement.executeUpdate();
         createTableStatement.close();
         con.close();
@@ -58,7 +59,7 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
     }
     
     private String getSearchStatement() {
-    	return "SELECT * FROM user WHERE instr(firstname || ' ' || lastname, ?) > 0";
+    	return "SELECT * FROM user WHERE instr(CONCAT(firstname , ' ' , lastname), ?) > 0";
     }
 
     @Override
@@ -145,6 +146,7 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
         ResultSet resultSet;
         try {
             resultSet = st.executeQuery();
+            resultSet.next();
             ArrayList<User> result = convertResultSetToDomainModelList(resultSet);
             st.close();
             con.close();
@@ -165,6 +167,7 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
         ResultSet resultSet;
         try {
             resultSet = st.executeQuery();
+            resultSet.next();
             User result = convertResultSetToDomainModel(resultSet);
             st.close();
             con.close();
@@ -182,6 +185,8 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
     }
 
     private String getMaxId(ResultSet resultSet) throws SQLException {
+        if (resultSet == null)
+            return "0";
         return resultSet.getString(1);
     }
 
@@ -191,6 +196,7 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
         ResultSet resultSet;
         try {
             resultSet = st.executeQuery();
+            resultSet.next();
             String result = getMaxId(resultSet);
             st.close();
             con.close();

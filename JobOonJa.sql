@@ -33,9 +33,9 @@ CREATE TABLE userSkill(
     point INTEGER,
     PRIMARY KEY(userId, skillName),
     FOREIGN KEY(skillName)
-    REFERENCES skill,
+    REFERENCES skill(skillName),
     FOREIGN KEY (userId)
-    REFERENCES user
+    REFERENCES user(id)
 );
 
 CREATE TABLE endorse(
@@ -44,9 +44,9 @@ CREATE TABLE endorse(
     skillName CHAR(15),
     PRIMARY KEY(endorserId, endorsedId, skillName),
     FOREIGN KEY (endorsedId, skillName)
-    REFERENCES userSkill,
+    REFERENCES userSkill(userId, skillName),
     FOREIGN KEY (endorserId)
-    REFERENCES user
+    REFERENCES user(id)
 );
 
 CREATE TABLE projectSkill(
@@ -55,9 +55,9 @@ CREATE TABLE projectSkill(
     point INTEGER,
     PRIMARY KEY(projectId, skillName),
     FOREIGN KEY(skillName)
-    REFERENCES skill,
+    REFERENCES skill(skillName),
     FOREIGN KEY (projectId)
-    REFERENCES project
+    REFERENCES project(id)
 );
 
 CREATE TABLE bid(
@@ -66,9 +66,9 @@ CREATE TABLE bid(
     offer INTEGER,
     PRIMARY KEY(userId, projectId),
     FOREIGN KEY (userId)
-    REFERENCES user,
+    REFERENCES user(id),
     FOREIGN KEY (projectId)
-    REFERENCES project
+    REFERENCES project(id)
 );
 
 CREATE TABLE auction(
@@ -76,7 +76,7 @@ CREATE TABLE auction(
     projectId CHAR(20),
     PRIMARY KEY(projectId, winner),
     FOREIGN KEY (winner)
-    REFERENCES user,
+    REFERENCES user(id),
     FOREIGN KEY (projectId)
-    REFERENCES project
+    REFERENCES project(id)
 );
