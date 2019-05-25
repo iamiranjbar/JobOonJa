@@ -100,7 +100,6 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 
 	@Override
 	protected Project convertResultSetToDomainModel(ResultSet rs) throws SQLException {
-		System.out.println("heloooooo");
 		ProjectSkillMapper projectSkillMapper = ProjectSkillMapper.getInstance();
 		BidMapper bidMapper = BidMapper.getInstance();
 		AuctionMapper auctionMapper = AuctionMapper.getInstance();
@@ -130,7 +129,6 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 	protected ArrayList<Project> convertResultSetToDomainModelList(ResultSet rs) throws SQLException {
 		ArrayList<Project> projects = new ArrayList<>();
         while (rs.next()){
-			System.out.println("<><><><>Fuckkkkkkkk<><><><><>");
             projects.add(this.convertResultSetToDomainModel(rs));
         }
         return projects;

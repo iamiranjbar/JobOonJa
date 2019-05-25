@@ -25,7 +25,7 @@ public class AuctionMapper extends Mapper<String, String> implements IAuctionMap
 		Connection con = ConnectionPool.getConnection();
         PreparedStatement createTableStatement = con.prepareStatement("CREATE TABLE IF NOT EXISTS auction(\n" + 
         		"winner CHAR(200),\n" +
-				"projectId CHAR(20),\n" +
+				"projectId CHAR(200),\n" +
 				"PRIMARY KEY(projectId, winner),\n" +
 				"FOREIGN KEY (winner)\n" +
 				"REFERENCES user(id),\n" +

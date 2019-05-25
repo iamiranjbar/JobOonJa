@@ -10,7 +10,7 @@
 		<filter-class>org.ebaysf.web.cors.CORSFilter</filter-class>
 		<init-param>
 			<param-name>cors.allowed.origins</param-name>
-			<param-value>http://localhost:8080, http://localhost:3000</param-value>
+			<param-value>http://localhost:8080, http://localhost:3000, http://localhost:5000</param-value>
 		</init-param>
 		<init-param>
 			<param-name>cors.allowed.methods</param-name>

@@ -34,7 +34,7 @@ public class BidMapper extends Mapper<BidDTO, String> implements IBidMapper {
 		Connection con = ConnectionPool.getConnection();
         PreparedStatement createTableStatement = con.prepareStatement("CREATE TABLE IF NOT EXISTS bid(\n" + 
         		"userId CHAR(200),\n" +
-				"projectId CHAR(20),\n" +
+				"projectId CHAR(200),\n" +
 				"offer INTEGER,\n" +
 				"PRIMARY KEY(userId, projectId),\n" +
 				"FOREIGN KEY (userId)\n" +

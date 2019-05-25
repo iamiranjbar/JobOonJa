@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class ConnectionPool {
 
     private static BasicDataSource ds = new BasicDataSource();
-    private final static String dbURL = "jdbc:mysql://localhost:3306/joboonja?useUnicode=yes&characterEncoding=UTF-8";
+    private final static String dbURL = "jdbc:mysql://mysql:3306/joboonja?useUnicode=yes&characterEncoding=UTF-8";
 
     static {
     	try {
