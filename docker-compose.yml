@@ -1,37 +1,33 @@
-version: '3'
+version: '3.7'
 services:
   frontend:
-    container_name: joboonja-front
-    image: node:11.13.0
+    container_name: jobOonJa-front
     restart: always
+    build: ../JobOonJa-Frontend/
     ports:
       - 5000:5000
-      - 443:443
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
     depends_on:
-      - app
+      - backend
 
   mysql:
-    container_name: some-mysql
-    image: mysql/mysql-server:5.7
+    container_name: ourDB
+    image: mysql
     environment:
-      MYSQL_DATABASE: test
-      MYSQL_ROOT_PASSWORD: hellokoding
-      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: joboonja
+      MYSQL_ROOT_PASSWORD: root
     ports:
-      - "3306:3306"
+      - 3306:3306
+    expose:
+      - 3306
+    volumes:
+      - /Users/amir/Desktop:/var/lib/mysql
     restart: always
 
-  app:
+  backend:
+    container_name: jobOonJa-back
     restart: always
-    build: ./app
-    working_dir: /app
-    volumes:
-      - ./app:/app
-      - ~/.m2:/root/.m2
-    expose:
-      - "8080"
-    command: mvn clean spring-boot:run
+    build: .
+    ports:
+          - 8080:8080
     depends_on:
       - mysql
