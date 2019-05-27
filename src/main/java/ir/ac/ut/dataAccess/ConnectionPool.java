@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class ConnectionPool {
 
     private static BasicDataSource ds = new BasicDataSource();
-    private final static String dbURL = "jdbc:mysql://my-mysql:3306/joboonja?useUnicode=yes&characterEncoding=UTF-8";
+    private final static String dbURL = "jdbc:mysql://ourDB:3306/joboonja?useUnicode=yes&characterEncoding=UTF-8";
 
     static {
     	try {
@@ -26,7 +26,14 @@ public class ConnectionPool {
         ds.setMaxOpenPreparedStatements(100);
     }
 
-    public static Connection getConnection() throws SQLException {
-        return ds.getConnection();
+    public static Connection getConnection() {
+        while (true) {
+            try {
+                return ds.getConnection();
+            } catch (SQLException ignored){
+                System.out.println("salammmmmmm!!!");
+                ignored.printStackTrace();
+            }
+        }
     }
 }

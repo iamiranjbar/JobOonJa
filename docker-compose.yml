@@ -9,9 +9,9 @@ services:
     depends_on:
       - backend
 
-  mysql:
+  ourDB:
     container_name: ourDB
-    image: mysql
+    image: mysql:5.7
     environment:
       MYSQL_DATABASE: joboonja
       MYSQL_ROOT_PASSWORD: root
@@ -30,4 +30,4 @@ services:
     ports:
           - 8080:8080
     depends_on:
-      - mysql
+      - ourDB
