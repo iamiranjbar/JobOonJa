@@ -21,6 +21,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.mindrot.jbcrypt.BCrypt;
+import java.nio.charset.StandardCharsets;
 
 
 import java.io.BufferedReader;
@@ -90,7 +91,7 @@ public class JobOonJa {
     private String extractGetData(HttpGet httpGet) throws IOException {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         CloseableHttpResponse response = httpclient.execute(httpGet);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8));
         String line;
         StringBuilder total = new StringBuilder();
         while ((line = reader.readLine()) != null) {

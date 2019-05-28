@@ -1,9 +1,7 @@
 package ir.ac.ut.dataAccess;
 
 import org.apache.commons.dbcp.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 
 public class ConnectionPool {
@@ -15,7 +13,6 @@ public class ConnectionPool {
     	try {
     	    Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         ds.setUrl(dbURL);
@@ -24,6 +21,25 @@ public class ConnectionPool {
         ds.setMinIdle(5);
         ds.setMaxIdle(10);
         ds.setMaxOpenPreparedStatements(100);
+        setEncoding();
+    }
+
+    public static String getAlterEncodingString(){
+        return "ALTER DATABASE joboonja CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+    }
+
+    public static void setEncoding(){
+        try {
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            statement.execute(getAlterEncodingString());
+            connection.close();
+            statement.close();
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
     }
 
     public static Connection getConnection() {
@@ -31,8 +47,7 @@ public class ConnectionPool {
             try {
                 return ds.getConnection();
             } catch (SQLException ignored){
-                System.out.println("salammmmmmm!!!");
-                ignored.printStackTrace();
+                System.out.println("Retry to connect....!");
             }
         }
     }

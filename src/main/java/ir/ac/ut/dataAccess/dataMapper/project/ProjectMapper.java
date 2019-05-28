@@ -36,14 +36,14 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 		Connection con = ConnectionPool.getConnection();
         PreparedStatement createTableStatement = con.prepareStatement("CREATE TABLE IF NOT EXISTS project(\n" + 
         		"    id CHAR(200),\n" +
-				"    title CHAR(200),\n" +
-				"    description longtext,\n" +
+				"    title CHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,\n" +
+				"    description longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,\n" +
 				"    imageURL longtext,\n" +
 				"    budget INTEGER,\n" +
 				"    deadLine LONG,\n" +
 				"    creationDate LONG,\n" +
 				"    PRIMARY KEY(id)" +
-        		");");
+        		")CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
         createTableStatement.executeUpdate();
         createTableStatement.close();
         con.close();

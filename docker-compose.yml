@@ -2,32 +2,28 @@ version: '3.7'
 services:
   frontend:
     container_name: jobOonJa-front
-    restart: always
     build: ../JobOonJa-Frontend/
     ports:
       - 5000:5000
-    depends_on:
-      - backend
 
   ourDB:
     container_name: ourDB
-    image: mysql:5.7
+    image: mysql:5.7.16
     environment:
       MYSQL_DATABASE: joboonja
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - 3306:3306
-    expose:
-      - 3306
+      - 8000:3306
     volumes:
-      - /Users/amir/Desktop:/var/lib/mysql
-    restart: always
+      - ./my-datavolume:/var/lib/mysql
 
   backend:
     container_name: jobOonJa-back
-    restart: always
     build: .
     ports:
-          - 8080:8080
+      - 8080:8080
     depends_on:
       - ourDB
+# volumes:
+#   my-datavolume:
+    

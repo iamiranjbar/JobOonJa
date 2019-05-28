@@ -41,7 +41,7 @@ public class BidMapper extends Mapper<BidDTO, String> implements IBidMapper {
 				"REFERENCES user(id),\n" +
 				"FOREIGN KEY (projectId)\n" +
 				"REFERENCES project(id)"+
-        		");");
+        		")CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
         createTableStatement.executeUpdate();
         createTableStatement.close();
         con.close();

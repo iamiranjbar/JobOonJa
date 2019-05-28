@@ -27,7 +27,7 @@ public class SkillMapper extends Mapper<Skill, String> implements ISkillMapper {
         PreparedStatement createTableStatement = con.prepareStatement("CREATE TABLE IF NOT EXISTS skill(\n" + 
         		"	skillName CHAR(15),\n" +
 				"   PRIMARY KEY(skillName)" +
-        		");");
+        		")CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
         createTableStatement.executeUpdate();
         createTableStatement.close();
         con.close();

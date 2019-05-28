@@ -41,7 +41,7 @@ public class EndorseMapper extends Mapper<String, String> implements IEndorseMap
                 "    REFERENCES userSkill(userId, skillName),\n" +
                 "    FOREIGN KEY (endorserId)\n" +
                 "    REFERENCES user(id)"+
-                ");");
+                ")CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
 	        createTableStatement.executeUpdate();
 	        createTableStatement.close();
 	        con.close();

@@ -26,15 +26,15 @@ public class UserMapper extends Mapper<User, String> implements IUserMapper {
     private UserMapper() throws SQLException {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement createTableStatement = con.prepareStatement("CREATE TABLE IF NOT EXISTS user (id CHAR(20),\n" +
-            "    firstname CHAR(20),\n" +
-            "    lastname CHAR(20),\n" +
+            "    firstname CHAR(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci,\n" +
+            "    lastname CHAR(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci,\n" +
             "    username CHAR(20),\n" +
             "    password CHAR(60),\n" +
-            "    jobTitle longtext,\n" +
+            "    jobTitle longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,\n" +
             "    profilePic longtext,\n" +
-            "    bio CHAR(100),\n" +
+            "    bio CHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci,\n" +
             "    PRIMARY KEY(id),\n" +
-            "    UNIQUE(username));"
+            "    UNIQUE(username))CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
         );
         createTableStatement.executeUpdate();
         createTableStatement.close();

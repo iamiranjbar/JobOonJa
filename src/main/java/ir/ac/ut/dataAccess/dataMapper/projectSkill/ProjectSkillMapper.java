@@ -34,7 +34,7 @@ public class ProjectSkillMapper extends Mapper<Skill, String> implements IProjec
 				"    REFERENCES skill(skillName),\n" +
 				"    FOREIGN KEY(projectId)\n" +
 				"    REFERENCES project(id)" +
-        		");");
+        		")CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
         createTableStatement.executeUpdate();
         createTableStatement.close();
         con.close();

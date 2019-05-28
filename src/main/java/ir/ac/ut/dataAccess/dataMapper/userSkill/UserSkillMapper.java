@@ -34,7 +34,7 @@ public class UserSkillMapper extends Mapper<UserSkill, String> implements IUserS
             "    REFERENCES skill(skillName),\n" +
             "    FOREIGN KEY (userId)\n" +
             "    REFERENCES user(id)\n" +
-            ");");
+            ")CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
         createTableStatement.executeUpdate();
         createTableStatement.close();
         con.close();
