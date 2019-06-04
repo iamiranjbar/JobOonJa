@@ -1,6 +1,7 @@
 version: '3.7'
 services:
   frontend:
+    image: aliedalat/frontend
     container_name: jobOonJa-front
     build: ../JobOonJa-Frontend/
     ports:
@@ -18,6 +19,7 @@ services:
       - ./my-datavolume:/var/lib/mysql
 
   backend:
+    image: aliedalat/backend
     container_name: jobOonJa-back
     build: .
     ports:
