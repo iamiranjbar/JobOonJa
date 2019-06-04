@@ -13,7 +13,7 @@ spec:
         app: joboonja-back
     spec:
       containers:
-        - image: aliedalat/backend
+        - image: iamiranjbar/backend
           imagePullPolicy: Always
           name: joboonja-back
           ports:
