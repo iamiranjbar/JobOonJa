@@ -13,15 +13,15 @@ spec:
         app: joboonja-front
     spec:
       containers:
-        - image: aliedalat/frontend
+        - image: iamiranjbar/frontend
           imagePullPolicy: Always
           name: joboonja-front
           ports:
             - containerPort: 5000
           resources:
               limits:
-                memory: "333Mi"
-                cpu: "333m"
+                memory: "111Mi"
+                cpu: "111m"
               requests:
-                memory: "333Mi"
-                cpu: "333m"
+                memory: "111Mi"
+                cpu: "111m"
