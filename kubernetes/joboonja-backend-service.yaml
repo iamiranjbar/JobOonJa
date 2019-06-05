@@ -3,10 +3,11 @@ kind: Service
 metadata:
   name: joboonja-back
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
   - port: 8080
-    protocol: TCP
-    targetPort: 8080
+    # protocol: TCP
+    # targetPort: 8080
+    nodePort: 30085
   selector:
     app: joboonja-back

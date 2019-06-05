@@ -5,12 +5,12 @@
 <web-app>
 	<display-name>IE RIA</display-name>
 
-	<!-- <filter>
+	<filter>
 		<filter-name>CORS Filter</filter-name>
 		<filter-class>org.ebaysf.web.cors.CORSFilter</filter-class>
 		<init-param>
 			<param-name>cors.allowed.origins</param-name>
-			<param-value>http://localhost:8080, http://localhost:3000, http://localhost:5000</param-value>
+			<param-value>*</param-value>
 		</init-param>
 		<init-param>
 			<param-name>cors.allowed.methods</param-name>
@@ -20,7 +20,7 @@
 			<param-name>cors.allowed.headers</param-name>
 			<param-value>Content-Type,X-Requested-With,accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers,Access-Control-Allow-Origin,Authorization</param-value>
 		</init-param>
-	</filter> -->
+	</filter>
 	<filter>
 		<filter-name>JwtFilter</filter-name>
 		<filter-class>ir.ac.ut.filter.TokenFilter</filter-class>
@@ -29,10 +29,10 @@
 			<param-value>/login,/signup,/validate</param-value>
 		</init-param>
 	</filter>
-	<!-- <filter-mapping>
+	<filter-mapping>
 		<filter-name>CORS Filter</filter-name>
 		<url-pattern>/*</url-pattern>
-	</filter-mapping> -->
+	</filter-mapping>
 	<filter-mapping>
 		<filter-name>JwtFilter</filter-name>
 		<url-pattern>/*</url-pattern>

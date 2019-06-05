@@ -7,7 +7,7 @@ import java.sql.*;
 public class ConnectionPool {
 
     private static BasicDataSource ds = new BasicDataSource();
-    private final static String dbURL = "jdbc:mysql://db:3306/joboonja?useUnicode=yes&characterEncoding=UTF-8";
+    private final static String dbURL = "jdbc:mysql://185.166.107.141:30936/joboonja?useUnicode=yes&characterEncoding=UTF-8";
 
     static {
     	try {
