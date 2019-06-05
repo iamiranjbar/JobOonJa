@@ -41,11 +41,11 @@ spec:
           name: db
         resources:
             limits:
-              memory: "333Mi"
-              cpu: "333m"
+              memory: "200Mi"
+              cpu: "200m"
             requests:
-              memory: "333Mi"
-              cpu: "333m"
+              memory: "200Mi"
+              cpu: "200m"
         volumeMounts:
         - name: mysql-persistent-storage
           mountPath: /var/lib/mysql
