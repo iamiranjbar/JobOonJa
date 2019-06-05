@@ -244,11 +244,9 @@ public class ProjectMapper extends Mapper<Project, String> implements IProjectMa
 	public ArrayList<Project> findAllSuitable(String id, String limit) throws SQLException {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(getFindSuitableStatement());
-		System.out.println(getFindSuitableStatement());
         st.setString(1, id);
         st.setString(2, id);
         st.setInt(3,Integer.parseInt(limit));
-		System.out.println(st.toString());
         try {
             ResultSet resultSet = st.executeQuery();
             if (resultSet.isClosed()) {

@@ -28,7 +28,6 @@ public abstract class Mapper<T,I> implements IMapper<T,I> {
         	if (resultSet.isClosed()) {
         		st.close();
         		con.close();
-                System.out.println("find");
     			return null;
         	}
             if(!resultSet.next()){
