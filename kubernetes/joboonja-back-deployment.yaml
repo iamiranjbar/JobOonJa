@@ -8,7 +8,7 @@ spec:
   strategy:
       type: RollingUpdate
       rollingUpdate:
-        maxUnavailable: 100%s
+        maxUnavailable: 100%
   selector:
     matchLabels:
       app: joboonja-back
