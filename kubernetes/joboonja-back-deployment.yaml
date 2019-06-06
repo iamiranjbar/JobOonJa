@@ -18,7 +18,7 @@ spec:
         app: joboonja-back
     spec:
       containers:
-        - image: quay.io/aliedalat/backend
+        - image: iamiranjbar/backend
           imagePullPolicy: Always
           name: joboonja-back
           ports:
