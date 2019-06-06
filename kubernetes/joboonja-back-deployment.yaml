@@ -5,6 +5,10 @@ metadata:
   namespace: ali-edalat-ns
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 100%
   selector:
     matchLabels:
       app: joboonja-back
