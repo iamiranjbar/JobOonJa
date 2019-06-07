@@ -46,10 +46,10 @@ spec:
               memory: "200Mi"
               cpu: "170m"
         volumeMounts:
-        - name: mysql-persistent-storage
+        - name: mysql-persistent-storage2
           mountPath: /var/lib/mysql
-          subPath: edalatRangbar-mysql
+          subPath: edalatRangbar2-mysql
       volumes:
-      - name: mysql-persistent-storage
+      - name: mysql-persistent-storage2
         persistentVolumeClaim:
-          claimName: mysql-pv-claim
+          claimName: mysql-pv-claim2
